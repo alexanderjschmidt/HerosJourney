@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="128" tilewidth="16" tileheight="16" nextobjectid="13">
+ <tileset firstgid="1" name="collison" tilewidth="16" tileheight="16">
+  <image source="../collison.png" trans="aaaa7f" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="2" name="Water" tilewidth="16" tileheight="16">
+  <image source="Water.png" trans="aaaa7f" width="144" height="48"/>
+ </tileset>
+ <layer name="Water" width="128" height="128">
+  <data encoding="base64" compression="zlib">
+   eJzt1LENgDAUQ8GI0IV0wP6jxjtQAPp3kqU3gVsDAAAAAAAAAP5uy3q265I9siObumSf2ZXdumS//T/a/2v/r/2/9v/a/2v/r/2/9v/a/2v/r/2/9v/a/2v/r/2/ft4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAX7MAPqxtbg==
+  </data>
+ </layer>
+ <imagelayer name="Bot">
+  <image source="Terrain1.png"/>
+ </imagelayer>
+ <layer name="Collision" width="128" height="128">
+  <data encoding="base64" compression="zlib">
+   eJzt3TEOwkAMRUG4/6URBQ1CQIKJ1/kzUkpg42dEQZHLBQAAAAAAAACAya4vLnK86j9lD96dfeo9HW31ue1pvPo9raRzdv9sm74P395v97y6m3+6nwm70j23X3ek+4x7+nfvQveszrgDv5yrUvccOnZghfeuONcW3U2m7sBeR/SfdlXM7YgdqKJ/zVyP3IF/0L9mtl2fW0n/GlP7f9LdqHquXR2m9n+2SkfWoDsPmnOnMwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMC5bXlupWecns/W/s+v0X823/9sVc30n0n/bPpn0z+b/tn0z6Z/Nv2z6Z+tuv/Wi176Z9M/W1cD/degfzb9s+mfTf9s+mfTIJv+2fTP5vc/m/7Z9M+293+bqote+mfTHwAAAM7jBp+jBIk=
+  </data>
+ </layer>
+</map>

@@ -1,0 +1,6 @@
+T1,True,0
+0:Player:Alex,Main,true:500;ClothChest,5,False,False;ClothShoes,5,False,False;ClothHat,5,False,False;ClothCape,5,False,False:1600,400,ForestRoad2
+1:Entity:Cart,cart,true
+2:Human:Kobold,Medieval_Dungeons_Kobold,true:500;ClothChest,5,False,False;ClothShoes,5,False,False;ClothHat,5,False,False;ClothCape,5,False,False:1700,500,ForestRoad2
+3:Chest:Chest,chest1,true:500;ClothChest,5,False,False;ClothShoes,5,False,False;ClothHat,5,False,False;ClothCape,5,False,False
+4:Human:Sarah,Sarah,true:500;ClothChest,5,False,False;ClothShoes,5,False,False;ClothHat,5,False,False;ClothCape,5,False,False:256,242,ForestRoad

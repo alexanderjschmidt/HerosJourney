@@ -1,0 +1,10 @@
+TEMPLATES
+chest1:Textures/Objects/chests.png,6,3;t,chestForwardClosed,0,0;t,chestForwardOpenFull,0,1;t,chestForwardOpenEmpty,0,2;t,chestRightClosed,1,0;t,chestRightOpenFull,1,1;t,chestRightOpenEmpty,1,2;t,chestLeftClosed,2,0;t,chestLeftOpenFull,2,1;t,chestLeftOpenEmpty,2,2:w,h,0,0,w,h,0,0
+chest2:Textures/Objects/chests.png,6,3;t,chestForwardClosed,3,0;t,chestForwardOpenFull,3,1;t,chestForwardOpenEmpty,3,2;t,chestRightClosed,4,0;t,chestRightOpenFull,4,1;t,chestRightOpenEmpty,4,2;t,chestLeftClosed,5,0;t,chestLeftOpenFull,5,1;t,chestLeftOpenEmpty,5,2:w,h,0,0,w,h,0,0
+door0:Textures/Objects/Doors/Doors_0.png,3,4;t,door,0,0;a,doorOpen,.1,0,1,2,0,0,0;a,doorClose,.1,2,1,0,0,0,0:w,h,0,0,w,h,0,0
+door1:Textures/Objects/Doors/Doors_0.png,3,4;t,door,1,0;a,doorOpen,.1,0,1,2,1,1,1;a,doorClose,.1,2,1,0,1,1,1:w,h,0,0,w,h,0,0
+door2:Textures/Objects/Doors/Doors_0.png,3,4;t,door,2,0;a,doorOpen,.1,0,1,2,2,2,2;a,doorClose,.1,2,1,0,2,2,2:w,h,0,0,w,h,0,0
+cart:Textures/Objects/cart.png,1,1;t,cart,0,0:w,h,0,0,w,h,0,0
+TEXT
+2:Would you like to kill me?%Yes,No%c&2.fight&1.setPos 89 700,c
+4:Hello there can I help you with anything?%Yes,No%1,c`What can I help you with?%Who are you?,Where are we?,Can I buy anything?,Can I trade with you,Nevermind.%2,3,c&4.barter,c&4.trade,c`I am Dwarf_1! Would you like to know anything else?%Yes,No%1,c`This is Town! Would you like to know anything else?%Yes,No%1,c

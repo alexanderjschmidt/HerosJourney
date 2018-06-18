@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="128" tilewidth="16" tileheight="16" nextobjectid="13">
+ <tileset firstgid="1" name="collison" tilewidth="16" tileheight="16">
+  <image source="../collison.png" trans="aaaa7f" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="2" source="Water.tsx"/>
+ <layer name="Water" width="128" height="128">
+  <data encoding="base64" compression="zlib">
+   eJzt1LENgDAUQ8GI0IV0wP6jxjPQgPh3kqU3gVsDAAAAAAAA4A+2rGe7LtkjO7KpS/aZXdmtS/bb/6P9v/b/2v9r/6/9v/b/2v9r/6/9v/b/2v9r/6/9v/b/2v9r/6/9v37eAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8EULBVl97A==
+  </data>
+ </layer>
+ <imagelayer name="Bot">
+  <image source="PlayerHomeWaterRemovedBot.png"/>
+ </imagelayer>
+ <objectgroup name="Objects">
+  <object id="10" name="NORTH" x="1185.75" y="78.5">
+   <ellipse/>
+  </object>
+  <object id="12" name="NORTHWEST" x="75" y="200">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <imagelayer name="Top" x="-1" y="14">
+  <image source="PlayerHomeWaterRemovedTop.png"/>
+ </imagelayer>
+ <layer name="Collision" width="128" height="128" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt2ttOwzAQRVH4/59GPFSiqE5sZzyXM3tJfaponNlOUyhfXwAAAAC6+/73QC/0743+AADU8P+e7X3vrvRZQfGzDf3n0b835flk7v9pTRnXiTOy9h8dP3pdp3nfL0b3qOg5r/bPsu6X3fV497A81tXaV48z2z/bvn050f/kOc4eY6fxzjmd6J9pf4xYzM772B774e8a79Z8d34RZs/Xel4n1hnd32MOT0TP7elsotdYsX/0rBT3wJN1WYqeQ8QeyPDaFutaEd2k6h7Y5dG/2sNibh57wAr9bebquQdOoL/NbKOOa4n+NiKObfV6Kv1nzzXiOjyxDzz6Xx2zwnWZUbb+Vmuge280xy86AwAq4951RpW5VllnNcwVAIB6Mt+/+ZvTeVnm+6k1/fM68b3XqD/yedpf/XsF1fN6eXJ+yu2Vz83KzGyqzo/+z1SfX/X1R1H8v5Lq6/cS3ZxOsaKvdfrnR6Ne1D4LYB7d1yjNifbzFGd14nsFVYr9rXSYyan+6nNTQ3/grA73E4zt9mffaKA/dtAfwAvvB73Rf53SzJTOxYvS37hVzsMT/aGC/oA+pXuWAs8W/F9GPpH9UQ/9etvpz57RsdqS9/zeaN8b/c/49LsUM+6D/r3Rvzf6g+69jK75TP2zrUfFVfun87Z8bfrbO33N0z+3Sv1RD/37uWu++kAtO32tPyOwb+JEXP+8b+QxM3v669qZPf11RPT/9DqIYTV7OtZE/97o3xv9e6N/LdZzpn8t1r8zWffn+4Kxu/Oemc3V8ztzpb8f+tNftf8q+l8/T3899H8/Lv3Hz9/1pX89nv1nZ0t/P/R/Py79x8+r9++I/r1Z9t/5+dHPwIdn/5U1ReD+f/08/fXQ//249B8/79k/8tGJxec3+sMS/QEAAAAA0PEDQuIHdQ==
+  </data>
+ </layer>
+</map>
