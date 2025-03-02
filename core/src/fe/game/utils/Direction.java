@@ -3,8 +3,7 @@ package fe.game.utils;
 import com.badlogic.gdx.math.Vector2;
 
 public enum Direction {
-	NODIRECTION(-1, 0), EAST(2, 0), WEST(6, 180), NORTH(0, 90), NORTHEAST(1, 45), NORTHWEST(7, 135), SOUTH(4,
-			270), SOUTHEAST(3, 315), SOUTHWEST(5, 225);
+	NODIRECTION(-1, 0), EAST(2, 180), WEST(6, 0), NORTH(0, 270), NORTHEAST(1, 225), NORTHWEST(7, 315), SOUTH(4, 90), SOUTHEAST(3, 135), SOUTHWEST(5, 45);
 
 	public static final float SQRT_HALF = 0.70710678118f;
 
@@ -22,7 +21,7 @@ public enum Direction {
 
 	public static Direction getDirectionWithClockPos(int clockPos) {
 		for (Direction d : Direction.values()) {
-			if (clockPos == d.getClockPos()) {
+			if (((clockPos + 8) % 8) == d.getClockPos()) {
 				return d;
 			}
 		}

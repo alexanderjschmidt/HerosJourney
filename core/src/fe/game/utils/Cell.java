@@ -2,24 +2,25 @@ package fe.game.utils;
 
 public class Cell implements Comparable<Cell> {
 
-	int finalCost = 0; // G+H
-	int length = 0;
+	public int f, g;
 	public int i;
 	public int j;
 	public Cell parent;
 
-	Cell(int i, int j) {
+	public Cell(int i, int j) {
 		this.i = i;
 		this.j = j;
+		this.f = 10000;
+		this.g = 10000;
 	}
 
 	@Override
 	public String toString() {
-		return "[" + this.i + ", " + this.j + "]";
+		return "(" + this.i + ", " + this.j + ")";
 	}
 
 	@Override
 	public int compareTo(Cell o) {
-		return finalCost - o.finalCost;
+		return f - o.f;
 	}
 }

@@ -1,90 +1,125 @@
 package fe.game.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import fe.game.ActionQueue;
 import fe.game.Application;
 import fe.game.Camera;
-import fe.game.Cursor;
-import fe.game.entities.Entity;
-import fe.game.entities.Species;
+import fe.game.GameState;
+import fe.game.entities.EntityClassManager;
+import fe.game.entities.ai.AIManager;
+import fe.game.entities.skills.SkillManager;
+import fe.game.entities.skills.SkillManagerOld;
+import fe.game.managers.InputManager;
+import fe.game.managers.KeyManager;
+import fe.game.tilemap.MapData;
 import fe.game.tilemap.TileMap;
+import fe.game.ui.HUD;
 
 public class BattleScreen implements Screen {
 
-	private TileMap map;
-	private Cursor cursor;
 	private Application app;
+	private AIManager ai;
 	private Camera camera;
 	private SpriteBatch batch;
 
-	private EntityManager entities;
+	private MapData mapData;
+	private boolean ready = false;
 
-	public BattleScreen(Application app) {
+	// quickStart constructor
+	public BattleScreen(Application app, boolean quickStart) {
 		this.app = app;
-		map = new TileMap();
-		batch = app.getBatch();
-		camera = app.getCamera();
-		entities = new EntityManager(map);
-		cursor = new Cursor(map, entities);
+		this.mapData = new MapData((int) (Math.random() * 10000000), 32, 100, 4, false);
+		startGame();
 	}
 
-	@Override
-	public void show() {
-		camera.load(map.getWidth() * TileMap.SIZE, map.getHeight()
-				* TileMap.SIZE, cursor);
-		Species grunt = new Species("Goblin Grunt");
-		entities.addEntity(new Entity(grunt), 10, 10);
+	// server join game
+	public BattleScreen(Application app) {
+		this.app = app;
+		this.mapData = ActionQueue.get().initSocket(false);
+	}
 
-		entities.addEntity(new Entity(grunt), 14, 14);
+	// server create game
+	public BattleScreen(Application app, int seed, int mapSize, int armySize, int teamCount, boolean fogOfWar) {
+		this.app = app;
+		this.mapData = ActionQueue.get().initSocket((int) (Math.random() * 10000000), 16, 100, 4, false, true);
+	}
+
+	public void startGame() {
+		batch = app.getBatch();
+		camera = app.getCamera();
+
+		SkillManager.get().createBaseSkills(this);
+		SkillManagerOld.createSkills();
+		EntityClassManager.get().createBuildings();
+
+		GameState.global().init(mapData);
+
+		ai = new AIManager();
+
+		camera.load(GameState.global().getWidth() * TileMap.SIZE, GameState.global().getHeight() * TileMap.SIZE, HUD.get().getCursor());
+		HUD.get().getCursor().setPosition(10, 15);
+
+		ready = true;
+		ActionQueue.get().checkLocked();
 	}
 
 	@Override
 	public void render(float delta) {
-		cursor.update();
+		if (!ready) {
+			if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE)) {
+				app.setScreen(new MainMenuScreen(app));
+			}
+			return;
+		}
 		camera.update();
 		app.getViewport().setCamera(camera);
 		batch.setProjectionMatrix(camera.combined);
 
-		entities.update(delta);
+		ai.update(GameState.global(), delta);
+		InputManager.get().update(delta);
+		HUD.get().update(delta);
 
 		batch.begin();
-		map.render(batch, camera.position.x / TileMap.SIZE, camera.position.y
-				/ TileMap.SIZE, delta);
-		entities.render(batch, camera.position.x / TileMap.SIZE,
-				camera.position.y / TileMap.SIZE, delta);
-		cursor.render(batch, delta);
+		GameState.global().render(batch, camera, delta);
+		HUD.get().getCursor().render(batch, delta);
 		batch.end();
+
+		HUD.get().draw();
+	}
+
+	@Override
+	public void show() {
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
+		if (!ready)
+			return;
+		HUD.get().resize(width, height);
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		ActionQueue.get().dispose();
+	}
 
+	public Application getApp() {
+		return app;
 	}
 
 }

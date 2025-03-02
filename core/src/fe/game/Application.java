@@ -2,14 +2,15 @@ package fe.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import fe.game.managers.ResourceManager;
 import fe.game.screens.LoadingScreen;
-import fe.game.utils.ResourceManager;
 
 public class Application extends Game {
 	public static final String TITLE = "Game";
@@ -18,8 +19,6 @@ public class Application extends Game {
 	private Camera camera;
 	private Viewport viewport;
 	private SpriteBatch batch;
-
-	private String currentLoad;
 
 	@Override
 	public void create() {
@@ -33,6 +32,12 @@ public class Application extends Game {
 		batch = new SpriteBatch();
 
 		setScreen(new LoadingScreen(this));
+	}
+
+	public void setScreen(Screen screen) {
+		super.setScreen(screen);
+		camera.position.x = Gdx.graphics.getWidth() / 2;
+		camera.position.y = Gdx.graphics.getHeight() / 2;
 	}
 
 	@Override

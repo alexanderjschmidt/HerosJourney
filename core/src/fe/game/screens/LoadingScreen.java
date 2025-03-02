@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 
 import fe.game.Application;
-import fe.game.utils.ResourceManager;
+import fe.game.managers.ResourceManager;
 
 public class LoadingScreen implements Screen {
 
@@ -29,10 +29,9 @@ public class LoadingScreen implements Screen {
 	}
 
 	private void update(float delta) {
-		progress = MathUtils.lerp(progress,
-				ResourceManager.get().getProgress(), .1f);
-		if (ResourceManager.get().update()
-				&& progress >= ResourceManager.get().getProgress() - .001f) {
+		progress = MathUtils.lerp(progress, ResourceManager.get().getProgress(), .1f);
+		if (ResourceManager.get().update() && progress >= ResourceManager.get().getProgress() - .001f) {
+			ResourceManager.get().splits();
 			app.setScreen(new SplashScreen(app));
 		}
 	}
@@ -46,12 +45,10 @@ public class LoadingScreen implements Screen {
 
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(32, app.getCamera().viewportHeight / 2 - 8,
-				app.getCamera().viewportWidth - 64, 64);
+		shapeRenderer.rect(32, app.getCamera().viewportHeight / 2 - 8, app.getCamera().viewportWidth - 64, 64);
 
 		shapeRenderer.setColor(Color.GREEN);
-		shapeRenderer.rect(32, app.getCamera().viewportHeight / 2 - 8, progress
-				* (app.getCamera().viewportWidth - 64), 64);
+		shapeRenderer.rect(32, app.getCamera().viewportHeight / 2 - 8, progress * (app.getCamera().viewportWidth - 64), 64);
 
 		shapeRenderer.end();
 	}

@@ -1,2 +1,0 @@
-Goblin:Would you like to kill me?:Yes,No:c,c
-Brotha:BROTHA! We must find oats or we shall surely perish!:Of Course!,Oats?,What?:c,1,2`Yes oats we must find them!?:I dont like oats...,Oh yea of course,Why?:3,c,4`The oats Brotha! If we do not find them, we are DooOoOMED!:Ok,Ok?:c,c`Of Course you do! Your a pig, we need oats or we shall perish!?:Ok,Ok?:c,c`Because we are pigs! Without oats we shall surely perish!:Ok,Ok?:c,c`

@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import fe.game.Application;
-import fe.game.utils.ResourceManager;
+import fe.game.managers.ResourceManager;
 
 public class MainMenuScreen implements Screen {
 
@@ -29,8 +29,7 @@ public class MainMenuScreen implements Screen {
 
 	public MainMenuScreen(final Application app) {
 		this.app = app;
-		this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(),
-				Gdx.graphics.getHeight(), app.getCamera()));
+		this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), app.getCamera()));
 	}
 
 	@Override
@@ -38,13 +37,11 @@ public class MainMenuScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		stage.clear();
 
-		Image background = new Image(ResourceManager.get().getTexture(
-				"Textures/UI/Background.png"));
+		Image background = new Image(ResourceManager.get().getTexture("Textures/UI/Background.png"));
 		background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		stage.addActor(background);
 		Label label = new Label("RPGame", ResourceManager.get().skin, "title");
-		label.setPosition(Gdx.graphics.getWidth() / 2 - (label.getWidth() / 2),
-				Gdx.graphics.getHeight() / 2 - (label.getHeight() / 2) + 120);
+		label.setPosition(Gdx.graphics.getWidth() / 2 - (label.getWidth() / 2), Gdx.graphics.getHeight() / 2 - (label.getHeight() / 2) + 120);
 		stage.addActor(label);
 		initButtons();
 	}
@@ -90,34 +87,21 @@ public class MainMenuScreen implements Screen {
 
 	private void initButtons() {
 
-		TextButton buttonPlay = new TextButton("New Game",
-				ResourceManager.get().skin, "default");
+		TextButton buttonPlay = new TextButton("New Game", ResourceManager.get().skin, "default");
 		buttonPlay.setSize(280, 60);
-		buttonPlay.setPosition(
-				Gdx.graphics.getWidth() / 2 - (buttonPlay.getWidth() / 2),
-				Gdx.graphics.getHeight() / 2 - (buttonPlay.getHeight() / 2));
-		buttonPlay.addAction(sequence(
-				alpha(0),
-				parallel(fadeIn(.5f),
-						moveBy(0, -20, .5f, Interpolation.pow5Out))));
+		buttonPlay.setPosition(Gdx.graphics.getWidth() / 2 - (buttonPlay.getWidth() / 2), Gdx.graphics.getHeight() / 2 - (buttonPlay.getHeight() / 2));
+		buttonPlay.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
 		buttonPlay.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				app.setScreen(new BattleScreen(app));
+				app.setScreen(new MapSettingScreen(app));
 			}
 		});
 
-		TextButton buttonLoad = new TextButton("Load Game",
-				ResourceManager.get().skin, "default");
+		TextButton buttonLoad = new TextButton("Load Game", ResourceManager.get().skin, "default");
 		buttonLoad.setSize(280, 60);
-		buttonLoad.setPosition(
-				Gdx.graphics.getWidth() / 2 - (buttonLoad.getWidth() / 2),
-				Gdx.graphics.getHeight() / 2 - (buttonLoad.getHeight() / 2)
-						- 70);
-		buttonLoad.addAction(sequence(
-				alpha(0),
-				parallel(fadeIn(.5f),
-						moveBy(0, -20, .5f, Interpolation.pow5Out))));
+		buttonLoad.setPosition(Gdx.graphics.getWidth() / 2 - (buttonLoad.getWidth() / 2), Gdx.graphics.getHeight() / 2 - (buttonLoad.getHeight() / 2) - 70);
+		buttonLoad.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
 		buttonLoad.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -125,37 +109,34 @@ public class MainMenuScreen implements Screen {
 			}
 		});
 
-		TextButton buttonExit = new TextButton("Exit",
-				ResourceManager.get().skin, "default");
+		TextButton buttonExit = new TextButton("Exit", ResourceManager.get().skin, "default");
 		buttonExit.setSize(280, 60);
-		buttonExit.setPosition(
-				Gdx.graphics.getWidth() / 2 - (buttonExit.getWidth() / 2),
-				Gdx.graphics.getHeight() / 2 - (buttonExit.getHeight() / 2)
-						- 140);
-		buttonExit.addAction(sequence(
-				alpha(0),
-				parallel(fadeIn(.5f),
-						moveBy(0, -20, .5f, Interpolation.pow5Out))));
+		buttonExit.setPosition(Gdx.graphics.getWidth() / 2 - (buttonExit.getWidth() / 2), Gdx.graphics.getHeight() / 2 - (buttonExit.getHeight() / 2) - 140);
+		buttonExit.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
 		buttonExit.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Gdx.app.exit();
 			}
 		});
-		TextButton buttonTemplate = new TextButton("Create Map",
-				ResourceManager.get().skin, "default");
+		TextButton buttonTemplate = new TextButton("Join Game", ResourceManager.get().skin, "default");
 		buttonTemplate.setSize(280, 60);
-		buttonTemplate.setPosition(Gdx.graphics.getWidth() / 2
-				- (buttonTemplate.getWidth() / 2), Gdx.graphics.getHeight() / 2
-				- (buttonTemplate.getHeight() / 2) - 210);
-		buttonTemplate.addAction(sequence(
-				alpha(0),
-				parallel(fadeIn(.5f),
-						moveBy(0, -20, .5f, Interpolation.pow5Out))));
+		buttonTemplate.setPosition(Gdx.graphics.getWidth() / 2 - (buttonTemplate.getWidth() / 2), Gdx.graphics.getHeight() / 2 - (buttonTemplate.getHeight() / 2) - 210);
+		buttonTemplate.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
 		buttonTemplate.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				// app.setScreen(new TemplateScreen());
+				app.setScreen(new BattleScreen(app));
+			}
+		});
+		TextButton buttonSingle = new TextButton("Single Player Game", ResourceManager.get().skin, "default");
+		buttonSingle.setSize(280, 60);
+		buttonSingle.setPosition(Gdx.graphics.getWidth() / 2 - (buttonTemplate.getWidth() / 2), Gdx.graphics.getHeight() / 2 - (buttonTemplate.getHeight() / 2) - 280);
+		buttonSingle.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
+		buttonSingle.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				app.setScreen(new BattleScreen(app, true));
 			}
 		});
 
@@ -163,5 +144,6 @@ public class MainMenuScreen implements Screen {
 		stage.addActor(buttonLoad);
 		stage.addActor(buttonExit);
 		stage.addActor(buttonTemplate);
+		stage.addActor(buttonSingle);
 	}
 }

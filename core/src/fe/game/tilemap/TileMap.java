@@ -1,37 +1,56 @@
 package fe.game.tilemap;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import fe.game.utils.SerializationUtils;
-import fe.game.utils.Type;
+import fe.game.GameState;
+import fe.game.entities.Entity;
+import fe.game.tilemap.tiles.Tile;
+import fe.game.utils.CellularAutomata;
 
 public class TileMap {
 
+	private CellularAutomata gen;
+	private Tileset tileset;
+
 	public static final int SIZE = 32;
-	boolean blend = true;
+	public boolean blend = true;
 
 	private int width, height;
-	private TileData[][] tileMap;
+	private int[][] tileMap;
+	private int[][] trees;
+	private int[][] facing;
+	private int[][] variance;
 	private float elapsed = 0;
 
-	public TileMap() {
-		width = 64;
-		height = 64;
-		tileMap = new TileData[width][height];
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				tileMap[x][y] = new TileData((y % 3 == 0 && x % 3 == 0) ? 0
-						: (byte) 1);
-			}
-		}
+	public TileMap(Tileset tileset, int width, int height, int seed) {
+		this(tileset, width, height);
+
+		// 383797854
+		// gen = new RandomWorldGenerator(seed, 80, 2, .6f, false);
+		gen = new CellularAutomata(width, height, seed);
+		genNewMap();
+	}
+
+	public TileMap(Tileset tileset, int width, int height) {
+		this.tileset = tileset;
+		this.width = width;
+		this.height = height;
+	}
+
+	public TileMap clone(GameState gameState) {
+		TileMap clone = new TileMap(tileset, width, height);
+		clone.gen = new CellularAutomata(width, height, (int) gen.getSeed());
+		clone.elapsed = elapsed;
+		clone.blend = blend;
+		clone.tileMap = tileMap.clone();
+		clone.trees = trees.clone();
+		// could possibly remove
+		clone.facing = facing.clone();
+		clone.variance = variance.clone();
+		return clone;
 	}
 
 	public void render(SpriteBatch batch, float xo, float yo, float delta) {
-		if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT_BRACKET)) {
-			blend = !blend;
-		}
 		elapsed += delta;
 
 		int x0 = (int) Math.max(Math.floor(xo - 21), 0);
@@ -41,46 +60,19 @@ public class TileMap {
 
 		for (int x = x0; x < x1; x++) {
 			for (int y = y0; y < y1; y++) {
-				TileData data = tileMap[x][y];
-				Tileset.get().getTile(data.tile1)
-				.render(batch, x * SIZE, y * SIZE, elapsed, 1f);
-				if (blend && data.tile2 != -1)
-					Tileset.get()
-					.getTile(data.tile2)
-					.render(batch, x * SIZE, y * SIZE, elapsed,
-							data.tile2percent);
+				tileset.render(batch, this, elapsed, x, y, tileMap[x][y], variance[x][y], facing[x][y]);
+				if (trees[x][y] != 0)
+					tileset.getTrees().render(batch, this, elapsed, x, y, variance[x][y]);
 			}
 		}
 	}
 
-	private class TileData {
-		public byte tile1;
-		public byte tile2;
-
-		public float tile2percent;
-
-		public TileData(byte tile1) {
-			this.tile1 = tile1;
+	public int get(int x, int y) {
+		if (x < 0 || y < 0 || x >= width || y >= height) {
+			return tileMap[Math.max(0, Math.min(width - 1, x))][Math.max(0, Math.min(height - 1, y))];
+		} else {
+			return tileMap[x][y];
 		}
-
-		public int writeBytes(byte[] dest, int pointer) {
-			pointer = SerializationUtils.writeBytes(dest, pointer, tile1);
-			pointer = SerializationUtils.writeBytes(dest, pointer, tile2);
-			pointer = SerializationUtils
-					.writeBytes(dest, pointer, tile2percent);
-			return pointer;
-		}
-
-		public int readBytes(byte[] src, int pointer) {
-			tile1 = SerializationUtils.readByte(src, pointer);
-			pointer += Type.getSize(Type.BYTE);
-			tile2 = SerializationUtils.readByte(src, pointer);
-			pointer += Type.getSize(Type.BYTE);
-			tile2percent = SerializationUtils.readFloat(src, pointer);
-			pointer += Type.getSize(Type.FLOAT);
-			return pointer;
-		}
-
 	}
 
 	public int getWidth() {
@@ -91,7 +83,50 @@ public class TileMap {
 		return height;
 	}
 
-	public boolean isSolid(int i, int j) {
-		return tileMap[i][j].tile1 == 0;
+	public int getTerrainCost(int x, int y, Entity selected) {
+		return selected.getEntityClass().getTerrainCost(tileset.getTerrain(get(x, y))) + (getTrees(x, y) != 0 ? selected.getEntityClass().getTreesCost() : 0);
+	}
+
+	public int getTrees(int x, int y) {
+		if (x < 0 || y < 0 || x >= width || y >= height) {
+			return trees[Math.max(0, Math.min(width - 1, x))][Math.max(0, Math.min(height - 1, y))];
+		} else {
+			return trees[x][y];
+		}
+	}
+
+	public void setTile(int x, int y, int k) {
+		tileMap[x][y] = k;
+	}
+
+	public boolean hasTree(int x, int y) {
+		return trees[x][y] != 0;
+	}
+
+	public void clearTrees(int x, int y) {
+		trees[x][y] = 0;
+	}
+
+	public Tile getTerrain(int x, int y) {
+		return tileset.getTerrain(tileMap[x][y]);
+	}
+
+	public void genPath(int i, int j, int endX, int endY) {
+		gen.genPath(this, i, j, endX, endY);
+	}
+
+	public void genNewMap() {
+		tileMap = gen.generateMap(width, height);
+		trees = gen.generateTrees(tileMap, width);
+
+		// tileMap = gen.mirrorY(tileMap, true);
+		// trees = gen.mirrorY(trees, true);
+		facing = gen.getFacingMap(tileMap);
+
+		variance = gen.getVarianceMap();
+	}
+
+	public void setSeed(int i) {
+		gen.setSeed(i);
 	}
 }

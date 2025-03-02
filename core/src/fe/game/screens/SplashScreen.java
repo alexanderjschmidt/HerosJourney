@@ -19,8 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import fe.game.Application;
-import fe.game.utils.KeyManager;
-import fe.game.utils.ResourceManager;
+import fe.game.managers.KeyManager;
+import fe.game.managers.ResourceManager;
 
 public class SplashScreen implements Screen {
 

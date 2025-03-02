@@ -22,6 +22,8 @@ public class RandomWorldGenerator {
 	/**
 	 * The amplitude of the map, this determines how much variation there is in map
 	 * levels. The higher the number the more levels and vice versa.
+	 * 
+	 * 80 appears to cap the max at 100 70 appears to cap the max at 87
 	 *
 	 * Default value: 70f.
 	 */
@@ -204,7 +206,7 @@ public class RandomWorldGenerator {
 	public int generateTerrain(int x, int y) {
 		float total = 0;
 		float d = (float) Math.pow(2, (octaves * 2) - 1);
-		for (int i = 0; i < (octaves * 2); i += 2) {
+		for (int i = 0; i < octaves; i += 1) {
 			float freq = (float) (Math.pow(2, i) / d);
 			float amp = (float) Math.pow(roughness, i) * amplitude;
 			total += (getInterpolatedNoise(x * freq, y * freq) * amp);
@@ -298,8 +300,7 @@ public class RandomWorldGenerator {
 	 * @return the smoothed noise
 	 */
 	private int getSmoothNoise(int x, int y) {
-		float corners = (getNoise(x - 1, y - 1) + getNoise(x + 1, y - 1) + getNoise(x - 1, y + 1)
-				+ getNoise(x + 1, y + 1)) / 16;
+		float corners = (getNoise(x - 1, y - 1) + getNoise(x + 1, y - 1) + getNoise(x - 1, y + 1) + getNoise(x + 1, y + 1)) / 16;
 		float sides = (getNoise(x - 1, y) + getNoise(x + 1, y) + getNoise(x, y + 1) + getNoise(x + 1, y - 1)) / 8;
 		float center = getNoise(x, y) / 4;
 		return (int) (corners + sides + center);
