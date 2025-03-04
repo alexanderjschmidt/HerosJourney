@@ -1,12 +1,12 @@
 package heros.journey.utils.pathfinding;
 
+import java.util.PriorityQueue;
+
 import heros.journey.entities.Entity;
 import heros.journey.entities.EntityManager;
-import heros.journey.utils.RangeManager;
+import heros.journey.initializers.BaseTile;
 import heros.journey.tilemap.TileMap;
-import heros.journey.tilemap.tiles.Tile;
-
-import java.util.PriorityQueue;
+import heros.journey.utils.RangeManager;
 
 public class AStar {
 
@@ -98,7 +98,7 @@ public class AStar {
 	}
 
 	private static int getPathCost(TileMap map, int i, int j) {
-		return map.get(i, j) == Tile.PATH ? 1 : ((map.getTerrain(i, j).getTerrainCost() + (map.getEnvironment(i, j) != null ? map.getEnvironment(i, j).getTerrainCost() : 0)) * 5);
+		return map.get(i, j) == BaseTile.PATH ? 1 : ((map.getTerrain(i, j).getTerrainCost() + (map.getEnvironment(i, j) != null ? map.getEnvironment(i, j).getTerrainCost() : 0)) * 5);
 	}
 
 	public static Cell aStarEntity(int dist1, RangeManager.RangeColor[][] range, int startI, int startJ, int endI, int endJ, TileMap mapRenderer, Entity selected) {

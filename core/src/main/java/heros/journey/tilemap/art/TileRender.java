@@ -1,4 +1,4 @@
-package heros.journey.tilemap.tiles;
+package heros.journey.tilemap.art;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 

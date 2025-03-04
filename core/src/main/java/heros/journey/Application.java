@@ -14,8 +14,9 @@ import heros.journey.screens.LoadingScreen;
 
 /*
  * TODO List
- * Make Tiles not Enums
  * Make TextureMaps not Enums?
+ * add zoom
+ * force zoom if camera would go off screen
  * make camera not go beyond map
  * Menus
  * 	Stats Screen

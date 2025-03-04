@@ -1,13 +1,15 @@
 package heros.journey.utils.worldgen;
 
+import java.util.Random;
+
+import heros.journey.initializers.BaseTile;
 import heros.journey.tilemap.TileMap;
 import heros.journey.tilemap.tiles.ActionTile;
 import heros.journey.tilemap.tiles.Tile;
 import heros.journey.tilemap.tiles.TileInterface;
+import heros.journey.tilemap.TileManager;
 import heros.journey.utils.pathfinding.AStar;
 import heros.journey.utils.pathfinding.Cell;
-
-import java.util.Random;
 
 public class CellularAutomata {
 
@@ -75,7 +77,7 @@ public class CellularAutomata {
 	public void genPath(TileMap tileMap, int startX, int startY, int endX, int endY) {
 		Cell path = AStar.aStar(startX, startY, endX, endY, tileMap);
 		while (path != null) {
-			tileMap.setTile(path.i, path.j, Tile.PATH);
+			tileMap.setTile(path.i, path.j, BaseTile.PATH);
 			path = path.parent;
 		}
 	}
@@ -94,7 +96,7 @@ public class CellularAutomata {
 					if (tiles[k] > tiles[max])
 						max = k;
 				}
-				map[i][j] = Tile.values()[max];
+				map[i][j] = TileManager.getTile(max);
 			}
 		}
 	}
@@ -111,7 +113,7 @@ public class CellularAutomata {
 						tiles[map[Math.max(0, Math.min(width - 1, i))][Math.max(0, Math.min(height - 1, l))].ordinal()]++;
 					}
 					if (tiles[map[i][j].ordinal()] <= 3)
-						map[i][j] = Tile.values()[tiles[3] > tiles[2] ? 3 : 2];
+						map[i][j] = TileManager.getTile(tiles[3] > tiles[2] ? 3 : 2);
 				}
 			}
 		}
@@ -140,14 +142,14 @@ public class CellularAutomata {
 
 	private TileInterface getTile(int nextInt) {
 		if (nextInt < 20)
-			return Tile.WATER;
+			return BaseTile.WATER;
 		else if (nextInt < 35)
-			return Tile.SAND;
+			return BaseTile.SAND;
 		else if (nextInt < 60)
-			return Tile.PLAINS;
+			return BaseTile.PLAINS;
 		else if (nextInt < 80)
-			return Tile.HILLS;
-		return Tile.MOUNTAINS;
+			return BaseTile.HILLS;
+		return BaseTile.MOUNTAINS;
 	}
 
 	public Tile[][] getFacingMap(Tile[][] tileMap) {
@@ -160,12 +162,12 @@ public class CellularAutomata {
 						tiles[tileMap[Math.max(0, Math.min(width - 1, k))][Math.max(0, Math.min(height - 1, l))].ordinal()]++;
 					}
 				}
-				int max = tileMap[i][j] == Tile.WATER ? 1 : 0;
+				int max = tileMap[i][j] == BaseTile.WATER ? 1 : 0;
 				for (int k = 0; k < tiles.length; k++) {
-					if (k != tileMap[i][j].ordinal() && tiles[k] >= tiles[max])
+					if (k != TileManager.getHeight(tileMap[i][j]) && tiles[k] >= tiles[max])
 						max = k;
 				}
-				facing[i][j] = Tile.values()[max];
+				facing[i][j] = TileManager.getTile(max);
 			}
 		}
 		return facing;
@@ -175,10 +177,10 @@ public class CellularAutomata {
 		ActionTile[][] trees = new ActionTile[width2][width2];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				if (tileMap[i][j] == Tile.PLAINS)
-					trees[i][j] = random.nextInt(2) == 1 ? ActionTile.TREES : null;
-				if (tileMap[i][j] == Tile.HILLS)
-					trees[i][j] = random.nextInt(4) == 1 ? ActionTile.TREES : null;
+				if (tileMap[i][j] == BaseTile.PLAINS)
+					trees[i][j] = random.nextInt(2) == 1 ? BaseTile.TREES : null;
+				if (tileMap[i][j] == BaseTile.HILLS)
+					trees[i][j] = random.nextInt(4) == 1 ? BaseTile.TREES : null;
 			}
 		}
 		// Smoothing ???
@@ -193,11 +195,11 @@ public class CellularAutomata {
 						}
 					}
 					if (trees[i][j] == null)
-						trees[i][j] = tiles[1] >= 6 ? ActionTile.TREES : null;
+						trees[i][j] = tiles[1] >= 6 ? BaseTile.TREES : null;
 					else
-						trees[i][j] = tiles[1] <= 3 ? null : ActionTile.TREES;
-					if (trees[i][j] == ActionTile.TREES && tiles[1] > 7)
-						trees[i][j] = random.nextInt(3) == 1 ? null : ActionTile.TREES;
+						trees[i][j] = tiles[1] <= 3 ? null : BaseTile.TREES;
+					if (trees[i][j] == BaseTile.TREES && tiles[1] > 7)
+						trees[i][j] = random.nextInt(3) == 1 ? null : BaseTile.TREES;
 				}
 			}
 		}

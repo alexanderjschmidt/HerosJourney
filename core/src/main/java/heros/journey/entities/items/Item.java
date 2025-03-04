@@ -11,6 +11,7 @@ public class Item implements ItemInterface {
 		this.type = type;
 		this.weight = weight;
 		this.value = value;
+        ItemManager.get().put(name, this);
 	}
 
 	public ItemType getType() {

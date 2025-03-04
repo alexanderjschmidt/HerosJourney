@@ -8,7 +8,6 @@ import heros.journey.ActionQueue;
 import heros.journey.Application;
 import heros.journey.GameCamera;
 import heros.journey.GameState;
-import heros.journey.entities.EntityClassManager;
 import heros.journey.entities.ai.AIManager;
 import heros.journey.utils.input.InputManager;
 import heros.journey.utils.input.KeyManager;
@@ -45,8 +44,6 @@ public class BattleScreen implements Screen {
 
 	public void startGame() {
 		batch = app.getBatch();
-
-		EntityClassManager.get().init();
 
 		GameState.global().init(mapData);
 

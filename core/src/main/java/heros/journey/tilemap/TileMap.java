@@ -11,6 +11,7 @@ import heros.journey.GameState;
 import heros.journey.entities.Entity;
 import heros.journey.entities.actions.Action;
 import heros.journey.initializers.BaseActions;
+import heros.journey.initializers.BaseTile;
 import heros.journey.tilemap.tiles.ActionTile;
 import heros.journey.tilemap.tiles.Tile;
 import heros.journey.tilemap.tiles.TileInterface;
@@ -119,9 +120,9 @@ public class TileMap {
 			while (true) {
 				int x = (int) (Math.random() * width);
 				int y = (int) (Math.random() * height);
-				if (tileMap[x][y] == Tile.PLAINS) {
+				if (tileMap[x][y] == BaseTile.PLAINS) {
 					housePos[i] = new Vector2(x, y);
-					environment[x][y] = ActionTile.HOUSE;
+					environment[x][y] = BaseTile.HOUSE;
 					break;
 				}
 			}

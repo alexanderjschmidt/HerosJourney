@@ -11,7 +11,7 @@ public class Stats {
 
 	private Map<DamageType, Integer> resistances;
 
-	private int reputation;
+	private int fame;
 
 	private int currentHealth;
 
@@ -29,7 +29,7 @@ public class Stats {
 			resistances.put(type, 0);
 		}
 		currentHealth = getMaxHealth();
-		reputation = 0;
+        fame = 0;
 	}
 
 	public void addExp(int exp) {
