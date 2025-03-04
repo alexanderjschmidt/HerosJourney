@@ -1,4 +1,4 @@
-package heros.journey.managers;
+package heros.journey.utils;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import heros.journey.GameCamera;

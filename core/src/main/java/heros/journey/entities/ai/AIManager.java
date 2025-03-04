@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import heros.journey.ActionQueue;
 import heros.journey.GameState;
-import heros.journey.utils.GameAction;
+import heros.journey.entities.actions.QueuedAction;
 
 public class AIManager {
 
-	private GameAction action;
+	private QueuedAction action;
 	private boolean creatingAction;
 
 	public AIManager() {
@@ -23,7 +23,7 @@ public class AIManager {
 				@Override
 				public void run() {
 					// do something important here, asynchronously to the rendering thread
-					final GameAction a = gameState.getActiveTeam().getAI().update(gameState, delta);
+					final QueuedAction a = gameState.getActiveTeam().getAI().update(gameState, delta);
 					// post a Runnable to the rendering thread that processes the result
 					Gdx.app.postRunnable(new Runnable() {
 						@Override

@@ -1,16 +1,15 @@
-package heros.journey.utils;
+package heros.journey.entities.actions;
 
-import heros.journey.entities.actions.Action;
 import heros.journey.utils.pathfinding.Cell;
 
-public class GameAction {
+public class QueuedAction {
 
 	private Cell path;
 	private Action action;
 	private int targetX, targetY;
 	public String information = "";
 
-	public GameAction(Cell path, Action action, int targetX, int targetY) {
+	public QueuedAction(Cell path, Action action, int targetX, int targetY) {
 		this.path = path;
 		this.action = action;
 		this.targetX = targetX;

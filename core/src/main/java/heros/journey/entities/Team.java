@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import heros.journey.GameState;
 import heros.journey.entities.ai.AI;
-import heros.journey.managers.RangeManager.RangeColor;
+import heros.journey.utils.RangeManager.RangeColor;
 
 public class Team {
 

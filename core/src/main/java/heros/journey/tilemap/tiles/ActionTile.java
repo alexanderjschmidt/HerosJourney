@@ -1,25 +1,26 @@
 package heros.journey.tilemap.tiles;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heros.journey.entities.actions.Action;
-import heros.journey.entities.actions.ActionManager;
+import heros.journey.initializers.BaseActions;
 import heros.journey.tilemap.TileMap;
 import heros.journey.utils.art.ResourceManager;
 import heros.journey.utils.art.TextureMaps;
 
-import java.util.Arrays;
-import java.util.List;
-
 public enum ActionTile implements TileInterface {
 
-	TREES("Trees", 2, ActionManager.getAction(ActionManager.WAIT)) {
+	TREES("Trees", 2, BaseActions.wait) {
 		@Override
 		public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, TileInterface facing) {
 			treesArt.render(batch, tileMap, elapsed, x, y, variance);
 		}
 	},
-	HOUSE("House", 1, ActionManager.getAction(ActionManager.WAIT)) {
+	HOUSE("House", 1, BaseActions.wait) {
 		@Override
 		public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, TileInterface facing) {
 			houseArt.render(batch, tileMap, elapsed, x, y, variance);

@@ -28,7 +28,7 @@ public class WangEdgeTileAnimated implements TileRender {
 		bitVal += map.get(x, y) == map.get(x + 1, y) ? 2 : 0;
 		bitVal += map.get(x, y) == map.get(x, y - 1) ? 4 : 0;
 		bitVal += map.get(x, y) == map.get(x - 1, y) ? 8 : 0;
-		if (Options.mapBlend)
+		if (Options.MAP_BLEND)
 			bitVal = 0;
 		batch.draw(autoTileTextures[bitVal][varianceVal % variance].getKeyFrame(elapsedTime, true), x * GameCamera.get().getSize(), y * GameCamera.get().getSize(), GameCamera.get().getSize(),
             GameCamera.get().getSize());

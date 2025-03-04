@@ -40,7 +40,7 @@ public class WangCornerBuildingTile implements TileRender {
 				? 8
 				: 0;
 
-		if (!Options.mapBlend)
+		if (!Options.MAP_BLEND)
 			bitVal = 15;
 		batch.draw(autoTileTextures[bitVal][varianceVal % variance], x * GameCamera.get().getSize(), y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
 	}

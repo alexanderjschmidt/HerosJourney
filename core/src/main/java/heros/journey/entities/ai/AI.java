@@ -1,20 +1,21 @@
 package heros.journey.entities.ai;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import com.badlogic.gdx.math.Vector2;
+
 import heros.journey.GameState;
 import heros.journey.entities.Building;
 import heros.journey.entities.Entity;
 import heros.journey.entities.Team;
 import heros.journey.entities.actions.Action;
-import heros.journey.entities.actions.ActionManager;
+import heros.journey.initializers.BaseActions;
+import heros.journey.entities.actions.QueuedAction;
 import heros.journey.entities.actions.TargetAction;
-import heros.journey.managers.RangeManager.RangeColor;
-import heros.journey.utils.GameAction;
+import heros.journey.utils.RangeManager.RangeColor;
 import heros.journey.utils.pathfinding.AStar;
 import heros.journey.utils.pathfinding.Cell;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class AI {
 
@@ -38,12 +39,12 @@ public class AI {
 		targetCastleY = 3;
 	}
 
-	public GameAction update(GameState gameState, float delta) {
-		GameAction action = updateUnits(gameState);
+	public QueuedAction update(GameState gameState, float delta) {
+		QueuedAction action = updateUnits(gameState);
 		return action;
 	}
 
-	private GameAction updateUnits(GameState gameState) {
+	private QueuedAction updateUnits(GameState gameState) {
 		ActionValue av = minimax(gameState.clone(), gameState.getActiveTeam(), 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
 		System.out.println("Entity: " + gameState.getEntities().getFog(av.action.getPath().i, av.action.getPath().j));
 		System.out.println("Entity Target: " + gameState.getEntities().getFog(av.action.getTargetX(), av.action.getTargetY()));
@@ -58,8 +59,8 @@ public class AI {
 		int[][] threatMap = decisionMaker.getThreatMap(state, state.getActiveTeam());
 		if (state.getActiveTeam().getArrayID() == maxTeam.getArrayID()) {
 			ActionValue maxVal = new ActionValue(null, Integer.MIN_VALUE);
-			for (GameAction action : this.getAllPossibleActions(state, threatMap)) {
-				ActionValue av = minimax(state.applyAction(action), maxTeam, action.getAction() == ActionManager.getAction(ActionManager.END_TURN) ? 0 : depth - 1, alpha, beta);
+			for (QueuedAction action : this.getAllPossibleActions(state, threatMap)) {
+				ActionValue av = minimax(state.applyAction(action), maxTeam, action.getAction() == BaseActions.end_turn ? 0 : depth - 1, alpha, beta);
 				av.action = action;
 				if (maxVal.actionValue < av.actionValue) {
 					maxVal = av;
@@ -74,8 +75,8 @@ public class AI {
 			return maxVal;
 		} else {
 			ActionValue minVal = new ActionValue(null, Integer.MAX_VALUE);
-			for (GameAction action : this.getAllPossibleActions(state, threatMap)) {
-				ActionValue av = minimax(state.applyAction(action), maxTeam, action.getAction() == ActionManager.getAction(ActionManager.END_TURN) ? 0 : depth - 1, alpha, beta);
+			for (QueuedAction action : this.getAllPossibleActions(state, threatMap)) {
+				ActionValue av = minimax(state.applyAction(action), maxTeam, action.getAction() == BaseActions.end_turn ? 0 : depth - 1, alpha, beta);
 				av.action = action;
 				if (minVal.actionValue > av.actionValue) {
 					minVal = av;
@@ -91,28 +92,28 @@ public class AI {
 		}
 	}
 
-	private ArrayList<GameAction> getAllPossibleActions(GameState state, int[][] threatMap) {
+	private ArrayList<QueuedAction> getAllPossibleActions(GameState state, int[][] threatMap) {
 		ArrayList<Entity> avalibleUnits = state.getEntities().getVisibleUnits(state.getActiveTeam(), false, true);
-		ArrayList<GameAction> possibleActions = new ArrayList<GameAction>(avalibleUnits.size());
+		ArrayList<QueuedAction> possibleActions = new ArrayList<QueuedAction>(avalibleUnits.size());
 		for (Entity e : avalibleUnits) {
 			for (Action action : e.getEntityClass().getActions()) {
-				if (action != ActionManager.getAction(ActionManager.WAIT)) {
+				if (action != BaseActions.wait) {
 					possibleActions.add(getActions(state, action, e, threatMap));
 				}
 			}
 		}
 		if (avalibleUnits.size() == 0) {
-			possibleActions.add(new GameAction(new Cell(0, 0, 1), ActionManager.getAction(ActionManager.END_TURN), 0, 0));
+			possibleActions.add(new QueuedAction(new Cell(0, 0, 1), BaseActions.end_turn, 0, 0));
 		}
 		return possibleActions;
 	}
 
-	private GameAction getActions(GameState state, Action action, Entity e, int[][] threatMap) {
-		GameAction gameAction;
+	private QueuedAction getActions(GameState state, Action action, Entity e, int[][] threatMap) {
+		QueuedAction queuedAction;
 		if (action instanceof TargetAction) {
 			TargetAction targetAction = (TargetAction) action;
 			AIEntityDecisionMaker.EntityUtil util = decisionMaker.getBestLocation(state, e, targetAction,
-					targetAction.equals(ActionManager.getAction(ActionManager.ATTACK)) ? e.getEntityClass().getRanges() : targetAction.getRanges(), threatMap);
+					targetAction.equals(BaseActions.attack) ? e.getEntityClass().getRanges() : targetAction.getRanges(), threatMap);
 			int tx = util.x;
 			int ty = util.y;
 			state.getRangeManager().setMoveAndAttackRange(e);
@@ -130,23 +131,23 @@ public class AI {
 			path = AStar.reversePath(path);
 			// AStar.printPath(path);
 			if (util.e != null && !util.e.getClass().equals(Building.class)) {
-				gameAction = new GameAction(path, targetAction, util.e.getXCoord(), util.e.getYCoord());
+				queuedAction = new QueuedAction(path, targetAction, util.e.getXCoord(), util.e.getYCoord());
 			} else {
-				gameAction = new GameAction(path, ActionManager.getAction(ActionManager.WAIT), 0, 0);
+				queuedAction = new QueuedAction(path, BaseActions.wait, 0, 0);
 			}
 
 			state.getRangeManager().clearRange();
 		} else {
-			gameAction = new GameAction(new Cell(e.getXCoord(), e.getYCoord(), 1), action, 0, 0);
+			queuedAction = new QueuedAction(new Cell(e.getXCoord(), e.getYCoord(), 1), action, 0, 0);
 		}
-		return gameAction;
+		return queuedAction;
 	}
 
 	private class ActionValue {
-		public GameAction action;
+		public QueuedAction action;
 		public int actionValue;
 
-		public ActionValue(GameAction action, int actionValue) {
+		public ActionValue(QueuedAction action, int actionValue) {
 			this.action = action;
 			this.actionValue = actionValue;
 		}

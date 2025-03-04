@@ -1,21 +1,22 @@
 package heros.journey;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import heros.journey.initializers.BaseClass;
 import heros.journey.entities.Entity;
-import heros.journey.entities.EntityClassManager;
 import heros.journey.entities.EntityManager;
 import heros.journey.entities.Team;
 import heros.journey.entities.actions.Action;
+import heros.journey.entities.actions.QueuedAction;
 import heros.journey.entities.actions.TargetAction;
 import heros.journey.entities.ai.AI;
-import heros.journey.managers.RangeManager;
 import heros.journey.tilemap.MapData;
 import heros.journey.tilemap.TileMap;
 import heros.journey.ui.HUD;
-import heros.journey.utils.GameAction;
+import heros.journey.utils.RangeManager;
 import heros.journey.utils.pathfinding.Cell;
-
-import java.util.ArrayList;
 
 public class GameState {
 
@@ -66,7 +67,7 @@ public class GameState {
 			}
 		}
 
-        Entity player = new Entity(EntityClassManager.get().get(EntityClassManager.HERO), playerTeam, this);
+        Entity player = new Entity(BaseClass.hero, playerTeam, this);
         entities.addEntity(player, 16, 16);
 	}
 
@@ -89,7 +90,7 @@ public class GameState {
 		return clone;
 	}
 
-	public GameState applyAction(GameAction action) {
+	public GameState applyAction(QueuedAction action) {
 		GameState state = this.clone();
 		Cell path = action.getPath();
 		Action skill = action.getAction();
@@ -203,4 +204,9 @@ public class GameState {
 		return height;
 	}
 
+    public void endTurn() {
+        if (!entities.anyUnitAvailable()) {
+            nextTurn();
+        }
+    }
 }

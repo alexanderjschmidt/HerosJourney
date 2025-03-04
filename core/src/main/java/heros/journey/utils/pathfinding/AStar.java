@@ -2,7 +2,7 @@ package heros.journey.utils.pathfinding;
 
 import heros.journey.entities.Entity;
 import heros.journey.entities.EntityManager;
-import heros.journey.managers.RangeManager;
+import heros.journey.utils.RangeManager;
 import heros.journey.tilemap.TileMap;
 import heros.journey.tilemap.tiles.Tile;
 

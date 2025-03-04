@@ -14,7 +14,6 @@ import heros.journey.screens.LoadingScreen;
 
 /*
  * TODO List
- * Auto End Turn when all characters used up
  * Make Tiles not Enums
  * Make TextureMaps not Enums?
  * make camera not go beyond map
@@ -57,6 +56,18 @@ public class Application extends Game {
 
 	private Viewport viewport;
 	private SpriteBatch batch;
+
+    private static Application app;
+
+    public static Application get() {
+        if (app == null)
+            app = new Application();
+        return app;
+    }
+
+    private Application(){
+        super();
+    }
 
 	@Override
 	public void create() {

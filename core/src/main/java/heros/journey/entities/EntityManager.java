@@ -149,12 +149,29 @@ public class EntityManager {
 			if (y == 0) {
 				x = (x + 1) % entities.length;
 			}
-			if ((entities[x][y] != null && entities[x][y].getTeam() == gameState.getActiveTeam() && !entities[x][y].used)) {
+			if (entities[x][y] != null && entities[x][y].getTeam() == gameState.getActiveTeam() && !entities[x][y].used) {
 				HUD.get().getCursor().setPosition(x, y);
 				return;
 			}
 		}
 	}
+
+    public boolean anyUnitAvailable() {
+        boolean anyUnitAvailable = false;
+        int x = 0;
+        int y = 0;
+        int iStart = 1;
+        for (int i = iStart; i != iStart - 1; i = (i + 1) % (entities.length * entities[0].length)) {
+            y = (y + 1) % entities[0].length;
+            if (y == 0) {
+                x = (x + 1) % entities.length;
+            }
+            if (entities[x][y] != null && entities[x][y].getTeam() == gameState.getActiveTeam() && !entities[x][y].used) {
+                anyUnitAvailable = true;
+            }
+        }
+        return anyUnitAvailable;
+    }
 
 	public static int getDistanceBetween(Entity A, Entity B) {
 		return (Math.abs(A.getXCoord() - B.getXCoord()) + Math.abs(A.getYCoord() - B.getYCoord()));

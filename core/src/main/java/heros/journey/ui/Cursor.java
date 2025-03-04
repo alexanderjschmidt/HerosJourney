@@ -11,9 +11,10 @@ import heros.journey.entities.Entity;
 import heros.journey.entities.actions.TargetAction;
 import heros.journey.entities.buffs.Buff;
 import heros.journey.entities.buffs.BuffManager;
-import heros.journey.managers.RangeManager.RangeColor;
+import heros.journey.utils.RangeManager.RangeColor;
 import heros.journey.utils.art.ResourceManager;
 import heros.journey.ui.HUD.HUDState;
+import heros.journey.utils.input.Options;
 import heros.journey.utils.pathfinding.AStar;
 import heros.journey.utils.pathfinding.Cell;
 
@@ -64,6 +65,9 @@ public class Cursor {
 		path = null;
 		GameState.global().getRangeManager().clearRange();
 		hud.clearSelect();
+        if(Options.AUTO_END_TURN){
+            GameState.global().endTurn();
+        }
 	}
 
 	public void render(Batch batch, float delta) {

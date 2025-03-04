@@ -53,7 +53,7 @@ public class WangCornerTile implements TileRender {
 			bitVal += map.get(x, y).ordinal() <= map.get(x - 1, y + 1).ordinal() && map.get(x, y).ordinal() <= map.get(x, y + 1).ordinal() && map.get(x, y).ordinal() <= map.get(x - 1, y).ordinal() ? 8
 					: 0;
 		}
-		if (!Options.mapBlend)
+		if (!Options.MAP_BLEND)
 			bitVal = 15;
 		batch.draw(autoTileTextures[bitVal][varianceVal % variance], x * GameCamera.get().getSize(), y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
 	}

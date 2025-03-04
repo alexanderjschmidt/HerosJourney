@@ -7,7 +7,7 @@ import heros.journey.entities.actions.ActionManager;
 import heros.journey.tilemap.MapData;
 import heros.journey.ui.HUD;
 import heros.journey.ui.HUD.HUDState;
-import heros.journey.utils.GameAction;
+import heros.journey.entities.actions.QueuedAction;
 import heros.journey.utils.pathfinding.Cell;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActionQueue extends ArrayList<GameAction> {
+public class ActionQueue extends ArrayList<QueuedAction> {
 
 	private boolean actionInProgress;
 
@@ -122,7 +122,7 @@ public class ActionQueue extends ArrayList<GameAction> {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				ActionQueue.get().addAction(new GameAction(temp, skill, targetX, targetY));
+				ActionQueue.get().addAction(new QueuedAction(temp, skill, targetX, targetY));
 				ActionQueue.get().nextAction();
 			}
 		}).on("playerDisconnected", new Emitter.Listener() {
@@ -166,7 +166,7 @@ public class ActionQueue extends ArrayList<GameAction> {
 			// System.out.println("end of queue");
 			return;
 		}
-		GameAction action = actionQueue.remove(0);
+		QueuedAction action = actionQueue.remove(0);
 		actionInProgress = true;
 		// System.out.println("Skill: " + action.getSkill());
 		Cell path = action.getPath();
@@ -185,7 +185,7 @@ public class ActionQueue extends ArrayList<GameAction> {
 		checkLocked();
 	}
 
-	public void addAction(GameAction action) {
+	public void addAction(QueuedAction action) {
 		actionQueue.add(action);
 	}
 

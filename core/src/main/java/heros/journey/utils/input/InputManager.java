@@ -1,7 +1,14 @@
 package heros.journey.utils.input;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+
 import heros.journey.ActionQueue;
 import heros.journey.GameState;
 import heros.journey.entities.actions.ActionManager;
@@ -11,11 +18,6 @@ import heros.journey.ui.HUD;
 import heros.journey.ui.HUD.HUDState;
 import heros.journey.utils.pathfinding.AStar;
 import heros.journey.utils.pathfinding.Cell;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class InputManager {
 
@@ -65,7 +67,7 @@ public class InputManager {
 
 	public void update(float delta) {
 		if (Gdx.input.isKeyJustPressed(KeyManager.DEVMODE)) {
-			Options.mapBlend = !Options.mapBlend;
+			Options.MAP_BLEND = !Options.MAP_BLEND;
 		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT_BRACKET)) {
 			gameState.getMap().setSeed((int) (Math.random() * 10000000));

@@ -16,14 +16,14 @@ import heros.journey.ActionQueue;
 import heros.journey.GameCamera;
 import heros.journey.GameState;
 import heros.journey.entities.actions.Action;
-import heros.journey.entities.actions.ActionManager;
+import heros.journey.initializers.BaseActions;
 import heros.journey.entities.actions.TargetAction;
 import heros.journey.entities.buffs.Buff;
 import heros.journey.entities.buffs.BuffManager;
 import heros.journey.entities.buffs.BuffType;
 import heros.journey.ui.HUD;
-import heros.journey.utils.pathfinding.Cell;
 import heros.journey.utils.Direction;
+import heros.journey.utils.pathfinding.Cell;
 
 public class Entity extends Actor {
 
@@ -227,7 +227,7 @@ public class Entity extends Actor {
 		}
 		if (path != null && gameState.getEntities().getFog(path.i, path.j) != null && gameState.getEntities().getFog(path.i, path.j).team != gameState.getActiveTeam()) {
 			path = null;
-			action = ActionManager.getAction(ActionManager.WAIT);
+			action = BaseActions.wait;
 		}
 		if (path == null) {
 			gameState.getEntities().removeEntity(x, y);
@@ -241,7 +241,7 @@ public class Entity extends Actor {
 				} else {
 					action.onSelect(gameState, this);
 				}
-				if (action.equals(ActionManager.getAction(ActionManager.WAIT))) {
+				if (action.equals(BaseActions.wait)) {
 					ActionQueue.get().endAction();
 				} else {
 					Timer.schedule(new Timer.Task() {
@@ -258,7 +258,7 @@ public class Entity extends Actor {
 	}
 
 	public void openActionMenu() {
-		List<Action> options = getEntityClass().getActions().stream().filter(action -> action.requiremendtsMet(gameState, this)).collect(Collectors.toList());
+		List<Action> options = getEntityClass().getActions().stream().filter(action -> action.requirementsMet(gameState, this)).collect(Collectors.toList());
 		HUD.get().getActionMenu().open(options);
 	}
 

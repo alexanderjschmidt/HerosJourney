@@ -1,15 +1,17 @@
 package heros.journey.entities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heros.journey.GameCamera;
 import heros.journey.entities.actions.Action;
-import heros.journey.entities.actions.ActionManager;
+import heros.journey.initializers.BaseActions;
 import heros.journey.tilemap.TileMap;
 import heros.journey.tilemap.tiles.ActionTile;
 import heros.journey.tilemap.tiles.Tile;
-
-import java.util.ArrayList;
 
 public class EntityClass {
 
@@ -41,12 +43,10 @@ public class EntityClass {
 		this.vision = vision;
 		this.value = value;
 		this.actions = new ArrayList<Action>();
-		this.actions.add(ActionManager.getAction(ActionManager.WAIT));
-		for (Action action : actions) {
-			this.actions.add(action);
-		}
+		this.actions.add(BaseActions.wait);
+        this.actions.addAll(Arrays.asList(actions));
 		if (ranges.length > 0) {
-			this.actions.add(ActionManager.getAction(ActionManager.ATTACK));
+			this.actions.add(BaseActions.attack);
 		}
 		EntityClassManager.get().put(name, this);
 	}

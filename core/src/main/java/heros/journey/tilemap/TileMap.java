@@ -1,19 +1,20 @@
 package heros.journey.tilemap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+
 import heros.journey.GameCamera;
 import heros.journey.GameState;
 import heros.journey.entities.Entity;
 import heros.journey.entities.actions.Action;
-import heros.journey.entities.actions.ActionManager;
+import heros.journey.initializers.BaseActions;
 import heros.journey.tilemap.tiles.ActionTile;
 import heros.journey.tilemap.tiles.Tile;
 import heros.journey.tilemap.tiles.TileInterface;
 import heros.journey.utils.worldgen.CellularAutomata;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TileMap {
 
@@ -153,7 +154,7 @@ public class TileMap {
 		ActionTile tile = environment[x][y];
 		if (tile == null) {
             ArrayList<Action> options = new ArrayList<Action>(1);
-            options.add(ActionManager.getAction(ActionManager.WAIT));
+            options.add(BaseActions.wait);
             return options;
 		}
 		return tile.getActions();

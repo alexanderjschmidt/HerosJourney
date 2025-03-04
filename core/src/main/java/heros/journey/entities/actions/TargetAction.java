@@ -2,7 +2,7 @@ package heros.journey.entities.actions;
 
 import heros.journey.GameState;
 import heros.journey.entities.Entity;
-import heros.journey.managers.RangeManager.RangeColor;
+import heros.journey.utils.RangeManager.RangeColor;
 import heros.journey.ui.HUD;
 import heros.journey.ui.HUD.HUDState;
 
@@ -21,7 +21,7 @@ public abstract class TargetAction extends Action {
 		this.rangeType = rangeType;
 	}
 
-	public boolean requiremendtsMet(GameState gameState, Entity selected) {
+	public boolean requirementsMet(GameState gameState, Entity selected) {
 		return gameState.getRangeManager().updateTargets(selected, targetEnemy, range, rangeType).size() > 0 && this.hasMana(selected);
 	}
 

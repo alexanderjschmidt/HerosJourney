@@ -28,7 +28,7 @@ public abstract class Action {
 		this(name, 0, false);
 	}
 
-	public abstract boolean requiremendtsMet(GameState gameState, Entity selected);
+	public abstract boolean requirementsMet(GameState gameState, Entity selected);
 
 	public void onHover(GameState gameState, Entity selected) {
 		gameState.getRangeManager().clearRange();
@@ -39,6 +39,10 @@ public abstract class Action {
 	public String toString() {
 		return name;
 	}
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
 	public void consumeMana(Entity e) {
 		e.consumeMana(manaCost);
