@@ -6,7 +6,6 @@ import java.util.Random;
 import com.badlogic.gdx.math.Vector2;
 
 import heros.journey.GameState;
-import heros.journey.entities.Building;
 import heros.journey.entities.Entity;
 import heros.journey.entities.Team;
 import heros.journey.entities.actions.Action;
@@ -130,7 +129,7 @@ public class AI {
 
 			path = AStar.reversePath(path);
 			// AStar.printPath(path);
-			if (util.e != null && !util.e.getClass().equals(Building.class)) {
+			if (util.e != null) {
 				queuedAction = new QueuedAction(path, targetAction, util.e.getXCoord(), util.e.getYCoord());
 			} else {
 				queuedAction = new QueuedAction(path, BaseActions.wait, 0, 0);

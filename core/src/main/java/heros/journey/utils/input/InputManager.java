@@ -7,9 +7,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 
 import heros.journey.ActionQueue;
+import heros.journey.GameCamera;
 import heros.journey.GameState;
 import heros.journey.entities.actions.ActionManager;
 import heros.journey.entities.actions.TargetAction;
@@ -69,13 +69,19 @@ public class InputManager {
 		if (Gdx.input.isKeyJustPressed(KeyManager.DEVMODE)) {
 			Options.MAP_BLEND = !Options.MAP_BLEND;
 		}
-		if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT_BRACKET)) {
+		if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {
 			gameState.getMap().setSeed((int) (Math.random() * 10000000));
 			gameState.getMap().genNewMap();
 		}
 		if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_JOB_INFO)) {
 			HUD.get().getJobUI().toggle();
 		}
+        if (Gdx.input.isKeyJustPressed(KeyManager.ZOOM_IN)) {
+            GameCamera.get().zoomIn();
+        }
+        if (Gdx.input.isKeyJustPressed(KeyManager.ZOOM_OUT)) {
+            GameCamera.get().zoomOut();
+        }
 		switch (HUD.get().getState()) {
 		case CURSOR_MOVE:
 			updateMoveState(delta);

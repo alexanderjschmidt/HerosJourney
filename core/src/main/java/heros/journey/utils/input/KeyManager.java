@@ -13,5 +13,8 @@ public class KeyManager {
 	public static final int BACK = Input.Keys.BACKSPACE;
 	public static final int SELECT = Input.Keys.ENTER;
 	public static final int NEXT_CHARACTER = Input.Keys.TAB;
-	public static final int SHOW_JOB_INFO = Input.Keys.I;
+    public static final int SHOW_JOB_INFO = Input.Keys.I;
+    public static final int ZOOM_IN = Input.Keys.LEFT_BRACKET;
+    public static final int ZOOM_OUT = Input.Keys.RIGHT_BRACKET;
+    public static final int RE_GEN_MAP = Input.Keys.BACKSLASH;
 }

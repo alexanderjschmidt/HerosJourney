@@ -1,5 +1,6 @@
 package heros.journey.entities.buffs;
 
+import heros.journey.GameCamera;
 import heros.journey.GameState;
 import heros.journey.entities.Effect;
 import heros.journey.entities.Entity;
@@ -27,7 +28,8 @@ public class BuffManager {
 
 				int damageReturned = attacker.calcDamageTaken(defender);
 				defender.lunge(.3f, attacker);
-				gameState.getEntities().addEffect(0, new Effect(ResourceManager.get().slash[(int) (Math.random() * 6)], defender.renderX, defender.renderY));
+				gameState.getEntities().addEffect(0, new Effect(ResourceManager.get().slash[(int) (Math.random() * 6)], defender.getXCoord() *
+                    GameCamera.get().getSize(), defender.getYCoord() * GameCamera.get().getSize()));
 				if (damageReturned > 0) {
 					attacker.vibrate(.5f, defender);
 					attacker.adjustHealth(defender, .5f, -damageReturned);

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
 
-import heros.journey.GameCamera;
 import heros.journey.GameState;
 import heros.journey.entities.ai.AIGoalData;
 import heros.journey.ui.HUD;
@@ -34,8 +33,8 @@ public class EntityManager {
 			for (int j = 0; j < height; j++) {
 				if (entities[i][j] != null) {
 					clone.entities[i][j] = entities[i][j].clone(newGameState);
-					clone.entities[i][j].renderX = i * GameCamera.get().getSize();
-					clone.entities[i][j].renderY = j * GameCamera.get().getSize();
+					clone.entities[i][j].setXCoord(i);
+					clone.entities[i][j].setYCoord(j);
 				}
 			}
 		}
@@ -97,8 +96,8 @@ public class EntityManager {
 	public void addEntity(Entity e, int x, int y) {
 		if (entities[x][y] == null) {
 			entities[x][y] = e;
-			e.renderX = x * GameCamera.get().getSize();
-			e.renderY = y * GameCamera.get().getSize();
+			e.setXCoord(x);
+			e.setYCoord(y);
 		}
 	}
 

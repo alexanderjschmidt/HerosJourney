@@ -32,7 +32,6 @@ public class Entity extends Actor {
 	public static final float MAX_MANA = 10;
 
 	protected EntityClass job;
-	public float renderX, renderY;
 	private int x, y;
 	public Direction dir = Direction.SOUTH;
 	private String render = "idleSOUTH";
@@ -52,8 +51,6 @@ public class Entity extends Actor {
 
 	public Entity(int x, int y) {
 		this.setPosition(0, 0);
-		renderX = x * GameCamera.get().getSize();
-		renderY = y * GameCamera.get().getSize();
 	}
 
 	public Entity(EntityClass job, Team team, GameState gameState) {
@@ -106,7 +103,7 @@ public class Entity extends Actor {
 		} else {
 			batch.setColor(this.getColor());
 		}
-		job.render(batch, renderX + this.getX(), renderY + getY(), elapsedTime);
+        job.render(batch, getRenderX(), getRenderY(), elapsedTime);
 		batch.setColor(Color.WHITE);
 		renderBuffs(batch, buffTime);
 	}
@@ -122,7 +119,7 @@ public class Entity extends Actor {
 		}
 		if (activeBuffs.size() > 0) {
 			if (activeBuffs.get((int) (buffTime % activeBuffs.size())) != null)
-				activeBuffs.get((int) (buffTime % activeBuffs.size())).render(batch, renderX, renderY);
+				activeBuffs.get((int) (buffTime % activeBuffs.size())).render(batch, getRenderX(), getRenderY());
 		}
 	}
 
@@ -200,60 +197,46 @@ public class Entity extends Actor {
 	}
 
 	public void update(float delta) {
-		if (path != null) {
-			float dx = path.i * GameCamera.get().getSize() - renderX;
-			if (dx < -1) {
-				renderX -= delta * MOVE_SPEED;
-				return;
-			} else if (dx > 1) {
-				renderX += delta * MOVE_SPEED;
-				return;
-			} else {
-				renderX = path.i * GameCamera.get().getSize();
-				float dy = path.j * GameCamera.get().getSize() - renderY;
-				if (dy < -1) {
-					renderY -= delta * MOVE_SPEED;
-					return;
-				} else if (dy > 1) {
-					renderY += delta * MOVE_SPEED;
-					return;
-				} else {
-					renderY = path.j * GameCamera.get().getSize();
-					path = path.parent;
-				}
-			}
-		} else {
-			return;
-		}
-		if (path != null && gameState.getEntities().getFog(path.i, path.j) != null && gameState.getEntities().getFog(path.i, path.j).team != gameState.getActiveTeam()) {
-			path = null;
-			action = BaseActions.wait;
-		}
-		if (path == null) {
-			gameState.getEntities().removeEntity(x, y);
-			gameState.getEntities().addEntity(this, this.getXCoord(), this.getYCoord());
-			if (action == null) {
-				openActionMenu();
-			} else {
-				if (action instanceof TargetAction) {
-					TargetAction s = (TargetAction) action;
-					s.targetEffect(gameState, this, targetX, targetY);
-				} else {
-					action.onSelect(gameState, this);
-				}
-				if (action.equals(BaseActions.wait)) {
-					ActionQueue.get().endAction();
-				} else {
-					Timer.schedule(new Timer.Task() {
-						@Override
-						public void run() {
-							ActionQueue.get().endAction();
-						}
-					}, 1f);
-				}
-				ActionQueue.get().nextAction();
-				ActionQueue.get().checkLocked();
-			}
+        final Entity e = this;
+		if (path != null && !this.hasActions()) {
+            //TODO Make duration based on move speed
+            this.addAction(Actions.sequence(Actions.moveTo(path.i - x, path.j - y, .2f),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        gameState.getEntities().removeEntity(x, y);
+                        x = path.i;
+                        y = path.j;
+                        gameState.getEntities().addEntity(e, e.getXCoord(), e.getYCoord());
+                        e.setPosition(0, 0);
+                        path = path.parent;
+                        if (path == null) {
+                            if (action == null) {
+                                openActionMenu();
+                            } else {
+                                if (action instanceof TargetAction) {
+                                    TargetAction s = (TargetAction) action;
+                                    s.targetEffect(gameState, e, targetX, targetY);
+                                } else {
+                                    action.onSelect(gameState, e);
+                                }
+                                if (action.equals(BaseActions.wait)) {
+                                    ActionQueue.get().endAction();
+                                } else {
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            ActionQueue.get().endAction();
+                                        }
+                                    }, 1f);
+                                }
+                                ActionQueue.get().nextAction();
+                                ActionQueue.get().checkLocked();
+                            }
+                        }
+                    }
+                })
+            ));
 		}
 	}
 
@@ -274,13 +257,29 @@ public class Entity extends Actor {
 		this.targetY = y2;
 	}
 
-	public int getXCoord() {
-		return (int) (renderX / GameCamera.get().getSize());
-	}
+    public int getXCoord() {
+        return x;
+    }
 
-	public int getYCoord() {
-		return (int) (renderY / GameCamera.get().getSize());
-	}
+    public int getYCoord() {
+        return y;
+    }
+
+    public void setXCoord(int x) {
+        this.x = x;
+    }
+
+    public void setYCoord(int y) {
+        this.y = y;
+    }
+
+    public float getRenderX() {
+        return (x + getX()) * GameCamera.get().getSize();
+    }
+
+    public float getRenderY() {
+        return (y + getY()) * GameCamera.get().getSize();
+    }
 
 	public boolean remove() {
 		gameState.getEntities().removeEntity(getXCoord(), getYCoord());

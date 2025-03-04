@@ -1,6 +1,9 @@
 package heros.journey.initializers;
 
+import com.badlogic.gdx.Game;
+
 import heros.journey.Application;
+import heros.journey.GameCamera;
 import heros.journey.GameState;
 import heros.journey.entities.Effect;
 import heros.journey.entities.Entity;
@@ -89,9 +92,13 @@ public class BaseActions {
 
 				if (EntityManager.getDistanceBetween(attacker, defender) == 1) {
 					attacker.lunge(0, defender);
-					gameState.getEntities().addEffect(0, new Effect(ResourceManager.get().slash[(int) (Math.random() * 6)], defender.renderX, defender.renderY));
+					gameState.getEntities().addEffect(0, new Effect(ResourceManager.get().slash[(int) (Math.random() * 6)], defender.getXCoord() * GameCamera.get().getSize(), defender.getYCoord() * GameCamera.get().getSize()));
 				} else {
-					gameState.getEntities().addEffect(0, new Effect(ResourceManager.get().arrow, attacker.renderX, attacker.renderY, defender.renderX, defender.renderY, true));
+					gameState.getEntities().addEffect(0, new Effect(ResourceManager.get().arrow, attacker.getXCoord() *
+                        GameCamera.get().getSize(), attacker.getYCoord() *
+                        GameCamera.get().getSize(), defender.getXCoord() *
+                        GameCamera.get().getSize(), defender.getYCoord() *
+                        GameCamera.get().getSize(), true));
 				}
 				if (damageTaken > 0) {
 					defender.vibrate(.2f, attacker);
