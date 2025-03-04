@@ -1,10 +1,6 @@
 package heros.journey.entities.ai;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import com.badlogic.gdx.math.Vector2;
-
 import heros.journey.GameState;
 import heros.journey.entities.Building;
 import heros.journey.entities.Entity;
@@ -13,10 +9,12 @@ import heros.journey.entities.actions.Action;
 import heros.journey.entities.actions.ActionManager;
 import heros.journey.entities.actions.TargetAction;
 import heros.journey.managers.RangeManager.RangeColor;
-import heros.journey.tilemap.Tileset;
-import heros.journey.utils.AStar;
-import heros.journey.utils.Cell;
 import heros.journey.utils.GameAction;
+import heros.journey.utils.pathfinding.AStar;
+import heros.journey.utils.pathfinding.Cell;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class AI {
 
@@ -104,7 +102,7 @@ public class AI {
 			}
 		}
 		if (avalibleUnits.size() == 0) {
-			possibleActions.add(new GameAction(new Cell(0, 0), ActionManager.getAction(ActionManager.END_TURN), 0, 0));
+			possibleActions.add(new GameAction(new Cell(0, 0, 1), ActionManager.getAction(ActionManager.END_TURN), 0, 0));
 		}
 		return possibleActions;
 	}
@@ -139,7 +137,7 @@ public class AI {
 
 			state.getRangeManager().clearRange();
 		} else {
-			gameAction = new GameAction(new Cell(e.getXCoord(), e.getYCoord()), action, 0, 0);
+			gameAction = new GameAction(new Cell(e.getXCoord(), e.getYCoord(), 1), action, 0, 0);
 		}
 		return gameAction;
 	}
@@ -152,35 +150,5 @@ public class AI {
 			this.action = action;
 			this.actionValue = actionValue;
 		}
-	}
-
-	// TODO Remove?
-	private GameAction spawnAt(GameState gameState, int x, int y, Action action) {
-		int i = x;
-		int j = y;
-		// spiral code
-		int di = 1;
-		int dj = 0;
-		int segment_length = 1;
-		int segment_passed = 0;
-		for (int k = 0; k < (gameState.getWidth() * gameState.getHeight()); ++k) {
-			if ((gameState.getMap().get(i, j) == Tileset.PLAINS || gameState.getMap().get(i, j) == Tileset.HILLS) && gameState.getEntities().getFog(i, j) == null) {
-				GameAction g = new GameAction(new Cell(i, j), action, i, j);
-				return g;
-			}
-			i += di;
-			j += dj;
-			++segment_passed;
-			if (segment_passed == segment_length) {
-				segment_passed = 0;
-				int buffer = di;
-				di = -dj;
-				dj = buffer;
-				if (dj == 0) {
-					++segment_length;
-				}
-			}
-		}
-		return null;
 	}
 }

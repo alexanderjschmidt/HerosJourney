@@ -1,6 +1,4 @@
-package heros.journey.managers;
-
-import java.util.HashMap;
+package heros.journey.utils.art;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -14,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
+import java.util.HashMap;
 
 public class ResourceManager extends AssetManager {
 
@@ -40,6 +40,7 @@ public class ResourceManager extends AssetManager {
 	public TextureRegion[] rally;
 
 	public HashMap<String, Float> textures;
+    public HashMap<TextureMaps, TextureRegion[][]> textureRegions;
 
 	private static ResourceManager manager;
 
@@ -57,11 +58,11 @@ public class ResourceManager extends AssetManager {
 
 	private ResourceManager() {
 		textures = new HashMap<String, Float>();
+        textureRegions = new HashMap<TextureMaps, TextureRegion[][]>(TextureMaps.values().length);
 		initFonts();
 		loadSkin("uiskin");
 		loadTexture("Textures/UI/cursor.png");
 		loadTexture("Textures/sprites.png");
-		loadTexture("Textures/Overworld_Tileset.png");
 		loadTexture("Textures/UI/TalkingBackground.png");
 		loadTexture("Textures/splash/badlogic.jpg");
 		loadTexture("Textures/splash/pvglogo.png");
@@ -75,6 +76,14 @@ public class ResourceManager extends AssetManager {
 		loadTexture("Textures/Battle_Animations/Ice 5.png");
 		loadTexture("Textures/Battle_Animations/Light 8.png");
 		loadTexture("Textures/Battle_Animations/Parameter 10.png");
+
+        for (TextureMaps textureMap : TextureMaps.values()) {
+            loadTexture(textureMap.getLocation());
+        }
+
+        for (TextureMaps textureMap : TextureMaps.values()) {
+            textureRegions.put(textureMap, TextureRegion.split(getTexture(textureMap.getLocation()), textureMap.getWidth(), textureMap.getHeight()));
+        }
 	}
 
 	public void splits() {
@@ -185,5 +194,13 @@ public class ResourceManager extends AssetManager {
 		font36.dispose();
 		font72.dispose();
 	}
+
+    public static TextureRegion[][] get(TextureMaps textureMap) {
+        return manager.textureRegions.get(textureMap);
+    }
+
+    public static TextureRegion get(TextureMaps textureMap, int x, int y) {
+        return manager.textureRegions.get(textureMap)[x][y];
+    }
 
 }

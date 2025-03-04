@@ -4,15 +4,14 @@
  * Random map generator
  *
  */
-package heros.journey.utils;
+package heros.journey.utils.worldgen;
 
-import java.awt.Color;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
 
 /**
  * The Class RandomWorldGenerator.

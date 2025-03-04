@@ -2,19 +2,17 @@ package heros.journey.tilemap.tiles;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heros.journey.GameCamera;
 import heros.journey.tilemap.TileMap;
+import heros.journey.utils.input.Options;
 
-public class WangEdgeTile extends Tile {
+public class WangEdgeTile implements TileRender {
 
 	private TextureRegion[][] autoTileTextures;
 	private int variance;
 	private boolean inverted;
 
-	public WangEdgeTile(String name, int terrainCost, TextureRegion[][] tiles, int variance, int x, int y) {
-		super(name, terrainCost);
-		this.inverted = inverted;
+	public WangEdgeTile(TextureRegion[][] tiles, int variance, int x, int y) {
 		autoTileTextures = new TextureRegion[16][variance];
 		this.variance = variance;
 		for (int i = 0; i < 16; i++) {
@@ -30,7 +28,7 @@ public class WangEdgeTile extends Tile {
 		bitVal += map.get(x, y) == map.get(x + 1, y) ? 2 : 0;
 		bitVal += map.get(x, y) == map.get(x, y - 1) ? 4 : 0;
 		bitVal += map.get(x, y) == map.get(x - 1, y) ? 8 : 0;
-		if (!map.blend)
+		if (!Options.mapBlend)
 			bitVal = 0;
 		batch.draw(autoTileTextures[bitVal][varianceVal % variance], x * GameCamera.get().getSize(), y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
 	}

@@ -17,8 +17,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import heros.journey.Application;
 import heros.journey.GameCamera;
-import heros.journey.managers.KeyManager;
-import heros.journey.managers.ResourceManager;
+import heros.journey.utils.input.KeyManager;
+import heros.journey.utils.art.ResourceManager;
 
 public class MapSettingScreen implements Screen {
 

@@ -1,4 +1,4 @@
-package heros.journey.utils;
+package heros.journey.utils.serialization;
 
 import java.nio.ByteBuffer;
 

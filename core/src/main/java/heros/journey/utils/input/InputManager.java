@@ -1,14 +1,7 @@
-package heros.journey.managers;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+package heros.journey.utils.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
 import heros.journey.ActionQueue;
 import heros.journey.GameState;
 import heros.journey.entities.actions.ActionManager;
@@ -16,8 +9,13 @@ import heros.journey.entities.actions.TargetAction;
 import heros.journey.ui.Cursor;
 import heros.journey.ui.HUD;
 import heros.journey.ui.HUD.HUDState;
-import heros.journey.utils.AStar;
-import heros.journey.utils.Cell;
+import heros.journey.utils.pathfinding.AStar;
+import heros.journey.utils.pathfinding.Cell;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InputManager {
 
@@ -49,25 +47,25 @@ public class InputManager {
 		while (path != null) {
 			Cell temp2 = temp;
 			Cell holder2 = holder;
-			temp = new Cell(path.i, path.j);
+			temp = new Cell(path.i, path.j, 1);
 			temp.parent = temp2;
-			holder = new Cell(path.i, path.j);
+			holder = new Cell(path.i, path.j, 1);
 			holder.parent = holder2;
 			path = path.parent;
 		}
 		cursor.setPath(temp);
 		if (holder == null) {
 			if (cursor.getSelected() != null)
-				holder = new Cell(cursor.getSelected().getXCoord(), cursor.getSelected().getYCoord());
+				holder = new Cell(cursor.getSelected().getXCoord(), cursor.getSelected().getYCoord(), 1);
 			else
-				holder = new Cell(cursor.x, cursor.y);
+				holder = new Cell(cursor.x, cursor.y, 1);
 		}
 		pathHolder = holder;
 	}
 
 	public void update(float delta) {
 		if (Gdx.input.isKeyJustPressed(KeyManager.DEVMODE)) {
-			gameState.getMap().blend = !gameState.getMap().blend;
+			Options.mapBlend = !Options.mapBlend;
 		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT_BRACKET)) {
 			gameState.getMap().setSeed((int) (Math.random() * 10000000));
@@ -209,7 +207,7 @@ public class InputManager {
 	private void sendAction() {
 		Cell temp = pathHolder;
 		if (temp == null) {
-			temp = new Cell(cursor.x, cursor.y);
+			temp = new Cell(cursor.x, cursor.y, 1);
 		}
 		List<Integer> xCoords = new ArrayList<Integer>();
 		List<Integer> yCoords = new ArrayList<Integer>();

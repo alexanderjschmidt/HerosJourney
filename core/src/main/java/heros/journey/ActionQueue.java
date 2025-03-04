@@ -1,11 +1,5 @@
 package heros.journey;
 
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import heros.journey.entities.Entity;
 import heros.journey.entities.Team;
 import heros.journey.entities.actions.Action;
@@ -13,11 +7,16 @@ import heros.journey.entities.actions.ActionManager;
 import heros.journey.tilemap.MapData;
 import heros.journey.ui.HUD;
 import heros.journey.ui.HUD.HUDState;
-import heros.journey.utils.Cell;
 import heros.journey.utils.GameAction;
+import heros.journey.utils.pathfinding.Cell;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class ActionQueue extends ArrayList<GameAction> {
 
@@ -114,7 +113,7 @@ public class ActionQueue extends ArrayList<GameAction> {
 					yCoords = action.getJSONArray("yCoords");
 					for (int i = 0; i < xCoords.length(); i++) {
 						Cell temp2 = temp;
-						temp = new Cell(xCoords.getInt(i), yCoords.getInt(i));
+						temp = new Cell(xCoords.getInt(i), yCoords.getInt(i), 1);
 						temp.parent = temp2;
 					}
 					targetX = action.getInt("targetX");

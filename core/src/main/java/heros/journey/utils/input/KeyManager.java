@@ -1,4 +1,4 @@
-package heros.journey.managers;
+package heros.journey.utils.input;
 
 import com.badlogic.gdx.Input;
 

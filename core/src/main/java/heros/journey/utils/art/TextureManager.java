@@ -1,11 +1,11 @@
-package heros.journey.managers;
-
-import java.util.HashMap;
+package heros.journey.utils.art;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import java.util.HashMap;
 
 public class TextureManager extends HashMap<String, Animation> {
 
@@ -26,7 +26,7 @@ public class TextureManager extends HashMap<String, Animation> {
 		TextureRegion[] tex = { new TextureRegion(ResourceManager.get()
 				.getTexture(ResourceManager.get().loadTexture(normal))) };
 		if (tex != null) {
-			put(name, new Animation(1f, tex));
+			put(name, new Animation<TextureRegion>(1f, tex));
 
 			tex[0].getTexture().setFilter(Texture.TextureFilter.Linear,
 					Texture.TextureFilter.Linear);
@@ -98,7 +98,7 @@ public class TextureManager extends HashMap<String, Animation> {
 			frames[i] = region[x[i]][y[i]];
 		}
 
-		put(aniName, new Animation(delay, frames));
+		put(aniName, new Animation<TextureRegion>(delay, frames));
 		tex.setFilter(Texture.TextureFilter.Linear,
 				Texture.TextureFilter.Linear);
 	}

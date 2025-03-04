@@ -1,6 +1,7 @@
 package heros.journey.utils;
 
 import heros.journey.entities.actions.Action;
+import heros.journey.utils.pathfinding.Cell;
 
 public class GameAction {
 

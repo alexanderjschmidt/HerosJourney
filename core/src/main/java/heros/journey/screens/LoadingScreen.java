@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 
 import heros.journey.Application;
 import heros.journey.GameCamera;
-import heros.journey.managers.ResourceManager;
+import heros.journey.utils.art.ResourceManager;
 
 public class LoadingScreen implements Screen {
 

@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import heros.journey.managers.ResourceManager;
+import heros.journey.utils.art.ResourceManager;
 import heros.journey.screens.LoadingScreen;
 
 /*
  * TODO List
- * Move Map gen over from fe game 2
+ * Auto End Turn when all characters used up
+ * Make Tiles not Enums
+ * Make TextureMaps not Enums?
  * make camera not go beyond map
  * Menus
  * 	Stats Screen

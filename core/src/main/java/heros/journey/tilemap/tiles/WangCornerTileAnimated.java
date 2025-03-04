@@ -3,22 +3,17 @@ package heros.journey.tilemap.tiles;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heros.journey.GameCamera;
 import heros.journey.tilemap.TileMap;
+import heros.journey.utils.input.Options;
 
-public class WangCornerTileAnimated extends Tile {
+public class WangCornerTileAnimated implements TileRender {
 
 	protected Animation<TextureRegion>[][] autoTileTextures;
 	protected int variance;
 	int direction;
 
-	public WangCornerTileAnimated(String name, int terrainCost) {
-		super(name, terrainCost);
-	}
-
-	public WangCornerTileAnimated(String name, int terrainCost, TextureRegion[][] tiles, int variance, int x, int y, int neutralX, int neutralY, int direction) {
-		super(name, terrainCost);
+	public WangCornerTileAnimated(TextureRegion[][] tiles, int variance, int x, int y, int neutralX, int neutralY, int direction) {
 		this.direction = direction;
 		autoTileTextures = new Animation[16][variance];
 		this.variance = variance;
@@ -35,22 +30,30 @@ public class WangCornerTileAnimated extends Tile {
 	public void render(Batch batch, TileMap map, float elapsedTime, int x, int y, int varianceVal) {
 		int bitVal = 0;
 		if (direction == 1) {
-			bitVal += map.get(x, y) >= map.get(x + 1, y + 1) && map.get(x, y) >= map.get(x, y + 1) && map.get(x, y) >= map.get(x + 1, y) ? 1 : 0;
-			bitVal += map.get(x, y) >= map.get(x + 1, y - 1) && map.get(x, y) >= map.get(x, y - 1) && map.get(x, y) >= map.get(x + 1, y) ? 2 : 0;
-			bitVal += map.get(x, y) >= map.get(x - 1, y - 1) && map.get(x, y) >= map.get(x, y - 1) && map.get(x, y) >= map.get(x - 1, y) ? 4 : 0;
-			bitVal += map.get(x, y) >= map.get(x - 1, y + 1) && map.get(x, y) >= map.get(x, y + 1) && map.get(x, y) >= map.get(x - 1, y) ? 8 : 0;
+			bitVal += map.get(x, y).ordinal() >= map.get(x + 1, y + 1).ordinal() && map.get(x, y).ordinal() >= map.get(x, y + 1).ordinal() && map.get(x, y).ordinal() >= map.get(x + 1, y).ordinal() ? 1
+					: 0;
+			bitVal += map.get(x, y).ordinal() >= map.get(x + 1, y - 1).ordinal() && map.get(x, y).ordinal() >= map.get(x, y - 1).ordinal() && map.get(x, y).ordinal() >= map.get(x + 1, y).ordinal() ? 2
+					: 0;
+			bitVal += map.get(x, y).ordinal() >= map.get(x - 1, y - 1).ordinal() && map.get(x, y).ordinal() >= map.get(x, y - 1).ordinal() && map.get(x, y).ordinal() >= map.get(x - 1, y).ordinal() ? 4
+					: 0;
+			bitVal += map.get(x, y).ordinal() >= map.get(x - 1, y + 1).ordinal() && map.get(x, y).ordinal() >= map.get(x, y + 1).ordinal() && map.get(x, y).ordinal() >= map.get(x - 1, y).ordinal() ? 8
+					: 0;
 		} else if (direction == 2) {
 			bitVal += map.get(x, y) == map.get(x + 1, y + 1) && map.get(x, y) == map.get(x, y + 1) && map.get(x, y) == map.get(x + 1, y) ? 1 : 0;
 			bitVal += map.get(x, y) == map.get(x + 1, y - 1) && map.get(x, y) == map.get(x, y - 1) && map.get(x, y) == map.get(x + 1, y) ? 2 : 0;
 			bitVal += map.get(x, y) == map.get(x - 1, y - 1) && map.get(x, y) == map.get(x, y - 1) && map.get(x, y) == map.get(x - 1, y) ? 4 : 0;
 			bitVal += map.get(x, y) == map.get(x - 1, y + 1) && map.get(x, y) == map.get(x, y + 1) && map.get(x, y) == map.get(x - 1, y) ? 8 : 0;
 		} else {
-			bitVal += map.get(x, y) <= map.get(x + 1, y + 1) && map.get(x, y) <= map.get(x, y + 1) && map.get(x, y) <= map.get(x + 1, y) ? 1 : 0;
-			bitVal += map.get(x, y) <= map.get(x + 1, y - 1) && map.get(x, y) <= map.get(x, y - 1) && map.get(x, y) <= map.get(x + 1, y) ? 2 : 0;
-			bitVal += map.get(x, y) <= map.get(x - 1, y - 1) && map.get(x, y) <= map.get(x, y - 1) && map.get(x, y) <= map.get(x - 1, y) ? 4 : 0;
-			bitVal += map.get(x, y) <= map.get(x - 1, y + 1) && map.get(x, y) <= map.get(x, y + 1) && map.get(x, y) <= map.get(x - 1, y) ? 8 : 0;
+			bitVal += map.get(x, y).ordinal() <= map.get(x + 1, y + 1).ordinal() && map.get(x, y).ordinal() <= map.get(x, y + 1).ordinal() && map.get(x, y).ordinal() <= map.get(x + 1, y).ordinal() ? 1
+					: 0;
+			bitVal += map.get(x, y).ordinal() <= map.get(x + 1, y - 1).ordinal() && map.get(x, y).ordinal() <= map.get(x, y - 1).ordinal() && map.get(x, y).ordinal() <= map.get(x + 1, y).ordinal() ? 2
+					: 0;
+			bitVal += map.get(x, y).ordinal() <= map.get(x - 1, y - 1).ordinal() && map.get(x, y).ordinal() <= map.get(x, y - 1).ordinal() && map.get(x, y).ordinal() <= map.get(x - 1, y).ordinal() ? 4
+					: 0;
+			bitVal += map.get(x, y).ordinal() <= map.get(x - 1, y + 1).ordinal() && map.get(x, y).ordinal() <= map.get(x, y + 1).ordinal() && map.get(x, y).ordinal() <= map.get(x - 1, y).ordinal() ? 8
+					: 0;
 		}
-		if (!map.blend)
+		if (!Options.mapBlend)
 			bitVal = 15;
 		batch.draw(autoTileTextures[bitVal][varianceVal % variance].getKeyFrame(elapsedTime, true), x * GameCamera.get().getSize(), y * GameCamera.get().getSize(), GameCamera.get().getSize(),
 				GameCamera.get().getSize());
@@ -81,7 +84,8 @@ public class WangCornerTileAnimated extends Tile {
 			autoTileTextures[5][i] = new Animation<TextureRegion>(.2f, new TextureRegion[] { tiles[y][x], tiles[y][x + 5], tiles[y][x + 10], tiles[y][x + 15], tiles[y][x + 10], tiles[y][x + 5] });
 			autoTileTextures[7][i] = new Animation<TextureRegion>(.2f,
 					new TextureRegion[] { tiles[y - 2][x], tiles[y - 2][x + 5], tiles[y - 2][x + 10], tiles[y - 2][x + 15], tiles[y - 2][x + 10], tiles[y - 2][x + 5] });
-			autoTileTextures[10][i] = new Animation<TextureRegion>(.2f, new TextureRegion[] { tiles[y][x + 1], tiles[y][x + 6], tiles[y][x + 11], tiles[y][x + 16], tiles[y][x + 11], tiles[y][x + 6] });
+			autoTileTextures[10][i] = new Animation<TextureRegion>(.2f,
+					new TextureRegion[] { tiles[y][x + 1], tiles[y][x + 6], tiles[y][x + 11], tiles[y][x + 16], tiles[y][x + 11], tiles[y][x + 6] });
 			autoTileTextures[11][i] = new Animation<TextureRegion>(.2f,
 					new TextureRegion[] { tiles[y - 1][x], tiles[y - 1][x + 5], tiles[y - 1][x + 10], tiles[y - 1][x + 15], tiles[y - 1][x + 10], tiles[y - 1][x + 5] });
 			autoTileTextures[13][i] = new Animation<TextureRegion>(.2f,

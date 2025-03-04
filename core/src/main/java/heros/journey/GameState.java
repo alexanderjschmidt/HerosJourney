@@ -1,9 +1,6 @@
 package heros.journey;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import heros.journey.entities.Entity;
 import heros.journey.entities.EntityClassManager;
 import heros.journey.entities.EntityManager;
@@ -14,10 +11,11 @@ import heros.journey.entities.ai.AI;
 import heros.journey.managers.RangeManager;
 import heros.journey.tilemap.MapData;
 import heros.journey.tilemap.TileMap;
-import heros.journey.tilemap.Tileset;
 import heros.journey.ui.HUD;
-import heros.journey.utils.Cell;
 import heros.journey.utils.GameAction;
+import heros.journey.utils.pathfinding.Cell;
+
+import java.util.ArrayList;
 
 public class GameState {
 
@@ -48,7 +46,7 @@ public class GameState {
 
 	public void init(MapData mapData) {
 		init(mapData.getMapSize(), mapData.getMapSize());
-		map = new TileMap(new Tileset(), width, height, mapData.getSeed());
+        map = new TileMap(width, mapData.getSeed());
 		entities = new EntityManager(this, width, height);
 		rangeManager = new RangeManager(this, width, height);
 

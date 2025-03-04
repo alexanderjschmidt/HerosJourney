@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Align;
 
 import heros.journey.GameCamera;
 import heros.journey.entities.EntityClass;
-import heros.journey.managers.ResourceManager;
+import heros.journey.utils.art.ResourceManager;
 
 public class JobInfoUI extends Actor {
 

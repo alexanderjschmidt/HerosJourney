@@ -1,9 +1,6 @@
 package heros.journey.managers;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heros.journey.GameCamera;
 import heros.journey.GameState;
 import heros.journey.entities.Entity;
@@ -11,6 +8,9 @@ import heros.journey.entities.Team;
 import heros.journey.entities.buffs.Buff;
 import heros.journey.entities.buffs.BuffManager;
 import heros.journey.ui.HUD;
+import heros.journey.utils.art.ResourceManager;
+
+import java.util.ArrayList;
 
 public class RangeManager {
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import heros.journey.entities.Entity;
-import heros.journey.managers.ResourceManager;
+import heros.journey.utils.art.ResourceManager;
 
 public class EntityUI extends Actor {
 

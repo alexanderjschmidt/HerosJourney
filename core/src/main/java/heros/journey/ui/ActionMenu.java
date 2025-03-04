@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import heros.journey.GameState;
 import heros.journey.entities.Entity;
 import heros.journey.entities.actions.Action;
-import heros.journey.managers.ResourceManager;
+import heros.journey.utils.art.ResourceManager;
 
 public class ActionMenu extends Actor {
 

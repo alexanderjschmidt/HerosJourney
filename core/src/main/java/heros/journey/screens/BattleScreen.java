@@ -11,8 +11,8 @@ import heros.journey.GameState;
 import heros.journey.entities.EntityClassManager;
 import heros.journey.entities.actions.ActionManager;
 import heros.journey.entities.ai.AIManager;
-import heros.journey.managers.InputManager;
-import heros.journey.managers.KeyManager;
+import heros.journey.utils.input.InputManager;
+import heros.journey.utils.input.KeyManager;
 import heros.journey.tilemap.MapData;
 import heros.journey.ui.HUD;
 
@@ -28,7 +28,7 @@ public class BattleScreen implements Screen {
 	// quickStart constructor
 	public BattleScreen(Application app, boolean quickStart) {
 		this.app = app;
-		this.mapData = new MapData((int) (Math.random() * 10000000), 32, 100, 4, false);
+		this.mapData = new MapData((int) (Math.random() * 10000000), 32, 100, 1, false);
 		startGame();
 	}
 

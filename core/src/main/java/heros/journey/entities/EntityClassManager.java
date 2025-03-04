@@ -2,7 +2,7 @@ package heros.journey.entities;
 
 import java.util.HashMap;
 
-import heros.journey.managers.ResourceManager;
+import heros.journey.utils.art.ResourceManager;
 
 public class EntityClassManager extends HashMap<String, EntityClass> {
 

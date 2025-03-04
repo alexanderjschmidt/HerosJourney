@@ -2,21 +2,16 @@ package heros.journey.tilemap.tiles;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heros.journey.GameCamera;
 import heros.journey.tilemap.TileMap;
+import heros.journey.utils.input.Options;
 
-public class WangCornerBuildingTile extends Tile {
+public class WangCornerBuildingTile implements TileRender {
 
 	protected TextureRegion[][] autoTileTextures;
 	protected int variance;
 
-	public WangCornerBuildingTile(String name, int terrainCost) {
-		super(name, terrainCost);
-	}
-
-	public WangCornerBuildingTile(String name, int terrainCost, TextureRegion[][] tiles, int variance, int x, int y, int neutralX, int neutralY) {
-		super(name, terrainCost);
+	public WangCornerBuildingTile(TextureRegion[][] tiles, int variance, int x, int y, int neutralX, int neutralY) {
 		autoTileTextures = new TextureRegion[16][variance];
 		this.variance = variance;
 		for (int i = 1; i < 16; i++) {
@@ -32,12 +27,20 @@ public class WangCornerBuildingTile extends Tile {
 	public void render(Batch batch, TileMap map, float elapsedTime, int x, int y, int varianceVal) {
 		int bitVal = 0;
 
-		bitVal += map.getTrees(x, y) == map.getTrees(x + 1, y + 1) && map.getTrees(x, y) == map.getTrees(x, y + 1) && map.getTrees(x, y) == map.getTrees(x + 1, y) ? 1 : 0;
-		bitVal += map.getTrees(x, y) == map.getTrees(x + 1, y - 1) && map.getTrees(x, y) == map.getTrees(x, y - 1) && map.getTrees(x, y) == map.getTrees(x + 1, y) ? 2 : 0;
-		bitVal += map.getTrees(x, y) == map.getTrees(x - 1, y - 1) && map.getTrees(x, y) == map.getTrees(x, y - 1) && map.getTrees(x, y) == map.getTrees(x - 1, y) ? 4 : 0;
-		bitVal += map.getTrees(x, y) == map.getTrees(x - 1, y + 1) && map.getTrees(x, y) == map.getTrees(x, y + 1) && map.getTrees(x, y) == map.getTrees(x - 1, y) ? 8 : 0;
+		bitVal += map.getEnvironment(x, y) == map.getEnvironment(x + 1, y + 1) && map.getEnvironment(x, y) == map.getEnvironment(x, y + 1) && map.getEnvironment(x, y) == map.getEnvironment(x + 1, y)
+				? 1
+				: 0;
+		bitVal += map.getEnvironment(x, y) == map.getEnvironment(x + 1, y - 1) && map.getEnvironment(x, y) == map.getEnvironment(x, y - 1) && map.getEnvironment(x, y) == map.getEnvironment(x + 1, y)
+				? 2
+				: 0;
+		bitVal += map.getEnvironment(x, y) == map.getEnvironment(x - 1, y - 1) && map.getEnvironment(x, y) == map.getEnvironment(x, y - 1) && map.getEnvironment(x, y) == map.getEnvironment(x - 1, y)
+				? 4
+				: 0;
+		bitVal += map.getEnvironment(x, y) == map.getEnvironment(x - 1, y + 1) && map.getEnvironment(x, y) == map.getEnvironment(x, y + 1) && map.getEnvironment(x, y) == map.getEnvironment(x - 1, y)
+				? 8
+				: 0;
 
-		if (!map.blend)
+		if (!Options.mapBlend)
 			bitVal = 15;
 		batch.draw(autoTileTextures[bitVal][varianceVal % variance], x * GameCamera.get().getSize(), y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
 	}

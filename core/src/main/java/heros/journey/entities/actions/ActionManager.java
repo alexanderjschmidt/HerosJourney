@@ -11,7 +11,7 @@ import heros.journey.entities.EntityManager;
 import heros.journey.entities.buffs.Buff;
 import heros.journey.entities.buffs.BuffManager;
 import heros.journey.managers.RangeManager.RangeColor;
-import heros.journey.managers.ResourceManager;
+import heros.journey.utils.art.ResourceManager;
 import heros.journey.screens.BattleScreen;
 import heros.journey.screens.MainMenuScreen;
 import heros.journey.ui.HUD;

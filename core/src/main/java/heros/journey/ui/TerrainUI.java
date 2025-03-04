@@ -7,13 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import heros.journey.GameState;
-import heros.journey.managers.ResourceManager;
+import heros.journey.tilemap.tiles.ActionTile;
+import heros.journey.utils.art.ResourceManager;
 import heros.journey.tilemap.tiles.Tile;
 
 public class TerrainUI extends Actor {
 
 	private Tile tile;
-	private boolean trees;
+	private ActionTile actionTile;
 
 	public TerrainUI() {
 		this.setSize(HUD.FONT_SIZE * 10, 24 + HUD.FONT_SIZE);
@@ -22,8 +23,8 @@ public class TerrainUI extends Actor {
 	}
 
 	public void update(int x, int y) {
-		tile = GameState.global().getMap().getTerrain(x, y);
-		trees = GameState.global().getMap().hasTree(x, y);
+		tile = GameState.global().getMap().get(x, y);
+        actionTile = GameState.global().getMap().getEnvironment(x, y);
 	}
 
 	@Override
@@ -36,8 +37,8 @@ public class TerrainUI extends Actor {
 		int cost = 0;
 		if (tile != null) {
 			name = tile.toString();
-			if (trees) {
-				name = name + " and Trees";
+			if (actionTile != null) {
+				name = name + " and " + actionTile.toString();
 			}
 			ResourceManager.get().font24.draw(batch, name, getX() + HUD.FONT_SIZE, 12 + getY() + (1 * HUD.FONT_SIZE));
 		}

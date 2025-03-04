@@ -22,7 +22,7 @@ import heros.journey.entities.buffs.Buff;
 import heros.journey.entities.buffs.BuffManager;
 import heros.journey.entities.buffs.BuffType;
 import heros.journey.ui.HUD;
-import heros.journey.utils.Cell;
+import heros.journey.utils.pathfinding.Cell;
 import heros.journey.utils.Direction;
 
 public class Entity extends Actor {

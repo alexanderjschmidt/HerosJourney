@@ -12,10 +12,10 @@ import heros.journey.entities.actions.TargetAction;
 import heros.journey.entities.buffs.Buff;
 import heros.journey.entities.buffs.BuffManager;
 import heros.journey.managers.RangeManager.RangeColor;
-import heros.journey.managers.ResourceManager;
+import heros.journey.utils.art.ResourceManager;
 import heros.journey.ui.HUD.HUDState;
-import heros.journey.utils.AStar;
-import heros.journey.utils.Cell;
+import heros.journey.utils.pathfinding.AStar;
+import heros.journey.utils.pathfinding.Cell;
 
 public class Cursor {
 	// coords
@@ -39,7 +39,7 @@ public class Cursor {
 	public Cursor(HUD hud) {
 		this.hud = hud;
 		TextureRegion[] frames = { ResourceManager.get().ui[0][0], ResourceManager.get().ui[0][0], ResourceManager.get().ui[0][1] };
-		ani = new Animation(.5f, frames);
+		ani = new Animation<TextureRegion>(.5f, frames);
 		setPosition(10, 15);
 	}
 

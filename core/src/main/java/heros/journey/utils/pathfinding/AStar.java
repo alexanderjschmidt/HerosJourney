@@ -1,12 +1,12 @@
-package heros.journey.utils;
-
-import java.util.PriorityQueue;
+package heros.journey.utils.pathfinding;
 
 import heros.journey.entities.Entity;
 import heros.journey.entities.EntityManager;
-import heros.journey.managers.RangeManager.RangeColor;
+import heros.journey.managers.RangeManager;
 import heros.journey.tilemap.TileMap;
-import heros.journey.tilemap.Tileset;
+import heros.journey.tilemap.tiles.Tile;
+
+import java.util.PriorityQueue;
 
 public class AStar {
 
@@ -18,7 +18,7 @@ public class AStar {
 
 		for (int i = 0; i < tileMap.getWidth(); i++) {
 			for (int j = 0; j < tileMap.getHeight(); j++) {
-				grid[i][j] = new Cell(i, j);
+				grid[i][j] = new Cell(i, j, manhattanHeuristic(i, j, endI, endJ));
 			}
 		}
 
@@ -37,44 +37,58 @@ public class AStar {
 				return current;
 			}
 
-			Cell t;
+			Cell target;
 			if (current.i - 1 >= 0) {
-				t = grid[current.i - 1][current.j];
-				checkAndUpdateCost(current, t, open, closed, tileMap, endI, endJ);
+				target = grid[current.i - 1][current.j];
+				checkAndUpdateCost(current, target, open, closed, tileMap, endI, endJ);
 			}
 			if (current.j - 1 >= 0) {
-				t = grid[current.i][current.j - 1];
-				checkAndUpdateCost(current, t, open, closed, tileMap, endI, endJ);
+				target = grid[current.i][current.j - 1];
+				checkAndUpdateCost(current, target, open, closed, tileMap, endI, endJ);
 			}
 			if (current.j + 1 < grid[0].length) {
-				t = grid[current.i][current.j + 1];
-				checkAndUpdateCost(current, t, open, closed, tileMap, endI, endJ);
+				target = grid[current.i][current.j + 1];
+				checkAndUpdateCost(current, target, open, closed, tileMap, endI, endJ);
 			}
 			if (current.i + 1 < grid.length) {
-				t = grid[current.i + 1][current.j];
-				checkAndUpdateCost(current, t, open, closed, tileMap, endI, endJ);
+				target = grid[current.i + 1][current.j];
+				checkAndUpdateCost(current, target, open, closed, tileMap, endI, endJ);
 			}
 		}
 		return null;
 	}
 
-	private static void checkAndUpdateCost(Cell current, Cell t, PriorityQueue<Cell> open, boolean[][] closed, TileMap map, int endI, int endJ) {
-		if (t == null || closed[t.i][t.j])
+	public static void printGrid(Cell[][] grid, TileMap tileMap) {
+		for (int j = 0; j < tileMap.getHeight(); j++) {
+			for (int i = 0; i < tileMap.getWidth(); i++) {
+				System.out.print(grid[i][j].h + " | ");
+			}
+			System.out.println();
+		}
+	}
+
+	private static void checkAndUpdateCost(Cell current, Cell target, PriorityQueue<Cell> open, boolean[][] closed, TileMap map, int endI, int endJ) {
+		if (target == null || closed[target.i][target.j])
 			return;
 
-		int tent = current.g + getPathCost(map, t.i, t.j);
-		if (!open.contains(t)) {
-			open.add(t);
-		} else if (tent >= t.g) {
+		target.t = getPathCost(map, target.i, target.j);
+		int tent = current.g + target.t;
+		if (!open.contains(target)) {
+			target.parent = current;
+			target.g = tent;
+			target.f = target.g + manhattanHeuristic(target.i, target.j, endI, endJ);
+			open.add(target);
+			return;
+		} else if (tent >= target.g) {
 			return;
 		}
-		t.parent = current;
-		t.g = tent;
-		t.f = t.g + manhattanHeuristic(t.i, t.j, endI, endJ);
+		target.parent = current;
+		target.g = tent;
+		target.f = target.g + manhattanHeuristic(target.i, target.j, endI, endJ);
 	}
 
 	private static int manhattanHeuristic(int i, int j, int endI, int endJ) {
-		return manhattanDist(i, j, endI, endJ) * 10;
+		return manhattanDist(i, j, endI, endJ);
 	}
 
 	public static int manhattanDist(int i, int j, int endI, int endJ) {
@@ -84,26 +98,10 @@ public class AStar {
 	}
 
 	private static int getPathCost(TileMap map, int i, int j) {
-		int tile = map.get(i, j);
-		int cost = 0;
-		if (tile == Tileset.WATER) {
-			cost += 50;
-		} else if (tile == Tileset.PLAINS) {
-			cost += 7;
-		} else if (tile == Tileset.HILLS) {
-			cost += 7;
-		} else if (tile == Tileset.MOUNTAINS) {
-			cost += 50;
-		} else if (tile == Tileset.PATH) {
-			cost += 7;
-		}
-		if (map.getTrees(i, j) == 1) {
-			cost += 3;
-		}
-		return cost;
+		return map.get(i, j) == Tile.PATH ? 1 : ((map.getTerrain(i, j).getTerrainCost() + (map.getEnvironment(i, j) != null ? map.getEnvironment(i, j).getTerrainCost() : 0)) * 5);
 	}
 
-	public static Cell aStarEntity(int dist1, RangeColor[][] range, int startI, int startJ, int endI, int endJ, TileMap map, Entity selected) {
+	public static Cell aStarEntity(int dist1, RangeManager.RangeColor[][] range, int startI, int startJ, int endI, int endJ, TileMap mapRenderer, Entity selected) {
 		PriorityQueue<Cell> open = new PriorityQueue<Cell>();
 		int dist = dist1 + 1;
 		Cell[][] grid = new Cell[range.length][range[0].length];
@@ -111,7 +109,7 @@ public class AStar {
 
 		for (int i = 0; i < range.length; i++) {
 			for (int j = 0; j < range[0].length; j++) {
-				grid[i][j] = new Cell(i, j);
+				grid[i][j] = new Cell(i, j, manhattanDist(i, j, endI, endJ));
 			}
 		}
 
@@ -138,29 +136,30 @@ public class AStar {
 			Cell t;
 			if (current.i - 1 >= 0) {
 				t = grid[current.i - 1][current.j];
-				checkAndUpdateCostEntity(current, t, open, closed, dist, range, map, selected, endI, endJ);
+				checkAndUpdateCostEntity(current, t, open, closed, dist, range, mapRenderer, selected, endI, endJ);
 			}
 			if (current.j - 1 >= 0) {
 				t = grid[current.i][current.j - 1];
-				checkAndUpdateCostEntity(current, t, open, closed, dist, range, map, selected, endI, endJ);
+				checkAndUpdateCostEntity(current, t, open, closed, dist, range, mapRenderer, selected, endI, endJ);
 			}
 			if (current.j + 1 < grid[0].length) {
 				t = grid[current.i][current.j + 1];
-				checkAndUpdateCostEntity(current, t, open, closed, dist, range, map, selected, endI, endJ);
+				checkAndUpdateCostEntity(current, t, open, closed, dist, range, mapRenderer, selected, endI, endJ);
 			}
 			if (current.i + 1 < grid.length) {
 				t = grid[current.i + 1][current.j];
-				checkAndUpdateCostEntity(current, t, open, closed, dist, range, map, selected, endI, endJ);
+				checkAndUpdateCostEntity(current, t, open, closed, dist, range, mapRenderer, selected, endI, endJ);
 			}
 		}
 		return null;
 	}
 
-	private static void checkAndUpdateCostEntity(Cell current, Cell t, PriorityQueue<Cell> open, boolean[][] closed, int dist, RangeColor[][] range, TileMap map, Entity selected, int endI, int endJ) {
-		if (t == null || closed[t.i][t.j] || range[t.i][t.j] != RangeColor.BLUE)
+	private static void checkAndUpdateCostEntity(Cell current, Cell t, PriorityQueue<Cell> open, boolean[][] closed, int dist, RangeManager.RangeColor[][] range, TileMap mapRenderer, Entity selected, int endI,
+                                                 int endJ) {
+		if (t == null || closed[t.i][t.j] || range[t.i][t.j] != RangeManager.RangeColor.BLUE)
 			return;
 
-		int tent = current.g + map.getTerrainCost(t.i, t.j, selected);
+		int tent = current.g + 1;
 		if (tent > dist) {
 			return;
 		}
@@ -188,7 +187,7 @@ public class AStar {
 		return node;
 	}
 
-	public static Cell aStarAI(int dist, RangeColor[][] range, int startI, int startJ, int endI, int endJ, TileMap map, Entity selected) {
+	public static Cell aStarAI(int dist, RangeManager.RangeColor[][] range, int startI, int startJ, int endI, int endJ, TileMap map, Entity selected) {
 		PriorityQueue<Cell> open = new PriorityQueue<Cell>();
 
 		Cell[][] grid = new Cell[range.length][range[0].length];
@@ -196,7 +195,7 @@ public class AStar {
 
 		for (int i = 0; i < range.length; i++) {
 			for (int j = 0; j < range[0].length; j++) {
-				grid[i][j] = new Cell(i, j);
+				grid[i][j] = new Cell(i, j, manhattanDist(i, j, endI, endJ));
 			}
 		}
 
@@ -238,7 +237,7 @@ public class AStar {
 		boolean closed[][] = new boolean[range.length][range[0].length];
 		for (int i = 0; i < range.length; i++) {
 			for (int j = 0; j < range[0].length; j++) {
-				grid[i][j] = new Cell(i, j);
+				grid[i][j] = new Cell(i, j, manhattanDist(i, j, endI, endJ));
 			}
 		}
 
@@ -275,14 +274,14 @@ public class AStar {
 				checkAndUpdateCostLong(current, t, open, closed, map, selected, endI, endJ);
 			}
 		}
-		return new Cell(startI, startJ);
+		return new Cell(startI, startJ, manhattanDist(startI, startJ, endI, endJ));
 	}
 
 	private static void checkAndUpdateCostLong(Cell current, Cell t, PriorityQueue<Cell> open, boolean[][] closed, TileMap map, Entity selected, int endI, int endJ) {
 		if (t == null || closed[t.i][t.j])
 			return;
 
-		int tent = current.g + map.getTerrainCost(t.i, t.j, selected);
+		int tent = current.g + 1;
 		if (!open.contains(t)) {
 			open.add(t);
 		} else if (tent >= t.g) {
@@ -314,7 +313,7 @@ public class AStar {
 
 	public static void printPath(Cell path) {
 		while (path != null) {
-			System.out.print("(" + path.i + ", " + path.j + ") ");
+			System.out.print(path);
 			path = path.parent;
 		}
 		System.out.println();

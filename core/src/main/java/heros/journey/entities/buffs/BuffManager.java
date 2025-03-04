@@ -3,7 +3,7 @@ package heros.journey.entities.buffs;
 import heros.journey.GameState;
 import heros.journey.entities.Effect;
 import heros.journey.entities.Entity;
-import heros.journey.managers.ResourceManager;
+import heros.journey.utils.art.ResourceManager;
 
 public class BuffManager {
 
