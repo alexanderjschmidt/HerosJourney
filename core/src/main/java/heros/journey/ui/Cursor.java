@@ -47,11 +47,7 @@ public class Cursor {
 	public void update(float delta) {
 		hover = GameState.global().getEntities().get(x, y);
 		if (selected != null && GameState.global().getRangeManager().getRange()[x][y] == RangeColor.BLUE && (path == null || (path.i != x || path.j != y))) {
-			int move = selected.getEntityClass().getMoveDistance();
-			Buff rallied = selected.getBuff(BuffManager.get().rallied);
-			if (rallied != null && rallied.isActive()) {
-				move += 3;
-			}
+			int move = selected.getMoveDistance();
 			path = AStar.aStarEntity(move, GameState.global().getRangeManager().getRange(), sx, sy, x, y, GameState.global().getMap(), selected);
 		}
 	}
@@ -169,7 +165,7 @@ public class Cursor {
 		Entity e = GameState.global().getEntities().removeEntity(sx, sy);
 		GameState.global().getEntities().addEntity(e, initialX, initialY);
 		clearSelected(false);
-		if (e.getEntityClass().getMoveDistance() != 0) {
+		if (e.getMoveDistance() != 0) {
 			update(0);
 			setSelectedtoHover();
 			GameState.global().getRangeManager().setMoveAndAttackRange(selected);

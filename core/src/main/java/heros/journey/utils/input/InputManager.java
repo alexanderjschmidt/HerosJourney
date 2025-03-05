@@ -87,7 +87,7 @@ public class InputManager {
 			updateMoveState(delta);
 			break;
 		case TARGET:
-			updateAttackState(delta);
+			updateTargetState(delta);
 			break;
 		case ACTION_SELECT:
 			updateActionMenu();
@@ -98,7 +98,7 @@ public class InputManager {
 		}
 	}
 
-	private void updateAttackState(float delta) {
+	private void updateTargetState(float delta) {
 		if (cursor.getSelected() != null) {
 			if (cursor.getActiveSkill().shouldTargetEntity()) {
 				if (Gdx.input.isKeyJustPressed(KeyManager.UP) || Gdx.input.isKeyJustPressed(KeyManager.RIGHT)) {
@@ -126,7 +126,7 @@ public class InputManager {
 		if ((Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) || Gdx.input.isKeyJustPressed(KeyManager.BACK)) && cursor.getSelected() != null) {
 			cursor.clearSelected(false);
 		} else if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) || Gdx.input.isKeyJustPressed(KeyManager.BACK)) {
-			HUD.get().getActionMenu().open(ActionManager.get().getTeamActions(gameState, cursor.x, cursor.y));
+			HUD.get().getActionMenu().open(ActionManager.getTeamActions(gameState, cursor.x, cursor.y));
 		} else if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
 			if (cursor.getSelected() != null) {
 				savePath();
@@ -134,7 +134,7 @@ public class InputManager {
 			} else if (cursor.getHover() != null && cursor.getHover().getTeam() == gameState.getActiveTeam() && !cursor.getHover().used) {
 				cursor.setSelectedtoHover();
 				HUD.get().select();
-				if (cursor.getHover().getEntityClass().getMoveDistance() == 0) {
+				if (cursor.getHover().getMoveDistance() == 0) {
 					savePath();
 					cursor.getSelected().openActionMenu();
 				} else {
@@ -142,7 +142,7 @@ public class InputManager {
 				}
 			} else if (cursor.getHover() == null) {
 				savePath();
-				HUD.get().getActionMenu().open(ActionManager.get().getTeamActions(gameState, cursor.x, cursor.y));
+				HUD.get().getActionMenu().open(ActionManager.getTeamActions(gameState, cursor.x, cursor.y));
 			}
 		} else if (Gdx.input.isKeyJustPressed(KeyManager.NEXT_CHARACTER)) {
 			gameState.getEntities().nextCharacter(cursor.x, cursor.y);

@@ -34,4 +34,8 @@ public class Inventory extends HashMap<ItemInterface, Integer> {
 			}
 	}
 
+    public Inventory clone() {
+        return new Inventory();
+    }
+
 }

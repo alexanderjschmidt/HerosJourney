@@ -44,12 +44,8 @@ public abstract class Action {
         this.name = name;
     }
 
-	public void consumeMana(Entity e) {
-		e.consumeMana(manaCost);
-	}
-
 	public boolean hasMana(Entity e) {
-		return e.getMana() >= manaCost;
+		return e.getStats().getMana() >= manaCost;
 	}
 
 	/**

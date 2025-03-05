@@ -222,13 +222,11 @@ public class EntityManager {
 				Entity e = this.get(x, y);
 				if (e != null) {
 					if (e.getTeam() == team) {
-						score += e.getHealth();
-						score += e.getExp();
+						score += e.getStats().getFame();
 						score += e.used ? 2 : 0;
 						score += e.getBuffs().size() * 3;
 					} else {
-						score -= e.getHealth();
-						score -= e.getExp();
+						score -= e.getStats().getFame();
 						score -= e.getBuffs().size() * 3;
 					}
 				}

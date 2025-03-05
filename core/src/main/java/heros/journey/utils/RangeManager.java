@@ -68,11 +68,7 @@ public class RangeManager {
 			return;
 		}
 		clearRange();
-		int move = selected.getEntityClass().getMoveDistance();
-		Buff rallied = selected.getBuff(BuffManager.get().rallied);
-		if (rallied != null && rallied.isActive()) {
-			move += 3;
-		}
+		int move = selected.getMoveDistance();
 		floodfill(move, selected.getXCoord(), selected.getYCoord(), selected);
 	}
 
@@ -90,7 +86,7 @@ public class RangeManager {
 			return;
 		}
 		range[x][y] = RangeColor.BLUE;
-		setDistanceRangeAt(x, y, selected.getEntityClass().getRanges(), RangeColor.RED);
+		setDistanceRangeAt(x, y, selected.getRanges(), RangeColor.RED);
 
 		// System.out.println(terrainCost);
 		floodfill(dist - gameState.getMap().getTerrainCost(x + 1, y, selected), x + 1, y, selected);

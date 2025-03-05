@@ -112,7 +112,7 @@ public class AI {
 		if (action instanceof TargetAction) {
 			TargetAction targetAction = (TargetAction) action;
 			AIEntityDecisionMaker.EntityUtil util = decisionMaker.getBestLocation(state, e, targetAction,
-					targetAction.equals(BaseActions.attack) ? e.getEntityClass().getRanges() : targetAction.getRanges(), threatMap);
+					targetAction.equals(BaseActions.attack) ? e.getRanges() : targetAction.getRanges(), threatMap);
 			int tx = util.x;
 			int ty = util.y;
 			state.getRangeManager().setMoveAndAttackRange(e);
@@ -120,7 +120,7 @@ public class AI {
 			Cell path;
 			// not moving and then not attacking even though target is known
 			// fix this shit
-			path = AStar.aStarEntity(e.getEntityClass().getMoveDistance(), range, e.getXCoord(), e.getYCoord(), tx, ty, state.getMap(), e);
+			path = AStar.aStarEntity(e.getMoveDistance(), range, e.getXCoord(), e.getYCoord(), tx, ty, state.getMap(), e);
 			if (path == null) {
 				System.out.println(action);
 				System.out.println(e.getXCoord() + ", " + e.getYCoord());

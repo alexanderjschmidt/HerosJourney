@@ -1,7 +1,16 @@
 package heros.journey.entities.stats;
 
-public enum DamageType {
+public class DamageType {
 
-	Physical, Magical, True, Slashing, Bludgeoning, Piercing, Fire, Water, Wind, Earth, Dark, Light;
+    private String name;
 
+    public DamageType(String name) {
+        this.name = name;
+        DamageTypeManager.get().put(name, this);
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

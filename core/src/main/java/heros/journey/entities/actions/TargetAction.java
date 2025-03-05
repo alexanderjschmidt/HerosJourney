@@ -22,7 +22,9 @@ public abstract class TargetAction extends Action {
 	}
 
 	public boolean requirementsMet(GameState gameState, Entity selected) {
-		return gameState.getRangeManager().updateTargets(selected, targetEnemy, range, rangeType).size() > 0 && this.hasMana(selected);
+		return !gameState.getRangeManager()
+            .updateTargets(selected, targetEnemy, range, rangeType)
+            .isEmpty() && this.hasMana(selected);
 	}
 
 	public void onHover(GameState gameState, Entity hover) {

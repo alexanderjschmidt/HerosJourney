@@ -19,6 +19,7 @@ import heros.journey.screens.LoadingScreen;
  * force zoom if camera would go off screen
  * make camera not go beyond map
  * Menus
+ *  reposition menus on window resize
  * 	Stats Screen
  * 		visuals
  * 		increment on level up

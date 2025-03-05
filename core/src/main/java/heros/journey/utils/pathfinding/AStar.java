@@ -294,7 +294,7 @@ public class AStar {
 
 	public static Cell prune(Cell path, EntityManager entities, Entity e) {
 		Cell p = path;
-		Cell[] temp = new Cell[e.getEntityClass().getMoveDistance()];
+		Cell[] temp = new Cell[e.getMoveDistance()];
 		for (int i = 0; i < temp.length && p != null; i++) {
 			temp[i] = p;
 			p = p.parent;

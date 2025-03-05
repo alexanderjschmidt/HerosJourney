@@ -1,30 +1,18 @@
 package heros.journey.initializers;
 
-import com.badlogic.gdx.Game;
-
 import heros.journey.Application;
-import heros.journey.GameCamera;
 import heros.journey.GameState;
-import heros.journey.entities.Effect;
 import heros.journey.entities.Entity;
-import heros.journey.entities.EntityManager;
 import heros.journey.entities.actions.Action;
-import heros.journey.entities.actions.TargetAction;
-import heros.journey.entities.buffs.Buff;
-import heros.journey.entities.buffs.BuffManager;
 import heros.journey.screens.MainMenuScreen;
 import heros.journey.ui.HUD;
-import heros.journey.ui.HUD.HUDState;
-import heros.journey.utils.RangeManager.RangeColor;
-import heros.journey.utils.art.ResourceManager;
 
 public class BaseActions {
 
-	public static String WAIT = "Wait", END_TURN = "End Turn", EXIT_GAME = "Exit Game", ATTACK = "Attack";
     public static Action wait, end_turn, exit_game, attack;
 
 	static {
-		end_turn = new Action(END_TURN, true) {
+		end_turn = new Action("End Turn", true) {
 			@Override
 			public void onSelect(GameState gameState, Entity selected) {
 				gameState.nextTurn();
@@ -35,7 +23,7 @@ public class BaseActions {
 				return true;
 			}
 		};
-        exit_game = new Action(EXIT_GAME, true) {
+        exit_game = new Action("Exit Game", true) {
 			@Override
 			public void onSelect(GameState gameState, Entity selected) {
                 Application.get().setScreen(new MainMenuScreen(Application.get()));
@@ -46,7 +34,7 @@ public class BaseActions {
 				return true;
 			}
 		};
-        wait = new Action(WAIT) {
+        wait = new Action("Wait") {
 			@Override
 			public void onSelect(GameState gameState, Entity selected) {
 				HUD.get().getCursor().clearSelected(true);
@@ -57,7 +45,7 @@ public class BaseActions {
 				return true;
 			}
 		};
-		attack = new TargetAction(ATTACK, 0, null, RangeColor.RED, true) {
+		/*attack = new TargetAction("Attack", 0, null, RangeColor.RED, true) {
 			@Override
 			public void onHover(GameState gameState, Entity selected) {
 				Entity e = selected;
@@ -102,7 +90,7 @@ public class BaseActions {
 				}
 				if (damageTaken > 0) {
 					defender.vibrate(.2f, attacker);
-					defender.adjustHealth(attacker, .2f, -damageTaken);
+					defender.getStats().adjustHealth(-damageTaken);
 				}
 				HUD.get().getCursor().clearSelected(true);
 			}
@@ -118,9 +106,9 @@ public class BaseActions {
 
 			@Override
 			public int utilityFunc(Entity user, Entity e) {
-				return (int) (user.getTeam() != e.getTeam() && e.calcDamageTaken(user) != 0 ? e.getEntityClass().getMaxHealth() / e.getHealth() : 0);
+				return (int) (user.getTeam() != e.getTeam() && e.calcDamageTaken(user) != 0 ? Stats.MAX_HEALTH / e.getStats().getHealth() : 0);
 			}
-		};
+		};*/
 	}
 
 }

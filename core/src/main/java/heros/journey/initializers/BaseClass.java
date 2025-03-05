@@ -9,7 +9,7 @@ public class BaseClass {
     public static EntityClass hero;
 
 	static {
-        hero = new EntityClass(HERO, "You", ResourceManager.get().sprites[1][1], 10, 0, 0, new int[] {1}, 5, 5, 30);
+        hero = new EntityClass(HERO, "You", ResourceManager.get().sprites[1][1]);
 	}
 
 }

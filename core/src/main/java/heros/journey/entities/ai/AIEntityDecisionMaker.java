@@ -38,7 +38,7 @@ public class AIEntityDecisionMaker {
 
 	public EntityUtil getBestLocation(GameState state, Entity selected, Action skill, int[] range, int[][] threatMap) {
 		EntityUtil[][] utilityMap = new EntityUtil[state.getWidth()][state.getHeight()];
-		EntityUtil util = floodfillUtility(state, utilityMap, selected.getEntityClass().getMoveDistance(), selected.getXCoord(), selected.getYCoord(), skill, selected, range, threatMap,
+		EntityUtil util = floodfillUtility(state, utilityMap, selected.getMoveDistance(), selected.getXCoord(), selected.getYCoord(), skill, selected, range, threatMap,
 				new EntityUtil(null, Integer.MIN_VALUE, -1, -1));
 
 		/*
