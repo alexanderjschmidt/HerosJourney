@@ -11,7 +11,7 @@ public class ActionManager extends HashMap<String, Action> {
 
 	private static final long serialVersionUID = 1L;
 
-	private List<Action> teamActions;
+	private final List<Action> teamActions;
 
 	private static ActionManager actionManager;
 
@@ -43,7 +43,7 @@ public class ActionManager extends HashMap<String, Action> {
 	}
 
 	public static void addTeamAction(Action action) {
-		get().teamActions.add(action);
+		get().teamActions.addFirst(action);
 	}
 
 }

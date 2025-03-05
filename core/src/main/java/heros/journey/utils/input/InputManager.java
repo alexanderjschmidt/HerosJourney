@@ -195,9 +195,9 @@ public class InputManager {
 
 	private void updateActionMenu() {
 		if (Gdx.input.isKeyJustPressed(KeyManager.UP)) {
-			HUD.get().getActionMenu().increment();
+            HUD.get().getActionMenu().decrement();
 		} else if (Gdx.input.isKeyJustPressed(KeyManager.DOWN)) {
-			HUD.get().getActionMenu().decrement();
+            HUD.get().getActionMenu().increment();
 		}
 		if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
 			if (!(HUD.get().getActionMenu().getSelected() instanceof TargetAction)) {

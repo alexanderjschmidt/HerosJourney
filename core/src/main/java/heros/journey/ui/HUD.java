@@ -38,7 +38,7 @@ public class HUD extends Stage {
 	public HUD() {
 		super(new ScreenViewport());
 		cursor = new Cursor(this);
-		actionMenu = new ActionMenu(this);
+		actionMenu = new ActionMenu();
 		terrainUI = new TerrainUI();
 		entityUI = new EntityUI();
 		combatUI = new CombatUI();
@@ -60,19 +60,14 @@ public class HUD extends Stage {
 		} else {
 			actionMenu.setVisible(false);
 		}
-		terrainUI.update(cursor.x, cursor.y);
-		entityUI.update(cursor);
+		terrainUI.update();
+		entityUI.update();
 		if (selectedEntityUI != null)
-			selectedEntityUI.update(cursor);
+			selectedEntityUI.update();
 		if (getState() == HUDState.TARGET) {
 			combatUI.setVisible(true);
 		} else {
 			combatUI.setVisible(false);
-		}
-		if (getState() == HUDState.LOCKED) {
-			turnUI.minimal = true;
-		} else {
-			turnUI.minimal = false;
 		}
 		if (jobInfoUI.toggled()) {
 			Entity e = GameState.global().getEntities().get(cursor.x, cursor.y);
@@ -84,10 +79,6 @@ public class HUD extends Stage {
 	public void showJobInfo(EntityClass job) {
 		jobInfoUI.setVisible(true);
 		jobInfoUI.update(job);
-	}
-
-	public void hideJobInfoUI() {
-		jobInfoUI.setVisible(false);
 	}
 
 	public void select() {
