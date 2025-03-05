@@ -5,10 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import heros.journey.GameState;
-import heros.journey.entities.Entity;
-import heros.journey.entities.EntityClass;
-
 public class HUD extends Stage {
 
 	public enum HUDState {
@@ -25,7 +21,7 @@ public class HUD extends Stage {
 	private EntityUI entityUI, selectedEntityUI;
 	private CombatUI combatUI;
 	private TurnUI turnUI;
-	private JobInfoUI jobInfoUI;
+	private EntityDetailedUI entityDetailedUI;
 
 	private static HUD hud;
 
@@ -43,13 +39,13 @@ public class HUD extends Stage {
 		entityUI = new EntityUI();
 		combatUI = new CombatUI();
 		turnUI = new TurnUI();
-		jobInfoUI = new JobInfoUI();
+		entityDetailedUI = new EntityDetailedUI();
 		this.addActor(actionMenu);
 		this.addActor(terrainUI);
 		this.addActor(entityUI);
 		this.addActor(combatUI);
 		this.addActor(turnUI);
-		this.addActor(jobInfoUI);
+		this.addActor(entityDetailedUI);
 	}
 
 	public void update(float delta) {
@@ -69,16 +65,7 @@ public class HUD extends Stage {
 		} else {
 			combatUI.setVisible(false);
 		}
-		if (jobInfoUI.toggled()) {
-			Entity e = GameState.global().getEntities().get(cursor.x, cursor.y);
-			showJobInfo(e != null ? e.getEntityClass() : null);
-		}
 		turnUI.update();
-	}
-
-	public void showJobInfo(EntityClass job) {
-		jobInfoUI.setVisible(true);
-		jobInfoUI.update(job);
 	}
 
 	public void select() {
@@ -95,7 +82,7 @@ public class HUD extends Stage {
 	}
 
 	public void resize(int width, int height) {
-		getViewport().update(width, height, true);
+        getViewport().update(width, height, true);
 	}
 
 	public ActionMenu getActionMenu() {
@@ -106,8 +93,8 @@ public class HUD extends Stage {
 		return combatUI;
 	}
 
-	public JobInfoUI getJobUI() {
-		return jobInfoUI;
+	public EntityDetailedUI getEntityDetailedUI() {
+		return entityDetailedUI;
 	}
 
 	public HUDState getState() {

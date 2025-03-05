@@ -95,6 +95,10 @@ public class Entity extends EntityActor {
         return stats;
     }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
+
 	public String toString() {
 		return job.toString() + " " + getTeam() + " (" + getXCoord() + ", " + getYCoord() + ")";
 	}

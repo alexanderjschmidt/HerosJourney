@@ -2,6 +2,13 @@ package heros.journey.tilemap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -103,8 +110,27 @@ public class TileMap {
 		houseStart = 0;
 		houseEnd = 1;
 
-		genHouses();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Callable<String> noiseTask = () -> {
+            // Simulate long-running noise generation task
+            genHouses();
+            return "";
+        };
+        Future<String> future = executorService.submit(noiseTask);
 
+        try {
+            // Wait for the task to complete or timeout
+            future.get(2000, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException e) {
+            // Handle timeout case (task did not finish in time)
+            future.cancel(true);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            executorService.shutdown();
+        }
 		// tileMap = gen.mirrorY(tileMap, true);
 		// trees = gen.mirrorY(trees, true);
 		facing = gen.getFacingMap(tileMap);

@@ -74,7 +74,7 @@ public class InputManager {
 			gameState.getMap().genNewMap();
 		}
 		if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_JOB_INFO)) {
-			HUD.get().getJobUI().toggle();
+			HUD.get().getEntityDetailedUI().update();
 		}
         if (Gdx.input.isKeyJustPressed(KeyManager.ZOOM_IN)) {
             GameCamera.get().zoomIn();
