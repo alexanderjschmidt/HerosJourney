@@ -9,6 +9,7 @@ import heros.journey.tilemap.MapData;
 import heros.journey.ui.HUD;
 import heros.journey.utils.input.InputManager;
 import heros.journey.utils.input.KeyManager;
+import heros.journey.utils.worldgen.NewMapManager;
 
 public class BattleScreen implements Screen {
 
@@ -22,7 +23,7 @@ public class BattleScreen implements Screen {
 	// quickStart constructor
 	public BattleScreen(Application app, boolean quickStart) {
 		this.app = app;
-		this.mapData = new MapData((int) (Math.random() * 10000000), 32, 100, 1, false);
+		this.mapData = new MapData((int) (Math.random() * 10000000), 128, 100, 1, false);
 		startGame();
 	}
 
@@ -42,7 +43,7 @@ public class BattleScreen implements Screen {
 		batch = app.getBatch();
 
 		GameState.global().init(mapData);
-        NewMapManager.get().addtoGameState(GameState.global());
+        NewMapManager.get().initGameState(GameState.global());
 
 		ai = new AIManager();
 

@@ -1,30 +1,17 @@
 package heros.journey.tilemap.tiles;
 
+import heros.journey.entities.actions.Action;
+
 import java.util.Arrays;
 import java.util.List;
 
-import heros.journey.entities.actions.Action;
-import heros.journey.tilemap.TileManager;
+public abstract class ActionTile extends Tile {
 
-public abstract class ActionTile implements TileInterface {
-
-	private String name;
-	private List<Action> actions;
-	private int terrainCost;
+	private final List<Action> actions;
 
 	public ActionTile(String name, int terrainCost, Action... actions) {
-		this.name = name;
-		this.terrainCost = terrainCost;
+		super(name, terrainCost);
 		this.actions = Arrays.asList(actions);
-        TileManager.put(name, this, null);
-	}
-
-	public String toString() {
-		return name;
-	}
-
-	public int getTerrainCost() {
-		return terrainCost;
 	}
 
 	public List<Action> getActions() {

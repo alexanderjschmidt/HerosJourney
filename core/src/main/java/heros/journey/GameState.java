@@ -42,7 +42,8 @@ public class GameState {
 	}
 
 	private GameState(int width, int height) {
-		init(width, height);
+        this.width = width;
+        this.height = height;
 	}
 
 	public void init(MapData mapData) {
@@ -55,8 +56,9 @@ public class GameState {
 
         Initializer.init();
 
-		init(mapData.getMapSize(), mapData.getMapSize());
-        map = new TileMap(width, mapData.getSeed());
+        this.width = mapData.getMapSize();
+        this.height = mapData.getMapSize();
+        map = new TileMap(width);
 		entities = new EntityManager(this, width, height);
 		rangeManager = new RangeManager(this, width, height);
 
@@ -68,11 +70,6 @@ public class GameState {
 				team.setAI(new AI());
 			}
 		}
-	}
-
-	private void init(int width, int height) {
-		this.width = width;
-		this.height = height;
 	}
 
 	public GameState clone() {

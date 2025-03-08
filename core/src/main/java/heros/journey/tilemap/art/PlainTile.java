@@ -1,10 +1,9 @@
-package heros.journey.tilemap.tiles;
+package heros.journey.tilemap.art;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import heros.journey.GameCamera;
 import heros.journey.tilemap.TileMap;
-import heros.journey.tilemap.art.TileRender;
 
 public class PlainTile implements TileRender {
 

@@ -27,19 +27,18 @@ import heros.journey.screens.LoadingScreen;
  * 		Use Item (health potion)
  * 		Show Weight
  * 		Show Gold
- * 		Scroll
+ * 		Scrolling
  * 		Tabs
  *      Crafting??
  * 		Equipment
  * 			Equip
  * 	Wait time selector
  * Action on Town
+ *  Quests
  * Fog of War
  * Add Day/Night Cycle (could be used to show the world itself is getting darker not day/night)
  * Add time
  * Map Generation
- *  move map gen settings into initializer
- *  Fix infinite generation timeout
  * 	Generate Dungeons on world map
  * 	Improve road generation some towns roads loop too much
  * 	Improve map generation

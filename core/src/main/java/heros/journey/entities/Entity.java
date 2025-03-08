@@ -113,7 +113,7 @@ public class Entity extends EntityActor {
 	}
 
     public int getMoveDistance() {
-        return stats.getBody() * 5;
+        return stats.getBody() + 4;
     }
 
     public int[] getRanges() {

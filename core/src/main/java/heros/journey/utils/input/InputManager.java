@@ -1,16 +1,7 @@
 package heros.journey.utils.input;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.badlogic.gdx.Gdx;
-
-import heros.journey.ActionQueue;
-import heros.journey.GameCamera;
-import heros.journey.GameState;
+import heros.journey.*;
 import heros.journey.entities.actions.ActionManager;
 import heros.journey.entities.actions.TargetAction;
 import heros.journey.ui.Cursor;
@@ -18,6 +9,12 @@ import heros.journey.ui.HUD;
 import heros.journey.ui.HUD.HUDState;
 import heros.journey.utils.pathfinding.AStar;
 import heros.journey.utils.pathfinding.Cell;
+import heros.journey.utils.worldgen.NewMapManager;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InputManager {
 
@@ -70,8 +67,8 @@ public class InputManager {
 			Options.MAP_BLEND = !Options.MAP_BLEND;
 		}
 		if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {
-			gameState.getMap().setSeed((int) (Math.random() * 10000000));
-			gameState.getMap().genNewMap();
+            Random.get().setSeed((int) (Math.random() * 10000000));
+            NewMapManager.get().initMapGeneration(GameState.global());
 		}
 		if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_JOB_INFO)) {
 			HUD.get().getEntityDetailedUI().update();

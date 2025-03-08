@@ -2,23 +2,18 @@ package heros.journey.initializers.base;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heros.journey.initializers.InitializerInterface;
 import heros.journey.tilemap.TileMap;
+import heros.journey.tilemap.art.*;
 import heros.journey.tilemap.tiles.ActionTile;
-import heros.journey.tilemap.tiles.PlainTile;
-import heros.journey.tilemap.tiles.TileInterface;
-import heros.journey.tilemap.art.WangCornerBuildingTile;
-import heros.journey.tilemap.art.WangCornerTile;
-import heros.journey.tilemap.art.WangCornerTileAnimated;
-import heros.journey.tilemap.art.WangEdgeTile;
-import heros.journey.tilemap.art.WangEdgeTileAnimated;
+import heros.journey.tilemap.art.PlainTile;
+import heros.journey.tilemap.tiles.Tile;
 import heros.journey.utils.art.ResourceManager;
 import heros.journey.utils.art.TextureMaps;
 
 public class Tiles implements InitializerInterface {
 
-    public static heros.journey.tilemap.tiles.Tile WATER, SAND, PLAINS, HILLS, MOUNTAINS, PATH;
+    public static Tile WATER, SAND, PLAINS, HILLS, MOUNTAINS, PATH;
 
     // Art
     private static WangCornerTile longGrass, hills, shortGrass, sandArt, sandNeutral, cliffArt, sandCliff, mountainArt;
@@ -74,9 +69,9 @@ public class Tiles implements InitializerInterface {
         river = new WangEdgeTileAnimated(tiles, 3, 20, 3);
         river.overwriteEdge(tiles, 20, 3);
 
-        WATER = new heros.journey.tilemap.tiles.Tile("Water", 12) {
+        WATER = new Tile("Water", 12) {
             @Override
-            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, TileInterface facing) {
+            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 if (facing == PLAINS || facing == MOUNTAINS || facing == PATH) {
                     waterArt.render(batch, tileMap, elapsed, x, y, variance);
                 } else if (facing == SAND) {
@@ -86,24 +81,24 @@ public class Tiles implements InitializerInterface {
                 }
             }
         };
-        SAND = new heros.journey.tilemap.tiles.Tile("Sand", 3) {
+        SAND = new Tile("Sand", 3) {
             @Override
-            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, TileInterface facing) {
+            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 if (facing == PLAINS || facing == HILLS || facing == MOUNTAINS || facing == PATH)
                     sandArt.render(batch, tileMap, elapsed, x, y, variance);
                 else
                     sandNeutral.render(batch, tileMap, elapsed, x, y, variance);
             }
         };
-        PLAINS = new heros.journey.tilemap.tiles.Tile("Plains", 2) {
+        PLAINS = new Tile("Plains", 2) {
             @Override
-            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, TileInterface facing) {
+            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 shortGrass.render(batch, tileMap, elapsed, x, y, variance);
             }
         };
-        HILLS = new heros.journey.tilemap.tiles.Tile("Hill", 2) {
+        HILLS = new Tile("Hill", 2) {
             @Override
-            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, TileInterface facing) {
+            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 if (facing == WATER || facing == MOUNTAINS || facing == PATH) {
                     longGrass.render(batch, tileMap, elapsed, x, y, variance);
                 } else if (facing == SAND) {
@@ -113,15 +108,15 @@ public class Tiles implements InitializerInterface {
                 }
             }
         };
-        MOUNTAINS = new heros.journey.tilemap.tiles.Tile("Mountain", 24) {
+        MOUNTAINS = new Tile("Mountain", 24) {
             @Override
-            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, TileInterface facing) {
+            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 mountainArt.render(batch, tileMap, elapsed, x, y, variance);
             }
         };
-        PATH = new heros.journey.tilemap.tiles.Tile("Path", 1) {
+        PATH = new Tile("Path", 1) {
             @Override
-            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, TileInterface facing) {
+            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 pathArt.render(batch, tileMap, elapsed, x, y, variance);
             }
         };
@@ -141,7 +136,7 @@ public class Tiles implements InitializerInterface {
         treesArt.addVariance(tiles, 15, 5, 7, 5, 8);
         TREES = new ActionTile("Trees", 2, Actions.wait) {
             @Override
-            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, TileInterface facing) {
+            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 treesArt.render(batch, tileMap, elapsed, x, y, variance);
             }
         };
@@ -150,7 +145,7 @@ public class Tiles implements InitializerInterface {
         houseArt.addVariance(tiles, 7, 13, 8, 12, 8, 13, 9, 12, 9, 13);
         HOUSE = new ActionTile("House", 1, Actions.wait) {
             @Override
-            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, TileInterface facing) {
+            public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 houseArt.render(batch, tileMap, elapsed, x, y, variance);
             }
         };

@@ -1,8 +1,10 @@
 package heros.journey.tilemap.tiles;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import heros.journey.tilemap.TileManager;
+import heros.journey.tilemap.TileMap;
 
-public abstract class Tile implements TileInterface {
+public abstract class Tile {
 
 	private String name;
 	private int terrainCost;
@@ -13,7 +15,7 @@ public abstract class Tile implements TileInterface {
         TileManager.put(name, this, null);
     }
 
-    public Tile(String name, int terrainCost, TileInterface previousTile) {
+    public Tile(String name, int terrainCost, Tile previousTile) {
         this.name = name;
         this.terrainCost = terrainCost;
         TileManager.put(name, this, previousTile);
@@ -30,5 +32,7 @@ public abstract class Tile implements TileInterface {
     public int ordinal() {
         return TileManager.getHeight(this);
     }
+
+    public abstract void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing);
 
 }

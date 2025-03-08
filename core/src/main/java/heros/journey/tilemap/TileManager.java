@@ -1,15 +1,14 @@
 package heros.journey.tilemap;
 
+import heros.journey.tilemap.tiles.Tile;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import heros.journey.tilemap.tiles.Tile;
-import heros.journey.tilemap.tiles.TileInterface;
+public class TileManager extends HashMap<String, Tile> {
 
-public class TileManager extends HashMap<String,TileInterface> {
-
-    List<TileInterface> heightOrder;
+    List<Tile> heightOrder;
 
     private static TileManager tileManager;
 
@@ -23,7 +22,7 @@ public class TileManager extends HashMap<String,TileInterface> {
         heightOrder = new ArrayList<>();
     }
 
-    public static void put(String name, TileInterface tile, TileInterface previousTile){
+    public static void put(String name, Tile tile, Tile previousTile){
         get().put(name, tile);
         if (previousTile == null){
             get().heightOrder.add(tile);
@@ -36,7 +35,7 @@ public class TileManager extends HashMap<String,TileInterface> {
         }
     }
 
-    public static int getHeight(TileInterface tile){
+    public static int getHeight(Tile tile){
         for (int i = 0;i < get().heightOrder.size(); i++){
             if (get().heightOrder.get(i) == tile){
                 return i;
