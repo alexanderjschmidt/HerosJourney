@@ -4,7 +4,7 @@ import java.util.PriorityQueue;
 
 import heros.journey.entities.Entity;
 import heros.journey.entities.EntityManager;
-import heros.journey.initializers.BaseTile;
+import heros.journey.initializers.base.Tiles;
 import heros.journey.tilemap.TileMap;
 import heros.journey.utils.RangeManager;
 
@@ -98,7 +98,7 @@ public class AStar {
 	}
 
 	private static int getPathCost(TileMap map, int i, int j) {
-		return map.get(i, j) == BaseTile.PATH ? 1 : ((map.getTerrain(i, j).getTerrainCost() + (map.getEnvironment(i, j) != null ? map.getEnvironment(i, j).getTerrainCost() : 0)) * 5);
+		return map.get(i, j) == Tiles.PATH ? 1 : ((map.getTerrain(i, j).getTerrainCost() + (map.getEnvironment(i, j) != null ? map.getEnvironment(i, j).getTerrainCost() : 0)) * 5);
 	}
 
 	public static Cell aStarEntity(int dist1, RangeManager.RangeColor[][] range, int startI, int startJ, int endI, int endJ, TileMap mapRenderer, Entity selected) {

@@ -9,7 +9,7 @@ import heros.journey.GameState;
 import heros.journey.entities.Entity;
 import heros.journey.entities.Team;
 import heros.journey.entities.actions.Action;
-import heros.journey.initializers.BaseActions;
+import heros.journey.initializers.base.Actions;
 import heros.journey.entities.actions.QueuedAction;
 import heros.journey.entities.actions.TargetAction;
 import heros.journey.utils.RangeManager.RangeColor;
@@ -59,7 +59,7 @@ public class AI {
 		if (state.getActiveTeam().getArrayID() == maxTeam.getArrayID()) {
 			ActionValue maxVal = new ActionValue(null, Integer.MIN_VALUE);
 			for (QueuedAction action : this.getAllPossibleActions(state, threatMap)) {
-				ActionValue av = minimax(state.applyAction(action), maxTeam, action.getAction() == BaseActions.end_turn ? 0 : depth - 1, alpha, beta);
+				ActionValue av = minimax(state.applyAction(action), maxTeam, action.getAction() == Actions.end_turn ? 0 : depth - 1, alpha, beta);
 				av.action = action;
 				if (maxVal.actionValue < av.actionValue) {
 					maxVal = av;
@@ -75,7 +75,7 @@ public class AI {
 		} else {
 			ActionValue minVal = new ActionValue(null, Integer.MAX_VALUE);
 			for (QueuedAction action : this.getAllPossibleActions(state, threatMap)) {
-				ActionValue av = minimax(state.applyAction(action), maxTeam, action.getAction() == BaseActions.end_turn ? 0 : depth - 1, alpha, beta);
+				ActionValue av = minimax(state.applyAction(action), maxTeam, action.getAction() == Actions.end_turn ? 0 : depth - 1, alpha, beta);
 				av.action = action;
 				if (minVal.actionValue > av.actionValue) {
 					minVal = av;
@@ -96,13 +96,13 @@ public class AI {
 		ArrayList<QueuedAction> possibleActions = new ArrayList<QueuedAction>(avalibleUnits.size());
 		for (Entity e : avalibleUnits) {
 			for (Action action : e.getEntityClass().getActions()) {
-				if (action != BaseActions.wait) {
+				if (action != Actions.wait) {
 					possibleActions.add(getActions(state, action, e, threatMap));
 				}
 			}
 		}
 		if (avalibleUnits.size() == 0) {
-			possibleActions.add(new QueuedAction(new Cell(0, 0, 1), BaseActions.end_turn, 0, 0));
+			possibleActions.add(new QueuedAction(new Cell(0, 0, 1), Actions.end_turn, 0, 0));
 		}
 		return possibleActions;
 	}
@@ -112,7 +112,7 @@ public class AI {
 		if (action instanceof TargetAction) {
 			TargetAction targetAction = (TargetAction) action;
 			AIEntityDecisionMaker.EntityUtil util = decisionMaker.getBestLocation(state, e, targetAction,
-					targetAction.equals(BaseActions.attack) ? e.getRanges() : targetAction.getRanges(), threatMap);
+					targetAction.equals(Actions.attack) ? e.getRanges() : targetAction.getRanges(), threatMap);
 			int tx = util.x;
 			int ty = util.y;
 			state.getRangeManager().setMoveAndAttackRange(e);
@@ -132,7 +132,7 @@ public class AI {
 			if (util.e != null) {
 				queuedAction = new QueuedAction(path, targetAction, util.e.getXCoord(), util.e.getYCoord());
 			} else {
-				queuedAction = new QueuedAction(path, BaseActions.wait, 0, 0);
+				queuedAction = new QueuedAction(path, Actions.wait, 0, 0);
 			}
 
 			state.getRangeManager().clearRange();

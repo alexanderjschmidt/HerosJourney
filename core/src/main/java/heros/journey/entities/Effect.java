@@ -1,11 +1,9 @@
 package heros.journey.entities;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import heros.journey.GameCamera;
 
 public class Effect {
@@ -24,7 +22,7 @@ public class Effect {
 	}
 
 	public Effect(TextureRegion[] frames, float x, float y, float endx, float endy, boolean angle) {
-		this.ani = new Animation(.5f / frames.length, frames);
+		this.ani = new Animation<TextureRegion>(.5f / frames.length, frames);
 		this.x = x;
 		this.y = y;
 		elapsedTime = 0;

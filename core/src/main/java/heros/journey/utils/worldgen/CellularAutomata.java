@@ -2,10 +2,9 @@ package heros.journey.utils.worldgen;
 
 import java.util.Random;
 
-import heros.journey.initializers.BaseTile;
+import heros.journey.initializers.base.Tiles;
 import heros.journey.tilemap.TileMap;
 import heros.journey.tilemap.tiles.ActionTile;
-import heros.journey.tilemap.tiles.Tile;
 import heros.journey.tilemap.tiles.TileInterface;
 import heros.journey.tilemap.TileManager;
 import heros.journey.utils.pathfinding.AStar;
@@ -62,10 +61,10 @@ public class CellularAutomata {
 		return grid;
 	}
 
-	public Tile[][] generateMap(int size) {
+	public heros.journey.tilemap.tiles.Tile[][] generateMap(int size) {
 		this.width = size;
 		this.height = size;
-		Tile[][] map = new Tile[width][height];
+		heros.journey.tilemap.tiles.Tile[][] map = new heros.journey.tilemap.tiles.Tile[width][height];
 		randomize(seed, map);
 		for (int i = 1; i <= 5; i++) {
 			smooth(map);
@@ -77,12 +76,12 @@ public class CellularAutomata {
 	public void genPath(TileMap tileMap, int startX, int startY, int endX, int endY) {
 		Cell path = AStar.aStar(startX, startY, endX, endY, tileMap);
 		while (path != null) {
-			tileMap.setTile(path.i, path.j, BaseTile.PATH);
+			tileMap.setTile(path.i, path.j, Tiles.PATH);
 			path = path.parent;
 		}
 	}
 
-	private void smooth(Tile[][] map) {
+	private void smooth(heros.journey.tilemap.tiles.Tile[][] map) {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				int[] tiles = new int[tileCount];
@@ -101,7 +100,7 @@ public class CellularAutomata {
 		}
 	}
 
-	private void smoothSandAndWater(Tile[][] map) {
+	private void smoothSandAndWater(heros.journey.tilemap.tiles.Tile[][] map) {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				if (map[i][j].ordinal() <= 1) {
@@ -142,18 +141,18 @@ public class CellularAutomata {
 
 	private TileInterface getTile(int nextInt) {
 		if (nextInt < 20)
-			return BaseTile.WATER;
+			return Tiles.WATER;
 		else if (nextInt < 35)
-			return BaseTile.SAND;
+			return Tiles.SAND;
 		else if (nextInt < 60)
-			return BaseTile.PLAINS;
+			return Tiles.PLAINS;
 		else if (nextInt < 80)
-			return BaseTile.HILLS;
-		return BaseTile.MOUNTAINS;
+			return Tiles.HILLS;
+		return Tiles.MOUNTAINS;
 	}
 
-	public Tile[][] getFacingMap(Tile[][] tileMap) {
-		Tile[][] facing = new Tile[width][height];
+	public heros.journey.tilemap.tiles.Tile[][] getFacingMap(heros.journey.tilemap.tiles.Tile[][] tileMap) {
+		heros.journey.tilemap.tiles.Tile[][] facing = new heros.journey.tilemap.tiles.Tile[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				int[] tiles = new int[tileCount];
@@ -162,7 +161,7 @@ public class CellularAutomata {
 						tiles[tileMap[Math.max(0, Math.min(width - 1, k))][Math.max(0, Math.min(height - 1, l))].ordinal()]++;
 					}
 				}
-				int max = tileMap[i][j] == BaseTile.WATER ? 1 : 0;
+				int max = tileMap[i][j] == Tiles.WATER ? 1 : 0;
 				for (int k = 0; k < tiles.length; k++) {
 					if (k != TileManager.getHeight(tileMap[i][j]) && tiles[k] >= tiles[max])
 						max = k;
@@ -173,14 +172,14 @@ public class CellularAutomata {
 		return facing;
 	}
 
-	public ActionTile[][] generateTrees(Tile[][] tileMap, int width2) {
+	public ActionTile[][] generateTrees(heros.journey.tilemap.tiles.Tile[][] tileMap, int width2) {
 		ActionTile[][] trees = new ActionTile[width2][width2];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				if (tileMap[i][j] == BaseTile.PLAINS)
-					trees[i][j] = random.nextInt(2) == 1 ? BaseTile.TREES : null;
-				if (tileMap[i][j] == BaseTile.HILLS)
-					trees[i][j] = random.nextInt(4) == 1 ? BaseTile.TREES : null;
+				if (tileMap[i][j] == Tiles.PLAINS)
+					trees[i][j] = random.nextInt(2) == 1 ? Tiles.TREES : null;
+				if (tileMap[i][j] == Tiles.HILLS)
+					trees[i][j] = random.nextInt(4) == 1 ? Tiles.TREES : null;
 			}
 		}
 		// Smoothing ???
@@ -195,11 +194,11 @@ public class CellularAutomata {
 						}
 					}
 					if (trees[i][j] == null)
-						trees[i][j] = tiles[1] >= 6 ? BaseTile.TREES : null;
+						trees[i][j] = tiles[1] >= 6 ? Tiles.TREES : null;
 					else
-						trees[i][j] = tiles[1] <= 3 ? null : BaseTile.TREES;
-					if (trees[i][j] == BaseTile.TREES && tiles[1] > 7)
-						trees[i][j] = random.nextInt(3) == 1 ? null : BaseTile.TREES;
+						trees[i][j] = tiles[1] <= 3 ? null : Tiles.TREES;
+					if (trees[i][j] == Tiles.TREES && tiles[1] > 7)
+						trees[i][j] = random.nextInt(3) == 1 ? null : Tiles.TREES;
 				}
 			}
 		}

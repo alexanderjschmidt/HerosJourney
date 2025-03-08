@@ -1,11 +1,6 @@
 package heros.journey;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import heros.journey.entities.items.ItemManager;
-import heros.journey.initializers.BaseClass;
 import heros.journey.entities.Entity;
 import heros.journey.entities.EntityManager;
 import heros.journey.entities.Team;
@@ -13,12 +8,14 @@ import heros.journey.entities.actions.Action;
 import heros.journey.entities.actions.QueuedAction;
 import heros.journey.entities.actions.TargetAction;
 import heros.journey.entities.ai.AI;
-import heros.journey.initializers.BaseItem;
+import heros.journey.initializers.Initializer;
 import heros.journey.tilemap.MapData;
 import heros.journey.tilemap.TileMap;
 import heros.journey.ui.HUD;
 import heros.journey.utils.RangeManager;
 import heros.journey.utils.pathfinding.Cell;
+
+import java.util.ArrayList;
 
 public class GameState {
 
@@ -29,6 +26,7 @@ public class GameState {
 
 	private int activeTeam;
 	private ArrayList<Team> activeTeams;
+    Team playerTeam;
 	private int turn;
 
 	private static GameState gameState;
@@ -48,31 +46,28 @@ public class GameState {
 	}
 
 	public void init(MapData mapData) {
+        activeTeams = new ArrayList<Team>(mapData.getTeamCount());
+        playerTeam = new Team("Player", 0, this, false);
+        activeTeams.add(playerTeam);
+        for (int i = 1; i < mapData.getTeamCount(); i++) {
+            activeTeams.add(new Team("" + i, i, this, true));
+        }
+
+        Initializer.init();
+
 		init(mapData.getMapSize(), mapData.getMapSize());
         map = new TileMap(width, mapData.getSeed());
 		entities = new EntityManager(this, width, height);
 		rangeManager = new RangeManager(this, width, height);
 
-		activeTeams = new ArrayList<Team>(mapData.getTeamCount());
-        Team playerTeam = new Team("Player", 0, this, false);
-		activeTeams.add(playerTeam);
-		for (int i = 1; i < mapData.getTeamCount(); i++) {
-			activeTeams.add(new Team("" + i, i, this, true));
-		}
-
 		activeTeam = 0;
-		turn = 0;
+		turn = 1;
 
 		for (Team team : activeTeams) {
 			if (team.isAI()) {
 				team.setAI(new AI());
 			}
 		}
-
-        Entity player = new Entity(BaseClass.hero, playerTeam, this);
-        player.getInventory().add(BaseItem.wood);
-        player.getInventory().add(BaseItem.ironOre);
-        entities.addEntity(player, 16, 16);
 	}
 
 	private void init(int width, int height) {
@@ -187,6 +182,10 @@ public class GameState {
 	public ArrayList<Team> getTeams() {
 		return activeTeams;
 	}
+
+    public Team getPlayerTeam() {
+        return playerTeam;
+    }
 
 	public EntityManager getEntities() {
 		return entities;

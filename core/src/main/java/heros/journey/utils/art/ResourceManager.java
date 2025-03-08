@@ -39,7 +39,6 @@ public class ResourceManager extends AssetManager {
 	public TextureRegion[] bless;
 	public TextureRegion[] rally;
 
-	public HashMap<String, Float> textures;
     public HashMap<TextureMaps, TextureRegion[][]> textureRegions;
 
 	private static ResourceManager manager;
@@ -57,7 +56,6 @@ public class ResourceManager extends AssetManager {
 	}
 
 	private ResourceManager() {
-		textures = new HashMap<String, Float>();
         textureRegions = new HashMap<TextureMaps, TextureRegion[][]>(TextureMaps.values().length);
 		initFonts();
 		loadSkin("uiskin");
@@ -168,7 +166,6 @@ public class ResourceManager extends AssetManager {
 		if (!isLoaded(path)) {
 			this.finishLoadingAsset(path);
 		}
-		textures.put(path, -1f);
 		return get(path, Texture.class);
 	}
 

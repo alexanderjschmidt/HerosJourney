@@ -1,13 +1,12 @@
 package heros.journey.entities;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
-
 import heros.journey.GameState;
 import heros.journey.entities.ai.AIGoalData;
 import heros.journey.ui.HUD;
+
+import java.util.ArrayList;
 
 public class EntityManager {
 
@@ -93,13 +92,24 @@ public class EntityManager {
 		return e;
 	}
 
-	public void addEntity(Entity e, int x, int y) {
-		if (entities[x][y] == null) {
-			entities[x][y] = e;
-			e.setXCoord(x);
-			e.setYCoord(y);
-		}
-	}
+    public void addEntity(Entity e, int x, int y) {
+        if (entities[x][y] == null) {
+            entities[x][y] = e;
+            e.setXCoord(x);
+            e.setYCoord(y);
+        }
+    }
+
+    public void addEntity(Entity e) {
+        int x = e.getXCoord();
+        int y = e.getYCoord();
+        e.setGameState(gameState);
+        if (entities[x][y] == null) {
+            entities[x][y] = e;
+            e.setXCoord(x);
+            e.setYCoord(y);
+        }
+    }
 
 	/**
 	 * takes into account fog

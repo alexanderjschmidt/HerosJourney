@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import heros.journey.GameCamera;
 import heros.journey.entities.actions.Action;
-import heros.journey.initializers.BaseActions;
+import heros.journey.initializers.base.Actions;
 import heros.journey.tilemap.tiles.ActionTile;
 import heros.journey.tilemap.tiles.Tile;
 
@@ -25,7 +25,7 @@ public class EntityClass {
 		this.description = description;
 		this.sprite = sprite;
 		this.actions = new ArrayList<Action>();
-		this.actions.add(BaseActions.wait);
+		this.actions.add(Actions.wait);
         this.actions.addAll(Arrays.asList(actions));
 		EntityClassManager.get().put(name, this);
 	}

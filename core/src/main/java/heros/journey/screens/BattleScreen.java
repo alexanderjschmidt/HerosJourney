@@ -3,16 +3,12 @@ package heros.journey.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import heros.journey.ActionQueue;
-import heros.journey.Application;
-import heros.journey.GameCamera;
-import heros.journey.GameState;
+import heros.journey.*;
 import heros.journey.entities.ai.AIManager;
-import heros.journey.utils.input.InputManager;
-import heros.journey.utils.input.KeyManager;
 import heros.journey.tilemap.MapData;
 import heros.journey.ui.HUD;
+import heros.journey.utils.input.InputManager;
+import heros.journey.utils.input.KeyManager;
 
 public class BattleScreen implements Screen {
 
@@ -46,6 +42,7 @@ public class BattleScreen implements Screen {
 		batch = app.getBatch();
 
 		GameState.global().init(mapData);
+        NewMapManager.get().addtoGameState(GameState.global());
 
 		ai = new AIManager();
 

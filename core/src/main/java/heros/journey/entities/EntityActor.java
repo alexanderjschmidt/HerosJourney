@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
 
 import heros.journey.ActionQueue;
@@ -13,7 +12,7 @@ import heros.journey.GameCamera;
 import heros.journey.GameState;
 import heros.journey.entities.actions.Action;
 import heros.journey.entities.actions.TargetAction;
-import heros.journey.initializers.BaseActions;
+import heros.journey.initializers.base.Actions;
 import heros.journey.utils.Direction;
 import heros.journey.utils.pathfinding.Cell;
 
@@ -39,10 +38,9 @@ public class EntityActor extends Actor {
         setSelected("idleSOUTH");
 	}
 
-	public EntityActor(Team team, GameState gameState) {
+	public EntityActor(Team team) {
 		this(0, 0);
         this.team = team;
-        this.gameState = gameState;
 	}
 
 	public void render(Batch batch, float deltaTime) {
@@ -71,23 +69,23 @@ public class EntityActor extends Actor {
 	public void vibrate(float delay, EntityActor from) {
 		// 0.2 seconds
 		Vector2 v = dir.getDirVector();
-		this.addAction(Actions.sequence(Actions.delay(delay), Actions.moveBy(5 * v.y, 5 * v.x, .05f, Interpolation.pow5In), Actions.moveBy(-10 * v.y, -10 * v.x, .05f, Interpolation.pow5),
-				Actions.moveBy(10 * v.y, 10 * v.x, .05f, Interpolation.pow5), Actions.moveBy(-5 * v.y, -5 * v.x, .05f, Interpolation.pow5Out)));
+		this.addAction(com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence(com.badlogic.gdx.scenes.scene2d.actions.Actions.delay(delay), com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy(5 * v.y, 5 * v.x, .05f, Interpolation.pow5In), com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy(-10 * v.y, -10 * v.x, .05f, Interpolation.pow5),
+				com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy(10 * v.y, 10 * v.x, .05f, Interpolation.pow5), com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy(-5 * v.y, -5 * v.x, .05f, Interpolation.pow5Out)));
 
 	}
 
 	public void lunge(float delay, EntityActor at) {
 		// 0.4 seconds
 		Vector2 v = dir.getDirVector();
-		this.addAction(Actions.sequence(Actions.delay(delay), Actions.moveBy(15 * v.x, 15 * v.y, .2f, Interpolation.pow5In), Actions.moveBy(-15 * v.x, -15 * v.y, .2f, Interpolation.pow5Out)));
+		this.addAction(com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence(com.badlogic.gdx.scenes.scene2d.actions.Actions.delay(delay), com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy(15 * v.x, 15 * v.y, .2f, Interpolation.pow5In), com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy(-15 * v.x, -15 * v.y, .2f, Interpolation.pow5Out)));
 	}
 
 	public void update(float delta) {
         final Entity e = (Entity) this;
 		if (path != null && !this.hasActions()) {
             //TODO Make duration based on move speed
-            this.addAction(Actions.sequence(Actions.moveTo(path.i - x, path.j - y, .2f),
-                Actions.run(new Runnable() {
+            this.addAction(com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence(com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo(path.i - x, path.j - y, .2f),
+                com.badlogic.gdx.scenes.scene2d.actions.Actions.run(new Runnable() {
                     @Override
                     public void run() {
                         gameState.getEntities().removeEntity(x, y);
@@ -106,7 +104,7 @@ public class EntityActor extends Actor {
                                 } else {
                                     action.onSelect(gameState, e);
                                 }
-                                if (action.equals(BaseActions.wait)) {
+                                if (action.equals(Actions.wait)) {
                                     ActionQueue.get().endAction();
                                 } else {
                                     Timer.schedule(new Timer.Task() {
@@ -171,6 +169,11 @@ public class EntityActor extends Actor {
         this.y = y;
     }
 
+    public void setMapPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public float getRenderX() {
         return (x + getX()) * GameCamera.get().getSize();
     }
@@ -179,4 +182,7 @@ public class EntityActor extends Actor {
         return (y + getY()) * GameCamera.get().getSize();
     }
 
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
 }

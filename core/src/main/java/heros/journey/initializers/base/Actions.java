@@ -1,13 +1,14 @@
-package heros.journey.initializers;
+package heros.journey.initializers.base;
 
 import heros.journey.Application;
 import heros.journey.GameState;
 import heros.journey.entities.Entity;
 import heros.journey.entities.actions.Action;
+import heros.journey.initializers.InitializerInterface;
 import heros.journey.screens.MainMenuScreen;
 import heros.journey.ui.HUD;
 
-public class BaseActions {
+public class Actions implements InitializerInterface {
 
     public static Action wait, end_turn, exit_game, attack;
 

@@ -1,9 +1,10 @@
-package heros.journey.initializers;
+package heros.journey.initializers.base;
 
 import heros.journey.entities.EntityClass;
+import heros.journey.initializers.InitializerInterface;
 import heros.journey.utils.art.ResourceManager;
 
-public class BaseClass {
+public class Classes implements InitializerInterface {
 
     public static final String HERO = "Hero";
     public static EntityClass hero;

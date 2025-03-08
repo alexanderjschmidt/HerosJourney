@@ -1,18 +1,17 @@
 package heros.journey.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heros.journey.GameState;
 import heros.journey.entities.actions.Action;
 import heros.journey.entities.buffs.Buff;
 import heros.journey.entities.items.Inventory;
 import heros.journey.entities.stats.Stats;
 import heros.journey.ui.HUD;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Entity extends EntityActor {
 
@@ -25,8 +24,8 @@ public class Entity extends EntityActor {
 		super(x, y);
 	}
 
-	public Entity(EntityClass job, Team team, GameState gameState) {
-        super(team, gameState);
+	public Entity(EntityClass job, Team team) {
+        super(team);
 		this.job = job;
         this.stats = new Stats();
         this.inventory = new Inventory();
@@ -43,7 +42,7 @@ public class Entity extends EntityActor {
                 cloneTeam = team;
             }
         }
-        Entity clone = new Entity(this.job, cloneTeam, newGameState);
+        Entity clone = new Entity(this.job, cloneTeam);
         clone.setPosition(getX(), getY());
         clone.used = used;
 		clone.buffs = new ArrayList<Buff>();

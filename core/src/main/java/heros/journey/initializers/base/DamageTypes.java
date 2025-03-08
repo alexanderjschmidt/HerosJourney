@@ -1,8 +1,9 @@
-package heros.journey.initializers;
+package heros.journey.initializers.base;
 
 import heros.journey.entities.stats.DamageType;
+import heros.journey.initializers.InitializerInterface;
 
-public class BaseDamageType {
+public class DamageTypes implements InitializerInterface {
 
     public static DamageType physical, magical, trueDamage;
 

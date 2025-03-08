@@ -14,12 +14,13 @@ public class TurnUI extends UI {
 	}
 
 	public void update() {
-		team = GameState.global().getActiveTeam();
+
 	}
 
 	@Override
 	public void drawUI(Batch batch, float parentAlpha) {
-		drawText(batch, team.toString() + " Turn", 0, 0);
+		GameState gameState = GameState.global();
+        drawText(batch, gameState.getActiveTeam().toString() + " Day " + gameState.getTurn(), 0, 0);
 	}
 
 }

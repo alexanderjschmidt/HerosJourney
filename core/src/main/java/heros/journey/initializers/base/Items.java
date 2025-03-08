@@ -1,9 +1,10 @@
-package heros.journey.initializers;
+package heros.journey.initializers.base;
 
 import heros.journey.entities.items.Item;
 import heros.journey.entities.items.ItemType;
+import heros.journey.initializers.InitializerInterface;
 
-public class BaseItem {
+public class Items implements InitializerInterface {
 
     public static Item wood, ironOre;
 

@@ -17,10 +17,9 @@ import heros.journey.GameCamera;
 import heros.journey.GameState;
 import heros.journey.entities.Entity;
 import heros.journey.entities.actions.Action;
-import heros.journey.initializers.BaseActions;
-import heros.journey.initializers.BaseTile;
+import heros.journey.initializers.base.Actions;
+import heros.journey.initializers.base.Tiles;
 import heros.journey.tilemap.tiles.ActionTile;
-import heros.journey.tilemap.tiles.Tile;
 import heros.journey.tilemap.tiles.TileInterface;
 import heros.journey.utils.worldgen.CellularAutomata;
 
@@ -29,9 +28,9 @@ public class TileMap {
 	private CellularAutomata gen;
 
 	private int width, height, seed;
-	private Tile[][] tileMap;
+	private heros.journey.tilemap.tiles.Tile[][] tileMap;
 	private ActionTile[][] environment;
-	private Tile[][] facing;
+	private heros.journey.tilemap.tiles.Tile[][] facing;
 	private int[][] variance;
 	private float elapsed = 0;
 
@@ -63,7 +62,7 @@ public class TileMap {
 		}
 	}
 
-	public Tile get(int x, int y) {
+	public heros.journey.tilemap.tiles.Tile get(int x, int y) {
 		if (x < 0 || y < 0 || x >= width || y >= height) {
 			return tileMap[Math.max(0, Math.min(width - 1, x))][Math.max(0, Math.min(height - 1, y))];
 		} else {
@@ -91,7 +90,7 @@ public class TileMap {
 		}
 	}
 
-	public void setTile(int x, int y, Tile tile) {
+	public void setTile(int x, int y, heros.journey.tilemap.tiles.Tile tile) {
 		tileMap[x][y] = tile;
 	}
 
@@ -146,9 +145,9 @@ public class TileMap {
 			while (true) {
 				int x = (int) (Math.random() * width);
 				int y = (int) (Math.random() * height);
-				if (tileMap[x][y] == BaseTile.PLAINS) {
+				if (tileMap[x][y] == Tiles.PLAINS) {
 					housePos[i] = new Vector2(x, y);
-					environment[x][y] = BaseTile.HOUSE;
+					environment[x][y] = Tiles.HOUSE;
 					break;
 				}
 			}
@@ -181,7 +180,7 @@ public class TileMap {
 		ActionTile tile = environment[x][y];
 		if (tile == null) {
             ArrayList<Action> options = new ArrayList<Action>(1);
-            options.add(BaseActions.wait);
+            options.add(Actions.wait);
             return options;
 		}
 		return tile.getActions();
