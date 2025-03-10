@@ -108,7 +108,7 @@ public class Tiles implements InitializerInterface {
                 }
             }
         };
-        MOUNTAINS = new Tile("Mountain", 24) {
+        MOUNTAINS = new Tile("Mountain", 10) {
             @Override
             public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 mountainArt.render(batch, tileMap, elapsed, x, y, variance);
