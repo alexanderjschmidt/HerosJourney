@@ -55,8 +55,6 @@ import heroes.journey.screens.LoadingScreen;
  *
  */
 public class Application extends Game {
-	public static final String TITLE = "Game";
-	public static final float VERSION = .8f;
 
 	private Viewport viewport;
 	private SpriteBatch batch;
