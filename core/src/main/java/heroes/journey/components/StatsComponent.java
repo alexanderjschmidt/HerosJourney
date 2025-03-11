@@ -1,34 +1,38 @@
-package heroes.journey.entities.stats;
+package heroes.journey.components;
+
+import com.badlogic.ashley.core.Component;
+import heroes.journey.entities.stats.DamageType;
+import heroes.journey.entities.stats.DamageTypeManager;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Stats {
+public class StatsComponent implements Component {
 
     public static final float MAX_HEALTH = 100, MAX_MANA = 100;
 
-	private int body, mind;
+    private int body, mind;
     private int fame;
 
     private int health;
     private int mana;
 
-    private Map<DamageType, Integer> resistancesFlat;
-    private Map<DamageType, Float> resistancesPercentage;
+    private final Map<DamageType, Integer> resistancesFlat;
+    private final Map<DamageType, Float> resistancesPercentage;
 
-	public Stats() {
-		body = 1;
-		mind = 1;
+    public StatsComponent() {
+        body = 1;
+        mind = 1;
         fame = 0;
         resistancesFlat = new HashMap<DamageType, Integer>();
         resistancesPercentage = new HashMap<DamageType, Float>();
-		for (DamageType type : DamageTypeManager.get().values()) {
+        for (DamageType type : DamageTypeManager.get().values()) {
             resistancesFlat.put(type, 0);
             resistancesPercentage.put(type, 0f);
-		}
-        health = (int)MAX_HEALTH;
-        mana = (int)MAX_MANA;
-	}
+        }
+        health = (int) MAX_HEALTH;
+        mana = (int) MAX_MANA;
+    }
 
     public int getBody() {
         return body;
@@ -77,16 +81,20 @@ public class Stats {
         return true;
     }
 
-    public Map<DamageType,Integer> getResistancesFlat() {
+    public Map<DamageType, Integer> getResistancesFlat() {
         return resistancesFlat;
     }
 
-    public Map<DamageType,Float> getResistancesPercentage() {
+    public Map<DamageType, Float> getResistancesPercentage() {
         return resistancesPercentage;
     }
 
-    public Stats clone() {
-        Stats stats = new Stats();
+    public int getMoveDistance() {
+        return body + 4;
+    }
+
+    public StatsComponent clone() {
+        StatsComponent stats = new StatsComponent();
         stats.body = body;
         stats.mind = mind;
         stats.fame = fame;
@@ -94,5 +102,4 @@ public class Stats {
         stats.health = health;
         return stats;
     }
-
 }

@@ -1,4 +1,4 @@
-package heroes.journey;
+package heroes.journey.utils;
 
 public class Random extends java.util.Random {
 

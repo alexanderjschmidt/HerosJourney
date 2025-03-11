@@ -1,7 +1,8 @@
 package heroes.journey.utils.worldgen;
 
+import com.badlogic.ashley.core.Entity;
+import heroes.journey.Engine;
 import heroes.journey.GameState;
-import heroes.journey.entities.Character;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 public class NewMapManager {
 
-    List<Character> startingEntities;
+    List<Entity> startingEntities;
     Map<MapGenerationPhase, List<MapGenerationEffect>> mapGenerationEffects;
 
     private static NewMapManager newMapManager;
@@ -24,12 +25,12 @@ public class NewMapManager {
     private NewMapManager() {
         startingEntities = new ArrayList<>();
         mapGenerationEffects = new HashMap<>();
-        for(MapGenerationPhase phase:MapGenerationPhase.values()){
+        for (MapGenerationPhase phase : MapGenerationPhase.values()) {
             mapGenerationEffects.put(phase, new ArrayList<>());
         }
     }
 
-    public List<Character> getStartingEntities() {
+    public List<Entity> getStartingEntities() {
         return startingEntities;
     }
 
@@ -42,17 +43,18 @@ public class NewMapManager {
         initEntityGeneration(gameState);
     }
 
-    public void initMapGeneration(GameState gameState){
-        for(MapGenerationPhase phase:MapGenerationPhase.values()) {
+    public void initMapGeneration(GameState gameState) {
+        for (MapGenerationPhase phase : MapGenerationPhase.values()) {
             for (MapGenerationEffect mapGenerationEffect : mapGenerationEffects.get(phase)) {
                 mapGenerationEffect.apply(gameState);
             }
         }
     }
 
-    public void initEntityGeneration(GameState gameState){
-        for(Character character : startingEntities) {
-            gameState.getEntities().addEntity(character);
+    public void initEntityGeneration(GameState gameState) {
+        for (Entity entity : startingEntities) {
+            Engine.get().addEntity(entity);
+            gameState.getEntities().addEntity(entity);
         }
     }
 

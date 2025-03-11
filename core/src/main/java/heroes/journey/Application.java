@@ -8,12 +8,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.screens.LoadingScreen;
+import heroes.journey.utils.art.ResourceManager;
 
 /*
  * TODO List
+ * Fix Terrain difficulty
+ * Make sure AI is working still with components
  * Make TextureMaps not Enums?
  * fix far out zoom
  * force zoom if camera would go off screen
@@ -56,8 +57,8 @@ import heroes.journey.screens.LoadingScreen;
  */
 public class Application extends Game {
 
-	private Viewport viewport;
-	private SpriteBatch batch;
+    private Viewport viewport;
+    private SpriteBatch batch;
 
     private static Application app;
 
@@ -67,62 +68,62 @@ public class Application extends Game {
         return app;
     }
 
-    private Application(){
+    private Application() {
         super();
     }
 
-	@Override
-	public void create() {
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
+    @Override
+    public void create() {
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
 
-		viewport = new StretchViewport(w, h, new OrthographicCamera());
-		GameCamera.get().setToOrtho(false, w, h);
-		viewport.apply();
-		batch = new SpriteBatch();
+        viewport = new StretchViewport(w, h, new OrthographicCamera());
+        GameCamera.get().setToOrtho(false, w, h);
+        viewport.apply();
+        batch = new SpriteBatch();
 
-		setScreen(new LoadingScreen(this));
-	}
+        setScreen(new LoadingScreen(this));
+    }
 
-	public void setScreen(Screen screen) {
-		super.setScreen(screen);
-		GameCamera.get().position.x = Gdx.graphics.getWidth() / 2;
-		GameCamera.get().position.y = Gdx.graphics.getHeight() / 2;
-	}
+    public void setScreen(Screen screen) {
+        super.setScreen(screen);
+        GameCamera.get().position.x = Gdx.graphics.getWidth() / 2;
+        GameCamera.get().position.y = Gdx.graphics.getHeight() / 2;
+    }
 
-	@Override
-	public void dispose() {
-		super.dispose();
-		ResourceManager.get().dispose();
-	}
+    @Override
+    public void dispose() {
+        super.dispose();
+        ResourceManager.get().dispose();
+    }
 
-	@Override
-	public void render() {
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		super.render();
-	}
+    @Override
+    public void render() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        super.render();
+    }
 
-	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
-		viewport.update(width, height);
-	}
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        viewport.update(width, height);
+    }
 
-	@Override
-	public void pause() {
-	}
+    @Override
+    public void pause() {
+    }
 
-	@Override
-	public void resume() {
-	}
+    @Override
+    public void resume() {
+    }
 
-	public SpriteBatch getBatch() {
-		return batch;
-	}
+    public SpriteBatch getBatch() {
+        return batch;
+    }
 
-	public Viewport getViewport() {
-		return viewport;
-	}
+    public Viewport getViewport() {
+        return viewport;
+    }
 
 }

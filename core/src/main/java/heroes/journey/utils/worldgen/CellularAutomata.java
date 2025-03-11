@@ -1,6 +1,6 @@
 package heroes.journey.utils.worldgen;
 
-import heroes.journey.Random;
+import heroes.journey.utils.Random;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.TileManager;
 import heroes.journey.tilemap.tiles.ActionTile;

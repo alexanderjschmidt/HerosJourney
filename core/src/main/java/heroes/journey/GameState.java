@@ -1,12 +1,17 @@
 package heroes.journey;
 
+import static heroes.journey.Engine.aiMapper;
+import static heroes.journey.Engine.factionMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import heroes.journey.entities.Character;
+import heroes.journey.components.AIComponent;
+import heroes.journey.components.FactionComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionQueue;
@@ -22,102 +27,108 @@ import heroes.journey.utils.ai.pathfinding.Cell;
 
 public class GameState {
 
-	private int width, height;
-	private EntityManager entities;
-	private TileMap map;
-	private RangeManager rangeManager;
+    private int width, height;
+    private EntityManager entities;
+    private TileMap map;
+    private RangeManager rangeManager;
 
-	private int turn;
+    private int turn;
 
-	private static GameState gameState;
-    private List<Character> entitiesInActionOrder;
+    private static GameState gameState;
+    private List<Entity> entitiesInActionOrder;
 
-	public static GameState global() {
-		if (gameState == null)
-			gameState = new GameState();
-		return gameState;
-	}
+    public static GameState global() {
+        if (gameState == null)
+            gameState = new GameState();
+        return gameState;
+    }
 
-	private GameState() {
+    private GameState() {
         entitiesInActionOrder = new ArrayList<>();
-	}
+    }
 
-	private GameState(int width, int height) {
+    private GameState(int width, int height) {
         this();
         this.width = width;
         this.height = height;
-	}
+    }
 
-	public void init(MapData mapData) {
+    public void init(MapData mapData) {
         Initializer.init();
 
         this.width = mapData.getMapSize();
         this.height = mapData.getMapSize();
         map = new TileMap(width);
-		entities = new EntityManager(this, width, height);
-		rangeManager = new RangeManager(this, width, height);
+        entities = new EntityManager(this, width, height);
+        rangeManager = new RangeManager(this, width, height);
 
-		turn = 0;
-	}
+        turn = 0;
+    }
 
-	public GameState clone() {
-		GameState clone = new GameState(width, height);
-		clone.map = map.clone(clone);
-		clone.entities = entities.clone(clone);
-		clone.rangeManager = rangeManager.clone(clone);
-		clone.turn = turn;
-		return clone;
-	}
+    public GameState clone() {
+        GameState clone = new GameState(width, height);
+        clone.map = map.clone(clone);
+        clone.entities = entities.clone(clone);
+        clone.rangeManager = rangeManager.clone(clone);
+        clone.turn = turn;
+        return clone;
+    }
 
-	public GameState applyAction(QueuedAction queuedAction) {
-		Cell path = queuedAction.getPath();
-		Action action = queuedAction.getAction();
+    public GameState applyAction(QueuedAction queuedAction) {
+        Cell path = queuedAction.getPath();
+        Action action = queuedAction.getAction();
 
-		Character e = getEntities().get(path.i, path.j);
-		if (e != null) {
-			e.remove();
-			while (path.parent != null) {
-				path = path.parent;
-			}
-			getEntities().addEntity(e, path.i, path.j);
-		}
+        Entity e = getEntities().get(path.i, path.j);
+        if (e != null) {
+            //e.remove();
+            while (path.parent != null) {
+                path = path.parent;
+            }
+            getEntities().addEntity(e);
+        }
 
-		HUD.get().getCursor().setSelected(e);
-		if (action instanceof TargetAction targetAction) {
+        HUD.get().getCursor().setSelected(e);
+        if (action instanceof TargetAction targetAction) {
             targetAction.targetEffect(this, e, queuedAction.getTargetX(), queuedAction.getTargetY());
-		} else {
-			action.onSelect(this, e);
-		}
+        } else {
+            action.onSelect(this, e);
+        }
         incrementTurn();
         return this;
-	}
+    }
 
-	public void render(SpriteBatch batch, float delta) {
-		map.render(batch, GameCamera.get().position.x / GameCamera.get().getSize(), GameCamera.get().position.y / GameCamera.get().getSize(), delta);
-		entities.render(batch, GameCamera.get().position.x / GameCamera.get().getSize(), GameCamera.get().position.y / GameCamera.get().getSize(), delta);
-		rangeManager.render(batch, turn);
-	}
+    public void render(SpriteBatch batch, float delta) {
+        map.render(batch, GameCamera.get().position.x / GameCamera.get().getSize(),
+            GameCamera.get().position.y / GameCamera.get().getSize(), delta);
+        rangeManager.render(batch, turn);
+    }
 
-    private Character incrementTurn() {
-        if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()){
+    private Entity incrementTurn() {
+        if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
             entitiesInActionOrder = entities.getEntitiesInActionOrder();
             turn++;
         }
-        Character currentCharacter = entitiesInActionOrder.removeFirst();
-        entities.setCurrentEntity(currentCharacter);
-        return currentCharacter;
+        Entity currentEntity = entitiesInActionOrder.removeFirst();
+        entities.setCurrentEntity(currentEntity);
+        return currentEntity;
     }
 
     public void nextTurn() {
-        Character currentCharacter = incrementTurn();
+        Entity currentEntity = incrementTurn();
         System.out.println("turn " + turn + ", " + entitiesInActionOrder);
-        QueuedAction action = currentCharacter.getAI().getMove(this, currentCharacter);
+        AIComponent ai = aiMapper.get(currentEntity);
+        QueuedAction action = ai.getAI().getMove(this, currentEntity);
+
         if (action == null) {
-            Optional<Faction> currentFaction = currentCharacter.getFactions().stream().filter(Faction::isPlayerFaction).findFirst();
+            FactionComponent factions = factionMapper.get(currentEntity);
+            Optional<Faction> currentFaction = factions.getFactions()
+                .stream()
+                .filter(Faction::isPlayerFaction)
+                .findFirst();
             if (currentFaction.isEmpty())
-                throw new RuntimeException("If Character has the Player AI, it MUST have a Player Faction");
-            if(currentFaction.get().toString().equals(ActionQueue.get().getID())){
-                HUD.get().getCursor().setPosition(currentCharacter);
+                throw new RuntimeException("If Entity has the Player AI, it MUST have a Player Faction");
+            if (currentFaction.get().toString().equals(ActionQueue.get().getID())) {
+                HUD.get().getCursor().setPosition(currentEntity);
                 HUD.get().setState(HUD.HUDState.CURSOR_MOVE);
                 System.out.println("your turn");
             } else {
@@ -131,29 +142,29 @@ public class GameState {
         }
         getRangeManager().clearRange();
         HUD.get().getCursor().clearSelected();
-	}
+    }
 
-	public int getTurn() {
-		return turn;
-	}
+    public int getTurn() {
+        return turn;
+    }
 
-	public EntityManager getEntities() {
-		return entities;
-	}
+    public EntityManager getEntities() {
+        return entities;
+    }
 
-	public TileMap getMap() {
-		return map;
-	}
+    public TileMap getMap() {
+        return map;
+    }
 
-	public RangeManager getRangeManager() {
-		return rangeManager;
-	}
+    public RangeManager getRangeManager() {
+        return rangeManager;
+    }
 
-	public int getWidth() {
-		return width;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public int getHeight() {
-		return height;
-	}
+    public int getHeight() {
+        return height;
+    }
 }

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
-import heroes.journey.Random;
-import heroes.journey.entities.Character;
 import heroes.journey.entities.actions.QueuedAction;
+import heroes.journey.utils.Random;
 
 public class Node {
 
@@ -30,11 +31,13 @@ public class Node {
 
     // Get all possible QueuedActions and create child nodes
     public void expand() {
-        if (!children.isEmpty()) return; // Already expanded
+        if (!children.isEmpty())
+            return; // Already expanded
 
         List<QueuedAction> possibleQueuedActions = scorer.getPossibleQueuedActions(gameState);
         for (QueuedAction QueuedAction : possibleQueuedActions) {
-            GameState newState = gameState.clone().applyAction(QueuedAction); // Apply QueuedAction to get new state
+            GameState newState = gameState.clone()
+                .applyAction(QueuedAction); // Apply QueuedAction to get new state
             Node childNode = new Node(newState, this, scorer);
             childNode.setQueuedAction(QueuedAction);
             children.add(childNode);
@@ -50,7 +53,8 @@ public class Node {
 
     // Compute UCT value for a node
     private double uctValue(Node node) {
-        if (node.visitCount == 0) return Double.MAX_VALUE; // Favor unexplored nodes
+        if (node.visitCount == 0)
+            return Double.MAX_VALUE; // Favor unexplored nodes
         double exploitation = node.winScore / node.visitCount;
         double exploration = Math.sqrt(2) * Math.sqrt(Math.log(this.visitCount) / node.visitCount);
         return exploitation + exploration;
@@ -68,16 +72,16 @@ public class Node {
     }
 
     // Simulate a random game from this node and return a result
-    public int rollout(Character playingCharacter) {
+    public int rollout(Entity playingEntity) {
         GameState tempState = this.gameState.clone();
         int depth = 0;
-        while (scorer.getScore(gameState, playingCharacter) == 0 && depth < 5) {
+        while (scorer.getScore(gameState, playingEntity) == 0 && depth < 5) {
             List<QueuedAction> QueuedActions = scorer.getPossibleQueuedActions(gameState);
             QueuedAction randomQueuedAction = QueuedActions.get(Random.get().nextInt(QueuedActions.size()));
             tempState = tempState.applyAction(randomQueuedAction);
             depth++;
         }
-        return scorer.getScore(gameState, playingCharacter); // 1.0 if AI wins, 0.0 if loss, 0.5 for draw
+        return scorer.getScore(gameState, playingEntity); // 1.0 if AI wins, 0.0 if loss, 0.5 for draw
     }
 
     // Backpropagate the result up the tree
@@ -97,8 +101,19 @@ public class Node {
     }
 
     // Utility methods
-    public boolean hasChildren() { return !children.isEmpty(); }
-    public Node getParent() { return parent; }
-    public void setQueuedAction(QueuedAction queuedAction) { this.queuedAction = queuedAction; }
-    public QueuedAction getQueuedAction() { return queuedAction; }
+    public boolean hasChildren() {
+        return !children.isEmpty();
+    }
+
+    public Node getParent() {
+        return parent;
+    }
+
+    public void setQueuedAction(QueuedAction queuedAction) {
+        this.queuedAction = queuedAction;
+    }
+
+    public QueuedAction getQueuedAction() {
+        return queuedAction;
+    }
 }

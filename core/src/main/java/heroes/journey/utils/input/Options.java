@@ -3,8 +3,9 @@ package heroes.journey.utils.input;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
-import heroes.journey.entities.Character;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
 
@@ -15,25 +16,25 @@ public class Options {
     static {
         Action mapBlendAction = new Action("Blend Map: " + MAP_BLEND) {
             @Override
-            public void onSelect(GameState gameState, Character selected) {
+            public void onSelect(GameState gameState, Entity selected) {
                 MAP_BLEND = !MAP_BLEND;
                 this.setName("Blend Map: " + MAP_BLEND);
             }
 
             @Override
-            public boolean requirementsMet(GameState gameState, Character selected) {
+            public boolean requirementsMet(GameState gameState, Entity selected) {
                 return false;
             }
         };
         Action autoEndTurnAction = new Action("Auto End Turn: " + AUTO_END_TURN) {
             @Override
-            public void onSelect(GameState gameState, Character selected) {
+            public void onSelect(GameState gameState, Entity selected) {
                 AUTO_END_TURN = !AUTO_END_TURN;
                 this.setName("Auto End Turn: " + AUTO_END_TURN);
             }
 
             @Override
-            public boolean requirementsMet(GameState gameState, Character selected) {
+            public boolean requirementsMet(GameState gameState, Entity selected) {
                 return false;
             }
         };
@@ -42,12 +43,12 @@ public class Options {
         optionsList.add(autoEndTurnAction);
         new Action("Options", true) {
             @Override
-            public void onSelect(GameState gameState, Character selected) {
+            public void onSelect(GameState gameState, Entity selected) {
                 HUD.get().getActionMenu().open(optionsList);
             }
 
             @Override
-            public boolean requirementsMet(GameState gameState, Character selected) {
+            public boolean requirementsMet(GameState gameState, Entity selected) {
                 return true;
             }
         };

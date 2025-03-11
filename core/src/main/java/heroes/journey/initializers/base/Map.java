@@ -1,8 +1,9 @@
 package heroes.journey.initializers.base;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import heroes.journey.GameState;
-import heroes.journey.entities.Character;
+import heroes.journey.components.*;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.entities.ai.PlayerAI;
@@ -12,6 +13,8 @@ import heroes.journey.tilemap.tiles.ActionTile;
 import heroes.journey.tilemap.tiles.Tile;
 import heroes.journey.utils.ai.pathfinding.AStar;
 import heroes.journey.utils.ai.pathfinding.Cell;
+import heroes.journey.utils.art.ResourceManager;
+import heroes.journey.utils.art.TextureMaps;
 import heroes.journey.utils.worldgen.CellularAutomata;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationPhase;
@@ -22,17 +25,15 @@ public class Map implements InitializerInterface {
     static {
         Faction playerFaction = new Faction(ActionQueue.get().getID(), true);
 
-        Character player = new Character(Classes.hero, new PlayerAI(new MCTSAI()));
-        player.setMapPosition(16, 16);
-        player.getInventory().add(Items.wood);
-        player.getInventory().add(Items.ironOre);
-        player.getFactions().add(playerFaction);
-
-        Character goblin = new Character(Classes.goblin, new MCTSAI());
-        goblin.setMapPosition(20, 5);
+        Entity player = new Entity();
+        player.add(new PositionComponent(16, 16))
+            .add(new GlobalGameStateComponent())
+            .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[1][1]))
+            .add(new ActorComponent()).add(new MovementComponent()).add(new ActionComponent())
+            .add(new AIComponent(new PlayerAI(new MCTSAI())))
+            .add(new FactionComponent().addFaction(playerFaction)).add(new StatsComponent()).add(new InventoryComponent());
 
         NewMapManager.get().getStartingEntities().add(player);
-        NewMapManager.get().getStartingEntities().add(goblin);
 
         // Generated Map
         new MapGenerationEffect(MapGenerationPhase.INIT) {
@@ -83,7 +84,8 @@ public class Map implements InitializerInterface {
     }
 
     private static void genNextPath() {
-        Cell path = AStar.aStar((int) housePos[houseStart].x, (int) housePos[houseStart].y, (int) housePos[houseEnd].x, (int) housePos[houseEnd].y, GameState.global().getMap());
+        Cell path = AStar.aStar((int) housePos[houseStart].x, (int) housePos[houseStart].y,
+            (int) housePos[houseEnd].x, (int) housePos[houseEnd].y, GameState.global().getMap());
         while (path != null) {
             GameState.global().getMap().setTile(path.i, path.j, Tiles.PATH);
             path = path.parent;

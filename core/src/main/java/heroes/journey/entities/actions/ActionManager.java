@@ -5,45 +5,43 @@ import java.util.HashMap;
 import java.util.List;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.Character;
 
-public class ActionManager extends HashMap<String, Action> {
+public class ActionManager extends HashMap<String,Action> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final List<Action> teamActions;
+    private final List<Action> teamActions;
 
-	private static ActionManager actionManager;
+    private static ActionManager actionManager;
 
-	public static ActionManager get() {
-		if (actionManager == null)
-			actionManager = new ActionManager();
-		return actionManager;
-	}
+    public static ActionManager get() {
+        if (actionManager == null)
+            actionManager = new ActionManager();
+        return actionManager;
+    }
 
-	private ActionManager() {
-		teamActions = new ArrayList<Action>();
-	}
+    private ActionManager() {
+        teamActions = new ArrayList<Action>();
+    }
 
-	public static List<Action> getTeamActions(GameState gameState, int x, int y) {
-		ArrayList<Action> options = new ArrayList<Action>(get().teamActions.size());
-		Character e = new Character(x, y);
-		for (Action action : get().teamActions) {
-			if (action.requirementsMet(gameState, e))
-				options.add(action);
-		}
-		return options;
-	}
+    public static List<Action> getTeamActions(GameState gameState, int x, int y) {
+        ArrayList<Action> options = new ArrayList<Action>(get().teamActions.size());
+        for (Action action : get().teamActions) {
+            if (action.requirementsMet(gameState, null))
+                options.add(action);
+        }
+        return options;
+    }
 
-	public static Action getAction(String actionName) {
-		Action action = get().get(actionName);
-		if (action == null)
-			System.out.println("SKILL NOT FOUND");
-		return action;
-	}
+    public static Action getAction(String actionName) {
+        Action action = get().get(actionName);
+        if (action == null)
+            System.out.println("SKILL NOT FOUND");
+        return action;
+    }
 
-	public static void addTeamAction(Action action) {
-		get().teamActions.addFirst(action);
-	}
+    public static void addTeamAction(Action action) {
+        get().teamActions.addFirst(action);
+    }
 
 }

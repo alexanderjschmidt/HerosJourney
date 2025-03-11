@@ -4,13 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.TileMap;
-import heroes.journey.tilemap.art.WangCornerBuildingTile;
-import heroes.journey.tilemap.art.WangCornerTile;
-import heroes.journey.tilemap.art.WangCornerTileAnimated;
-import heroes.journey.tilemap.art.WangEdgeTile;
-import heroes.journey.tilemap.art.WangEdgeTileAnimated;
+import heroes.journey.tilemap.art.*;
 import heroes.journey.tilemap.tiles.ActionTile;
-import heroes.journey.tilemap.art.PlainTile;
 import heroes.journey.tilemap.tiles.Tile;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
@@ -138,7 +133,7 @@ public class Tiles implements InitializerInterface {
         treesArt.addVariance(tiles, 0, 6, 8);
         // Inner forest Variance
         treesArt.addVariance(tiles, 15, 5, 7, 5, 8);
-        TREES = new ActionTile("Trees", 2, Actions.wait) {
+        TREES = new ActionTile("Trees", 2, BaseActions.wait) {
             @Override
             public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 treesArt.render(batch, tileMap, elapsed, x, y, variance);
@@ -147,7 +142,7 @@ public class Tiles implements InitializerInterface {
 
         PlainTile houseArt = new PlainTile(tiles, 6, 7, 12);
         houseArt.addVariance(tiles, 7, 13, 8, 12, 8, 13, 9, 12, 9, 13);
-        HOUSE = new ActionTile("House", 1, Actions.wait) {
+        HOUSE = new ActionTile("House", 1, BaseActions.wait) {
             @Override
             public void render(SpriteBatch batch, TileMap tileMap, float elapsed, int x, int y, int variance, Tile facing) {
                 houseArt.render(batch, tileMap, elapsed, x, y, variance);
