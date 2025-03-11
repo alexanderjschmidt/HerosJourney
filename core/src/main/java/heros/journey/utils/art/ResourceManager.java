@@ -24,12 +24,7 @@ public class ResourceManager extends AssetManager {
 	public BitmapFont font36;
 	public BitmapFont font72;
 	public Skin skin;
-	public TextureRegion[][] ui;
 	public TextureRegion select;
-	public TextureRegion[] directions;
-
-	public TextureRegion[][] sprites;
-	public TextureRegion[][] tiles;
 
 	public TextureRegion[][] slash;
 	public TextureRegion[] arrow;
@@ -85,12 +80,7 @@ public class ResourceManager extends AssetManager {
 	}
 
 	public void splits() {
-		ui = TextureRegion.split(getTexture("Textures/UI/cursor.png"), 32, 32);
-		sprites = TextureRegion.split(getTexture("Textures/sprites.png"), 16, 16);
-		tiles = TextureRegion.split(getTexture("Textures/Overworld_Tileset.png"), 16, 16);
-
-		directions = new TextureRegion[] { sprites[3][0], sprites[2][0], sprites[3][1], sprites[2][1] };
-		select = ui[3][1];
+		select = get(TextureMaps.UI)[3][1];
 		slash = TextureRegion.split(getTexture("Textures/Battle_Animations/Slashing.png"), 32, 32);
 		arrow = arrangeFrames(TextureRegion.split(getTexture("Textures/Battle_Animations/Arrow 1.png"), 32, 32));
 		poison = arrangeFrames(TextureRegion.split(getTexture("Textures/Battle_Animations/Dark 8.png"), 32, 32));

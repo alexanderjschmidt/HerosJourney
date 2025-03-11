@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import heros.journey.entities.Entity;
 import heros.journey.entities.stats.Stats;
 import heros.journey.utils.art.ResourceManager;
+import heros.journey.utils.art.TextureMaps;
 
 public class EntityUI extends UI {
 
@@ -30,9 +31,9 @@ public class EntityUI extends UI {
 			String mana = entity.getStats().getMana() + "/" + ((int) Stats.MAX_MANA);
 			// replace with labels
 
-			batch.draw(ResourceManager.get().ui[0][3], getX() + HUD.FONT_SIZE, 12 + getY() + ((2) * HUD.FONT_SIZE), HEALTH_WIDTH * (entity.getStats().getHealth() / Stats.MAX_HEALTH),
+			batch.draw(ResourceManager.get(TextureMaps.UI)[0][3], getX() + HUD.FONT_SIZE, 12 + getY() + ((2) * HUD.FONT_SIZE), HEALTH_WIDTH * (entity.getStats().getHealth() / Stats.MAX_HEALTH),
 					HEALTH_HEIGHT);
-			batch.draw(ResourceManager.get().ui[1][2], getX() + HUD.FONT_SIZE, 12 + getY() + ((1) * HUD.FONT_SIZE), HEALTH_WIDTH * (entity.getStats().getMana() / Stats.MAX_MANA), HEALTH_HEIGHT);
+			batch.draw(ResourceManager.get(TextureMaps.UI)[1][2], getX() + HUD.FONT_SIZE, 12 + getY() + ((1) * HUD.FONT_SIZE), HEALTH_WIDTH * (entity.getStats().getMana() / Stats.MAX_MANA), HEALTH_HEIGHT);
 
             drawText(batch, "Health: " + health, 0, 1);
             drawText(batch, "Mana: " + mana, 0, 2);

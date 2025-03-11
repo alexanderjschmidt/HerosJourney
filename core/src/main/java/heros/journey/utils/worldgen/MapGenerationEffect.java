@@ -6,13 +6,34 @@ import java.util.concurrent.*;
 
 public abstract class MapGenerationEffect {
 
-    public MapGenerationEffect(){
-        NewMapManager.get().getMapGenerationEffects().add(this);
+    private final MapGenerationPhase phase;
+    private final int timeout;
+
+    public MapGenerationEffect(MapGenerationPhase phase, int timeout){
+        this.phase = phase;
+        this.timeout = timeout;
+        NewMapManager.get().addMapGenerationEffect(this);
     }
 
-    public abstract void apply(GameState gameState);
+    public MapGenerationEffect(MapGenerationPhase phase){
+        this(phase, 0);
+    }
 
-    public void timeout(Callable<Void> task, int timeout) {
+    public void apply(GameState gameState) {
+        if(timeout>0){
+            Callable<Void> task = () -> {
+                applyEffect(gameState);
+                return null;
+            };
+            timeout(task);
+        } else {
+            applyEffect(gameState);
+        }
+    }
+
+    public abstract void applyEffect(GameState gameState);
+
+    private void timeout(Callable<Void> task) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<Void> future = executorService.submit(task);
 
@@ -31,4 +52,7 @@ public abstract class MapGenerationEffect {
         }
     }
 
+    public MapGenerationPhase getPhase() {
+        return phase;
+    }
 }

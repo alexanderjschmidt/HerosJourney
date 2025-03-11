@@ -1,12 +1,9 @@
 package heros.journey.initializers.base;
 
-import java.util.concurrent.Callable;
-
 import com.badlogic.gdx.math.Vector2;
-
-import heros.journey.entities.actions.ActionQueue;
 import heros.journey.GameState;
 import heros.journey.entities.Entity;
+import heros.journey.entities.actions.ActionQueue;
 import heros.journey.entities.ai.MCTSAI;
 import heros.journey.entities.ai.PlayerAI;
 import heros.journey.entities.factions.Faction;
@@ -17,6 +14,7 @@ import heros.journey.utils.ai.pathfinding.AStar;
 import heros.journey.utils.ai.pathfinding.Cell;
 import heros.journey.utils.worldgen.CellularAutomata;
 import heros.journey.utils.worldgen.MapGenerationEffect;
+import heros.journey.utils.worldgen.MapGenerationPhase;
 import heros.journey.utils.worldgen.NewMapManager;
 
 public class Map implements InitializerInterface {
@@ -37,23 +35,24 @@ public class Map implements InitializerInterface {
         NewMapManager.get().getStartingEntities().add(goblin);
 
         // Generated Map
-        new MapGenerationEffect() {
+        new MapGenerationEffect(MapGenerationPhase.INIT) {
             @Override
-            public void apply(GameState gameState) {
+            public void applyEffect(GameState gameState) {
                 int width = gameState.getWidth();
-
                 Tile[][] tileMap = CellularAutomata.generateMap(width);
-                ActionTile[][] environment = CellularAutomata.generateTrees(tileMap, width);
                 gameState.getMap().setTileMap(tileMap);
-                gameState.getMap().setEnvironment(environment);
-
-                Callable<Void> housesTask = () -> {
-                    // Simulate long-running noise generation task
-                    genHouses(tileMap, environment);
-                    return null;
-                };
-                timeout(housesTask, 2000);
-
+                gameState.getMap().setEnvironment(CellularAutomata.generateTrees(tileMap, width));
+            }
+        };
+        new MapGenerationEffect(MapGenerationPhase.SECOND, 1000) {
+            @Override
+            public void applyEffect(GameState gameState) {
+                genHouses(gameState.getMap().getTileMap(), gameState.getMap().getEnvironment());
+            }
+        };
+        new MapGenerationEffect(MapGenerationPhase.FINAL) {
+            @Override
+            public void applyEffect(GameState gameState) {
                 gameState.getMap().genFacingAndVariance();
             }
         };

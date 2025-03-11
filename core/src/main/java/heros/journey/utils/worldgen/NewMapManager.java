@@ -4,12 +4,14 @@ import heros.journey.GameState;
 import heros.journey.entities.Entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NewMapManager {
 
     List<Entity> startingEntities;
-    List<MapGenerationEffect> mapGenerationEffects;
+    Map<MapGenerationPhase, List<MapGenerationEffect>> mapGenerationEffects;
 
     private static NewMapManager newMapManager;
 
@@ -21,15 +23,18 @@ public class NewMapManager {
 
     private NewMapManager() {
         startingEntities = new ArrayList<>();
-        mapGenerationEffects = new ArrayList<>();
+        mapGenerationEffects = new HashMap<>();
+        for(MapGenerationPhase phase:MapGenerationPhase.values()){
+            mapGenerationEffects.put(phase, new ArrayList<>());
+        }
     }
 
     public List<Entity> getStartingEntities() {
         return startingEntities;
     }
 
-    public List<MapGenerationEffect> getMapGenerationEffects() {
-        return mapGenerationEffects;
+    public void addMapGenerationEffect(MapGenerationEffect effect) {
+        mapGenerationEffects.get(effect.getPhase()).add(effect);
     }
 
     public void initGameState(GameState gameState) {
@@ -38,8 +43,10 @@ public class NewMapManager {
     }
 
     public void initMapGeneration(GameState gameState){
-        for (MapGenerationEffect mapGenerationEffect : mapGenerationEffects){
-            mapGenerationEffect.apply(gameState);
+        for(MapGenerationPhase phase:MapGenerationPhase.values()) {
+            for (MapGenerationEffect mapGenerationEffect : mapGenerationEffects.get(phase)) {
+                mapGenerationEffect.apply(gameState);
+            }
         }
     }
 

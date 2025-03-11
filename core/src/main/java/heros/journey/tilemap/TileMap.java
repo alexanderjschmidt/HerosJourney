@@ -11,7 +11,10 @@ import heros.journey.tilemap.tiles.Tile;
 import heros.journey.utils.worldgen.CellularAutomata;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static heros.journey.initializers.base.Tiles.WATER;
 
 public class TileMap {
 
@@ -26,6 +29,10 @@ public class TileMap {
 		// gen = new RandomWorldGenerator(seed, 80, 2, .6f, false);
 		width = mapSize;
 		height = mapSize;
+        tileMap = new Tile[width][height];
+        for (Tile[] row : tileMap) {
+            Arrays.fill(row, WATER);
+        }
         GameCamera.get().setZoom();
 	}
 
@@ -118,5 +125,13 @@ public class TileMap {
 
     public void setEnvironment(ActionTile[][] environment) {
         this.environment = environment;
+    }
+
+    public Tile[][] getTileMap() {
+        return tileMap;
+    }
+
+    public ActionTile[][] getEnvironment() {
+        return environment;
     }
 }
