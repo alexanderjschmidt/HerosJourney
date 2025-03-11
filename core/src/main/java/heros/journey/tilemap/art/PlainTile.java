@@ -3,7 +3,7 @@ package heros.journey.tilemap.art;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import heros.journey.GameCamera;
-import heros.journey.tilemap.TileMap;
+import heros.journey.tilemap.TileMapArt;
 
 public class PlainTile implements TileRender {
 
@@ -19,7 +19,7 @@ public class PlainTile implements TileRender {
 	}
 
 	@Override
-	public void render(Batch batch, TileMap map, float elapsedTime, int x, int y, int varianceVal) {
+	public void render(Batch batch, TileMapArt map, float elapsedTime, int x, int y, int varianceVal) {
 		batch.draw(textures[varianceVal % variance], x * GameCamera.get().getSize(), y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
 	}
 

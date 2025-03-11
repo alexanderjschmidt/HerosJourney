@@ -17,6 +17,8 @@ import heros.journey.utils.worldgen.MapGenerationEffect;
 import heros.journey.utils.worldgen.MapGenerationPhase;
 import heros.journey.utils.worldgen.NewMapManager;
 
+import static heros.journey.initializers.base.Tiles.CAVE;
+
 public class Map implements InitializerInterface {
 
     static {
@@ -48,6 +50,12 @@ public class Map implements InitializerInterface {
             @Override
             public void applyEffect(GameState gameState) {
                 genHouses(gameState.getMap().getTileMap(), gameState.getMap().getEnvironment());
+            }
+        };
+        new MapGenerationEffect(MapGenerationPhase.THIRD) {
+            @Override
+            public void applyEffect(GameState gameState) {
+                gameState.getMap().setEnvironment(gameState.getWidth()/2, gameState.getHeight()/2, CAVE);
             }
         };
         new MapGenerationEffect(MapGenerationPhase.FINAL) {

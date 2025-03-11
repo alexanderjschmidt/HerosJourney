@@ -3,7 +3,7 @@ package heros.journey.tilemap.art;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import heros.journey.GameCamera;
-import heros.journey.tilemap.TileMap;
+import heros.journey.tilemap.TileMapArt;
 import heros.journey.utils.input.Options;
 
 public class WangCornerBuildingTile implements TileRender {
@@ -24,7 +24,7 @@ public class WangCornerBuildingTile implements TileRender {
 		}
 	}
 
-	public void render(Batch batch, TileMap map, float elapsedTime, int x, int y, int varianceVal) {
+	public void render(Batch batch, TileMapArt map, float elapsedTime, int x, int y, int varianceVal) {
 		int bitVal = 0;
 
 		bitVal += map.getEnvironment(x, y) == map.getEnvironment(x + 1, y + 1) && map.getEnvironment(x, y) == map.getEnvironment(x, y + 1) && map.getEnvironment(x, y) == map.getEnvironment(x + 1, y)

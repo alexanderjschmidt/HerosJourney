@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import heros.journey.GameCamera;
-import heros.journey.tilemap.TileMap;
+import heros.journey.tilemap.TileMapArt;
 import heros.journey.utils.input.Options;
 
 public class WangEdgeTileAnimated implements TileRender {
@@ -22,7 +22,7 @@ public class WangEdgeTileAnimated implements TileRender {
 		}
 	}
 
-	public void render(Batch batch, TileMap map, float elapsedTime, int x, int y, int varianceVal) {
+	public void render(Batch batch, TileMapArt map, float elapsedTime, int x, int y, int varianceVal) {
 		int bitVal = 0;
 		bitVal += map.get(x, y) == map.get(x, y + 1) ? 1 : 0;
 		bitVal += map.get(x, y) == map.get(x + 1, y) ? 2 : 0;

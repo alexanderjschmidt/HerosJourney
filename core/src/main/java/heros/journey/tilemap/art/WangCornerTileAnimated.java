@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import heros.journey.GameCamera;
-import heros.journey.tilemap.TileMap;
+import heros.journey.tilemap.TileMapArt;
 import heros.journey.utils.input.Options;
 
 public class WangCornerTileAnimated implements TileRender {
@@ -27,7 +27,7 @@ public class WangCornerTileAnimated implements TileRender {
 		}
 	}
 
-	public void render(Batch batch, TileMap map, float elapsedTime, int x, int y, int varianceVal) {
+	public void render(Batch batch, TileMapArt map, float elapsedTime, int x, int y, int varianceVal) {
 		int bitVal = 0;
 		if (direction == 1) {
 			bitVal += map.get(x, y).ordinal() >= map.get(x + 1, y + 1).ordinal() && map.get(x, y).ordinal() >= map.get(x, y + 1).ordinal() && map.get(x, y).ordinal() >= map.get(x + 1, y).ordinal() ? 1
