@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.utils.RangeManager.RangeColor;
 import heroes.journey.utils.art.ResourceManager;
@@ -23,8 +23,8 @@ public class Cursor {
 
 	private HUD hud;
 
-	private Entity selected;
-	private Entity hover;
+	private Character selected;
+	private Character hover;
 	private int sx = -1, sy = -1;
 	private Cell path;
 	private TargetAction activeSkill;
@@ -146,11 +146,11 @@ public class Cursor {
         update(0);
     }
 
-    public void setPosition(Entity e) {
+    public void setPosition(Character e) {
         this.setPosition(e.getXCoord(), e.getYCoord());
     }
 
-	public Entity getSelected() {
+	public Character getSelected() {
 		return selected;
 	}
 
@@ -159,7 +159,7 @@ public class Cursor {
 			GameState.global().getRangeManager().clearRange();
 			return;
 		}
-		Entity e = GameState.global().getEntities().removeEntity(sx, sy);
+		Character e = GameState.global().getEntities().removeEntity(sx, sy);
 		GameState.global().getEntities().addEntity(e, initialX, initialY);
 		clearSelected();
 		if (e.getMoveDistance() != 0) {
@@ -176,7 +176,7 @@ public class Cursor {
 		hud.getCombatUI().setMessage(activeSkill.getUIMessage(GameState.global(), selected, x, y));
 	}
 
-	public Entity getHover() {
+	public Character getHover() {
 		return hover;
 	}
 
@@ -221,7 +221,7 @@ public class Cursor {
 		this.path = temp;
 	}
 
-	public void setSelected(Entity selected) {
+	public void setSelected(Character selected) {
 		this.selected = selected;
 	}
 

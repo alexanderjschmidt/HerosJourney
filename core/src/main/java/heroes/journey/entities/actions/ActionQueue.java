@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUD.HUDState;
@@ -160,7 +160,7 @@ public class ActionQueue extends ArrayList<QueuedAction> {
 		Cell path = action.getPath();
 
 		HUD.get().setState(HUDState.MOVING);
-		Entity selected = gameState.getEntities().get(path.i, path.j);
+		Character selected = gameState.getEntities().get(path.i, path.j);
 		HUD.get().getCursor().setSelected(selected);
 		selected.move(path, action.getAction(), action.getTargetX(), action.getTargetY());
         GameState.global().nextTurn();

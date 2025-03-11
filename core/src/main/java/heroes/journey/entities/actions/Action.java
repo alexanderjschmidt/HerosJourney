@@ -1,7 +1,7 @@
 package heroes.journey.entities.actions;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 
 public abstract class Action {
 
@@ -28,13 +28,13 @@ public abstract class Action {
 		this(name, 0, false);
 	}
 
-	public abstract boolean requirementsMet(GameState gameState, Entity selected);
+	public abstract boolean requirementsMet(GameState gameState, Character selected);
 
-	public void onHover(GameState gameState, Entity selected) {
+	public void onHover(GameState gameState, Character selected) {
 		gameState.getRangeManager().clearRange();
 	}
 
-	public abstract void onSelect(GameState gameState, Entity selected);
+	public abstract void onSelect(GameState gameState, Character selected);
 
 	public String toString() {
 		return name;
@@ -44,7 +44,7 @@ public abstract class Action {
         this.name = name;
     }
 
-	public boolean hasMana(Entity e) {
+	public boolean hasMana(Character e) {
 		return e.getStats().getMana() >= manaCost;
 	}
 
@@ -53,10 +53,10 @@ public abstract class Action {
 	 * @param user
 	 *            of the skill
 	 * @param e
-	 *            the Entity being affected by the skill
+	 *            the Character being affected by the skill
 	 * @return How valuable the skill is seen by the AI
 	 */
-	public int utilityFunc(Entity user, Entity e) {
+	public int utilityFunc(Character user, Character e) {
 		return 1;
 	}
 

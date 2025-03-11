@@ -5,7 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.utils.art.ResourceManager;
@@ -66,7 +66,7 @@ public class ActionMenu extends UI {
 	}
 
 	public void select() {
-		options.get(selected).onSelect(GameState.global(), HUD.get().getCursor().getSelected() == null ? new Entity(HUD.get().getCursor().x, HUD.get().getCursor().y) : HUD.get().getCursor().getSelected());
+		options.get(selected).onSelect(GameState.global(), HUD.get().getCursor().getSelected() == null ? new Character(HUD.get().getCursor().x, HUD.get().getCursor().y) : HUD.get().getCursor().getSelected());
         if (!(options.get(selected) instanceof TargetAction)) {
             GameState.global().nextTurn();
         }

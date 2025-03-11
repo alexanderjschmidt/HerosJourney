@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.initializers.base.Actions;
 import heroes.journey.utils.ai.MCTS;
@@ -20,26 +20,26 @@ public class MCTSAI implements AI, Scorer {
     }
 
     @Override
-    public QueuedAction getMove(GameState gameState, Entity playingEntity) {
-        return mcts.runMCTS(gameState.clone(), playingEntity, this);
+    public QueuedAction getMove(GameState gameState, Character playingCharacter) {
+        return mcts.runMCTS(gameState.clone(), playingCharacter, this);
     }
 
     @Override
     public List<QueuedAction> getPossibleQueuedActions(GameState gameState) {
         List<QueuedAction> possibleActions = new ArrayList<>();
-        Entity playingEntity = gameState.getEntities().getCurrentEntity();
-        Cell target = new Cell(playingEntity.getXCoord(), playingEntity.getYCoord() - 1, 1);
-        Cell path = new Cell(playingEntity.getXCoord(), playingEntity.getYCoord(), 1);
+        Character playingCharacter = gameState.getEntities().getCurrentEntity();
+        Cell target = new Cell(playingCharacter.getXCoord(), playingCharacter.getYCoord() - 1, 1);
+        Cell path = new Cell(playingCharacter.getXCoord(), playingCharacter.getYCoord(), 1);
         path.parent = target;
-        if (playingEntity.getYCoord() > 0)
+        if (playingCharacter.getYCoord() > 0)
             possibleActions.add(new QueuedAction(path, Actions.wait,0,0));
-        Cell path2 = new Cell(playingEntity.getXCoord(), playingEntity.getYCoord(), 1);
+        Cell path2 = new Cell(playingCharacter.getXCoord(), playingCharacter.getYCoord(), 1);
         possibleActions.add(new QueuedAction(path2, Actions.wait,0,0));
         return possibleActions;
     }
 
     @Override
-    public int getScore(GameState gameState, Entity playingEntity) {
+    public int getScore(GameState gameState, Character playingCharacter) {
         return 1;
     }
 }

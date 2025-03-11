@@ -1,19 +1,19 @@
 package heroes.journey.utils.ai;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.entities.actions.QueuedAction;
 
 public class MCTS {
     private static final int SIMULATIONS = 1000;
     private static final double EXPLORATION_FACTOR = Math.sqrt(2);
 
-    public QueuedAction runMCTS(GameState gameState, Entity playingEntity, Scorer scorer) {
+    public QueuedAction runMCTS(GameState gameState, Character playingCharacter, Scorer scorer) {
         Node root = new Node(gameState, null, scorer);
         for (int i = 0; i < SIMULATIONS; i++) {
             Node selectedNode = select(root);
             selectedNode = expand(selectedNode);
-            double result = simulate(selectedNode, playingEntity);
+            double result = simulate(selectedNode, playingCharacter);
             backpropagate(selectedNode, result);
         }
         return root.bestChildByVisits().getQueuedAction();
@@ -34,8 +34,8 @@ public class MCTS {
         return node;
     }
 
-    private double simulate(Node node, Entity playingEntity) {
-        return node.rollout(playingEntity); // Random game simulation
+    private double simulate(Node node, Character playingCharacter) {
+        return node.rollout(playingCharacter); // Random game simulation
     }
 
     private void backpropagate(Node node, double result) {

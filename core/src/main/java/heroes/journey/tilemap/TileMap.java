@@ -3,7 +3,7 @@ package heroes.journey.tilemap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.base.Actions;
 import heroes.journey.tilemap.tiles.ActionTile;
@@ -115,7 +115,7 @@ public class TileMap {
         return map;
     }
 
-    public int getTerrainCost(int x, int y, Entity selected) {
+    public int getTerrainCost(int x, int y, Character selected) {
         return selected.getEntityClass().getTerrainCost(get(x, y), environment[x][y]);
     }
 

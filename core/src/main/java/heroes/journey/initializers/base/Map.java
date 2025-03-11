@@ -2,7 +2,7 @@ package heroes.journey.initializers.base;
 
 import com.badlogic.gdx.math.Vector2;
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.entities.ai.PlayerAI;
@@ -22,13 +22,13 @@ public class Map implements InitializerInterface {
     static {
         Faction playerFaction = new Faction(ActionQueue.get().getID(), true);
 
-        Entity player = new Entity(Classes.hero, new PlayerAI(new MCTSAI()));
+        Character player = new Character(Classes.hero, new PlayerAI(new MCTSAI()));
         player.setMapPosition(16, 16);
         player.getInventory().add(Items.wood);
         player.getInventory().add(Items.ironOre);
         player.getFactions().add(playerFaction);
 
-        Entity goblin = new Entity(Classes.goblin, new MCTSAI());
+        Character goblin = new Character(Classes.goblin, new MCTSAI());
         goblin.setMapPosition(20, 5);
 
         NewMapManager.get().getStartingEntities().add(player);

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 
 public abstract class BuffType {
 
@@ -30,6 +30,6 @@ public abstract class BuffType {
 		return uses;
 	}
 
-	public abstract void activate(GameState gameState, Entity selected, int targetX, int targetY);
+	public abstract void activate(GameState gameState, Character selected, int targetX, int targetY);
 
 }

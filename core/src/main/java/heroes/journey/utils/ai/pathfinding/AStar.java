@@ -2,7 +2,7 @@ package heroes.journey.utils.ai.pathfinding;
 
 import java.util.PriorityQueue;
 
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.TileMap;
@@ -101,7 +101,7 @@ public class AStar {
 		return map.get(i, j) == Tiles.PATH ? 1 : ((map.getTerrain(i, j).getTerrainCost() + (map.getEnvironment(i, j) != null ? map.getEnvironment(i, j).getTerrainCost() : 0)) * 5);
 	}
 
-	public static Cell aStarEntity(int dist1, RangeManager.RangeColor[][] range, int startI, int startJ, int endI, int endJ, TileMap mapRenderer, Entity selected) {
+	public static Cell aStarEntity(int dist1, RangeManager.RangeColor[][] range, int startI, int startJ, int endI, int endJ, TileMap mapRenderer, Character selected) {
 		PriorityQueue<Cell> open = new PriorityQueue<Cell>();
 		int dist = dist1 + 1;
 		Cell[][] grid = new Cell[range.length][range[0].length];
@@ -154,7 +154,7 @@ public class AStar {
 		return null;
 	}
 
-	private static void checkAndUpdateCostEntity(Cell current, Cell t, PriorityQueue<Cell> open, boolean[][] closed, int dist, RangeManager.RangeColor[][] range, TileMap mapRenderer, Entity selected, int endI,
+	private static void checkAndUpdateCostEntity(Cell current, Cell t, PriorityQueue<Cell> open, boolean[][] closed, int dist, RangeManager.RangeColor[][] range, TileMap mapRenderer, Character selected, int endI,
                                                  int endJ) {
 		if (t == null || closed[t.i][t.j] || range[t.i][t.j] != RangeManager.RangeColor.BLUE)
 			return;
@@ -187,7 +187,7 @@ public class AStar {
 		return node;
 	}
 
-	public static Cell aStarAI(int dist, RangeManager.RangeColor[][] range, int startI, int startJ, int endI, int endJ, TileMap map, Entity selected) {
+	public static Cell aStarAI(int dist, RangeManager.RangeColor[][] range, int startI, int startJ, int endI, int endJ, TileMap map, Character selected) {
 		PriorityQueue<Cell> open = new PriorityQueue<Cell>();
 
 		Cell[][] grid = new Cell[range.length][range[0].length];
@@ -230,7 +230,7 @@ public class AStar {
 		return null;
 	}
 
-	public static Cell aStarAILong(int[][] range, int startI, int startJ, int endI, int endJ, TileMap map, Entity selected) {
+	public static Cell aStarAILong(int[][] range, int startI, int startJ, int endI, int endJ, TileMap map, Character selected) {
 		PriorityQueue<Cell> open = new PriorityQueue<Cell>();
 
 		Cell[][] grid = new Cell[range.length][range[0].length];
@@ -277,7 +277,7 @@ public class AStar {
 		return new Cell(startI, startJ, manhattanDist(startI, startJ, endI, endJ));
 	}
 
-	private static void checkAndUpdateCostLong(Cell current, Cell t, PriorityQueue<Cell> open, boolean[][] closed, TileMap map, Entity selected, int endI, int endJ) {
+	private static void checkAndUpdateCostLong(Cell current, Cell t, PriorityQueue<Cell> open, boolean[][] closed, TileMap map, Character selected, int endI, int endJ) {
 		if (t == null || closed[t.i][t.j])
 			return;
 
@@ -292,7 +292,7 @@ public class AStar {
 		t.f = t.g + manhattanDist(t.i, t.j, endI, endJ);
 	}
 
-	public static Cell prune(Cell path, EntityManager entities, Entity e) {
+	public static Cell prune(Cell path, EntityManager entities, Character e) {
 		Cell p = path;
 		Cell[] temp = new Cell[e.getMoveDistance()];
 		for (int i = 0; i < temp.length && p != null; i++) {

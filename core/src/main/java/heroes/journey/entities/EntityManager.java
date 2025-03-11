@@ -13,9 +13,9 @@ import heroes.journey.GameState;
 public class EntityManager {
 
 	private int width, height;
-	private Entity[][] entities;
+	private Character[][] entities;
 
-    private Entity currentEntity;
+    private Character currentCharacter;
 
 	private GameState gameState;
 	private float buffTime;
@@ -24,19 +24,19 @@ public class EntityManager {
 		this.gameState = gameState;
 		this.width = width;
 		this.height = height;
-		entities = new Entity[width][height];
+		entities = new Character[width][height];
 	}
 
 	public EntityManager clone(GameState newGameState) {
 		EntityManager clone = new EntityManager(newGameState, width, height);
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-                Entity e = entities[i][j];
+                Character e = entities[i][j];
                 if (e != null) {
-                    Entity clonedEntity = e.clone(newGameState);
-                    clone.addEntity(clonedEntity);
-                    if (e == currentEntity) {
-                        clone.setCurrentEntity(clonedEntity);
+                    Character clonedCharacter = e.clone(newGameState);
+                    clone.addEntity(clonedCharacter);
+                    if (e == currentCharacter) {
+                        clone.setCurrentEntity(clonedCharacter);
                     }
                 }
 			}
@@ -68,13 +68,13 @@ public class EntityManager {
 		}
 	}
 
-	public Entity removeEntity(int x, int y) {
-		Entity e = entities[x][y];
+	public Character removeEntity(int x, int y) {
+		Character e = entities[x][y];
 		entities[x][y] = null;
 		return e;
 	}
 
-    public void addEntity(Entity e, int x, int y) {
+    public void addEntity(Character e, int x, int y) {
         if (entities[x][y] == null) {
             entities[x][y] = e;
             e.setXCoord(x);
@@ -82,7 +82,7 @@ public class EntityManager {
         }
     }
 
-    public void addEntity(Entity e) {
+    public void addEntity(Character e) {
         int x = e.getXCoord();
         int y = e.getYCoord();
         e.setGameState(gameState);
@@ -100,17 +100,17 @@ public class EntityManager {
 	 * @param y
 	 * @return
 	 */
-	public Entity get(int x, int y) {
+	public Character get(int x, int y) {
 		if (x < 0 || y < 0 || y >= height || x >= width)
 			return null;
 		return entities[x][y];
 	}
 
-    public List<Entity> getEntitiesInActionOrder() {
-        List<Entity> entitiesInOrder = Arrays.stream(entities)  // Stream<Entity[]>
-            .flatMap(Arrays::stream)                         // Stream<Entity>
+    public List<Character> getEntitiesInActionOrder() {
+        List<Character> entitiesInOrder = Arrays.stream(entities)  // Stream<Character[]>
+            .flatMap(Arrays::stream)                         // Stream<Character>
             .filter(Objects::nonNull)                       // Remove nulls
-            .sorted(Comparator.comparing(Entity::getSpeed))// Remove null values
+            .sorted(Comparator.comparing(Character::getSpeed))// Remove null values
             .collect(Collectors.toList());
         return entitiesInOrder;
     }
@@ -118,7 +118,7 @@ public class EntityManager {
 	public void print() {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				Entity e = this.get(x, y);
+				Character e = this.get(x, y);
 				if (e != null) {
 					System.out.print("[" + x + ": " + y + "]  \t");
 				} else {
@@ -130,11 +130,11 @@ public class EntityManager {
 		System.out.println();
 	}
 
-    public Entity getCurrentEntity() {
-        return currentEntity;
+    public Character getCurrentEntity() {
+        return currentCharacter;
     }
 
-    public void setCurrentEntity(Entity currentEntity) {
-        this.currentEntity = currentEntity;
+    public void setCurrentEntity(Character currentCharacter) {
+        this.currentCharacter = currentCharacter;
     }
 }

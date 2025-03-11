@@ -1,7 +1,7 @@
 package heroes.journey.utils.worldgen;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class NewMapManager {
 
-    List<Entity> startingEntities;
+    List<Character> startingEntities;
     Map<MapGenerationPhase, List<MapGenerationEffect>> mapGenerationEffects;
 
     private static NewMapManager newMapManager;
@@ -29,7 +29,7 @@ public class NewMapManager {
         }
     }
 
-    public List<Entity> getStartingEntities() {
+    public List<Character> getStartingEntities() {
         return startingEntities;
     }
 
@@ -51,8 +51,8 @@ public class NewMapManager {
     }
 
     public void initEntityGeneration(GameState gameState){
-        for(Entity entity : startingEntities) {
-            gameState.getEntities().addEntity(entity);
+        for(Character character : startingEntities) {
+            gameState.getEntities().addEntity(character);
         }
     }
 

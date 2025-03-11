@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionQueue;
@@ -30,7 +30,7 @@ public class GameState {
 	private int turn;
 
 	private static GameState gameState;
-    private List<Entity> entitiesInActionOrder;
+    private List<Character> entitiesInActionOrder;
 
 	public static GameState global() {
 		if (gameState == null)
@@ -73,7 +73,7 @@ public class GameState {
 		Cell path = queuedAction.getPath();
 		Action action = queuedAction.getAction();
 
-		Entity e = getEntities().get(path.i, path.j);
+		Character e = getEntities().get(path.i, path.j);
 		if (e != null) {
 			e.remove();
 			while (path.parent != null) {
@@ -98,26 +98,26 @@ public class GameState {
 		rangeManager.render(batch, turn);
 	}
 
-    private Entity incrementTurn() {
+    private Character incrementTurn() {
         if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()){
             entitiesInActionOrder = entities.getEntitiesInActionOrder();
             turn++;
         }
-        Entity currentEntity = entitiesInActionOrder.removeFirst();
-        entities.setCurrentEntity(currentEntity);
-        return currentEntity;
+        Character currentCharacter = entitiesInActionOrder.removeFirst();
+        entities.setCurrentEntity(currentCharacter);
+        return currentCharacter;
     }
 
     public void nextTurn() {
-        Entity currentEntity = incrementTurn();
+        Character currentCharacter = incrementTurn();
         System.out.println("turn " + turn + ", " + entitiesInActionOrder);
-        QueuedAction action = currentEntity.getAI().getMove(this, currentEntity);
+        QueuedAction action = currentCharacter.getAI().getMove(this, currentCharacter);
         if (action == null) {
-            Optional<Faction> currentFaction = currentEntity.getFactions().stream().filter(Faction::isPlayerFaction).findFirst();
+            Optional<Faction> currentFaction = currentCharacter.getFactions().stream().filter(Faction::isPlayerFaction).findFirst();
             if (currentFaction.isEmpty())
-                throw new RuntimeException("If Entity has the Player AI, it MUST have a Player Faction");
+                throw new RuntimeException("If Character has the Player AI, it MUST have a Player Faction");
             if(currentFaction.get().toString().equals(ActionQueue.get().getID())){
-                HUD.get().getCursor().setPosition(currentEntity);
+                HUD.get().getCursor().setPosition(currentCharacter);
                 HUD.get().setState(HUD.HUDState.CURSOR_MOVE);
                 System.out.println("your turn");
             } else {

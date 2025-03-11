@@ -1,7 +1,7 @@
 package heroes.journey.entities.ai;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.entities.actions.QueuedAction;
 
 public class PlayerAI implements AI {
@@ -13,7 +13,7 @@ public class PlayerAI implements AI {
     }
 
     @Override
-    public QueuedAction getMove(GameState gameState, Entity e) {
+    public QueuedAction getMove(GameState gameState, Character e) {
         if (gameState == GameState.global())
             return null;
         else

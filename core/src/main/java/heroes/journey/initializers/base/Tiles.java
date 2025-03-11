@@ -9,7 +9,6 @@ import heroes.journey.tilemap.art.WangCornerTile;
 import heroes.journey.tilemap.art.WangCornerTileAnimated;
 import heroes.journey.tilemap.art.WangEdgeTile;
 import heroes.journey.tilemap.art.WangEdgeTileAnimated;
-import heros.journey.tilemap.art.*;
 import heroes.journey.tilemap.tiles.ActionTile;
 import heroes.journey.tilemap.art.PlainTile;
 import heroes.journey.tilemap.tiles.Tile;

@@ -3,7 +3,7 @@ package heroes.journey.entities.buffs;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 
 public class Buff {
 
@@ -28,7 +28,7 @@ public class Buff {
 		this.activate(null, null, 0, 0);
 	}
 
-	public void activate(GameState gameState, Entity selected, int targetX, int targetY) {
+	public void activate(GameState gameState, Character selected, int targetX, int targetY) {
 		used++;
 		type.activate(gameState, selected, targetX, targetY);
 	}

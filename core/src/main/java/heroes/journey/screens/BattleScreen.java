@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heros.journey.*;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.ui.HUD;

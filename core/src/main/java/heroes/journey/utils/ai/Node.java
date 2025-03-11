@@ -6,7 +6,7 @@ import java.util.List;
 
 import heroes.journey.GameState;
 import heroes.journey.Random;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.entities.actions.QueuedAction;
 
 public class Node {
@@ -68,16 +68,16 @@ public class Node {
     }
 
     // Simulate a random game from this node and return a result
-    public int rollout(Entity playingEntity) {
+    public int rollout(Character playingCharacter) {
         GameState tempState = this.gameState.clone();
         int depth = 0;
-        while (scorer.getScore(gameState, playingEntity) == 0 && depth < 5) {
+        while (scorer.getScore(gameState, playingCharacter) == 0 && depth < 5) {
             List<QueuedAction> QueuedActions = scorer.getPossibleQueuedActions(gameState);
             QueuedAction randomQueuedAction = QueuedActions.get(Random.get().nextInt(QueuedActions.size()));
             tempState = tempState.applyAction(randomQueuedAction);
             depth++;
         }
-        return scorer.getScore(gameState, playingEntity); // 1.0 if AI wins, 0.0 if loss, 0.5 for draw
+        return scorer.getScore(gameState, playingCharacter); // 1.0 if AI wins, 0.0 if loss, 0.5 for draw
     }
 
     // Backpropagate the result up the tree

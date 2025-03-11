@@ -3,7 +3,7 @@ package heroes.journey.utils;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.entities.Entity;
+import heroes.journey.entities.Character;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
@@ -19,7 +19,7 @@ public class RangeManager {
 	private GameState gameState;
 	private int width, height;
 	private RangeColor[][] range;
-	private ArrayList<Entity> targets;
+	private ArrayList<Character> targets;
 	private int target;
 
 	public RangeManager(GameState gameState, int width, int height) {
@@ -34,18 +34,18 @@ public class RangeManager {
 		return new RangeManager(newGameState, width, height);
 	}
 
-	public ArrayList<Entity> updateTargets(Entity selected, boolean enemies, int[] ranges, RangeColor rangeType) {
+	public ArrayList<Character> updateTargets(Character selected, boolean enemies, int[] ranges, RangeColor rangeType) {
 		clearRange();
 		int sx = selected.getXCoord();
 		int sy = selected.getYCoord();
 		setDistanceRangeAt(sx, sy, ranges, rangeType);
-		targets = new ArrayList<Entity>();
+		targets = new ArrayList<Character>();
 		target = 0;
 		for (int x = 0; x < range.length; x++) {
 			for (int y = 0; y < range[0].length; y++) {
 				// System.out.print(range[x][y]);
 				if (range[x][y] == rangeType) {
-					Entity e = gameState.getEntities().get(x, y);
+					Character e = gameState.getEntities().get(x, y);
 					if (e != null) {
 						targets.add(e);
 					}
@@ -61,7 +61,7 @@ public class RangeManager {
 		HUD.get().getCursor().setPosition(targets.get(target).getXCoord(), targets.get(target).getYCoord());
 	}
 
-	public void setMoveAndAttackRange(Entity selected) {
+	public void setMoveAndAttackRange(Character selected) {
 		if (selected == null) {
 			return;
 		}
@@ -75,7 +75,7 @@ public class RangeManager {
 		target = 0;
 	}
 
-	private void floodfill(int dist, int x, int y, Entity selected) {
+	private void floodfill(int dist, int x, int y, Character selected) {
 		if (x < 0 || y < 0 || x >= range.length || y >= range[0].length) {
 			// System.out.println("out of bounds");
 			return;
