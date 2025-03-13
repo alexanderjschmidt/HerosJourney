@@ -1,31 +1,28 @@
 package heroes.journey;
 
-import static heroes.journey.Engine.aiMapper;
-import static heroes.journey.Engine.factionMapper;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import heroes.journey.components.AIComponent;
-import heroes.journey.components.FactionComponent;
+import heroes.journey.components.PlayerComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.TargetAction;
-import heroes.journey.entities.factions.Faction;
 import heroes.journey.initializers.Initializer;
+import heroes.journey.systems.FactionSystem;
+import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.tilemap.TileMap;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
 
-public class GameState {
+public class GameState implements Cloneable {
 
     private int width, height;
     private EntityManager entities;
@@ -59,7 +56,7 @@ public class GameState {
         this.width = mapData.getMapSize();
         this.height = mapData.getMapSize();
         map = new TileMap(width);
-        entities = new EntityManager(this, width, height);
+        entities = new EntityManager(width, height);
         rangeManager = new RangeManager(this, width, height);
 
         turn = 0;
@@ -67,8 +64,8 @@ public class GameState {
 
     public GameState clone() {
         GameState clone = new GameState(width, height);
-        clone.map = map.clone(clone);
-        clone.entities = entities.clone(clone);
+        clone.entities = entities.clone();
+        clone.map = map.clone(clone.entities);
         clone.rangeManager = rangeManager.clone(clone);
         clone.turn = turn;
         return clone;
@@ -98,8 +95,7 @@ public class GameState {
     }
 
     public void render(SpriteBatch batch, float delta) {
-        map.render(batch, GameCamera.get().position.x / GameCamera.get().getSize(),
-            GameCamera.get().position.y / GameCamera.get().getSize(), delta);
+        map.render(batch, delta);
         rangeManager.render(batch, turn);
     }
 
@@ -107,6 +103,9 @@ public class GameState {
         if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
             entitiesInActionOrder = entities.getEntitiesInActionOrder();
             turn++;
+            if (GameState.global() == this) {
+                GameEngine.get().getSystem(FactionSystem.class).setProcessing(true);
+            }
         }
         Entity currentEntity = entitiesInActionOrder.removeFirst();
         entities.setCurrentEntity(currentEntity);
@@ -115,19 +114,11 @@ public class GameState {
 
     public void nextTurn() {
         Entity currentEntity = incrementTurn();
-        System.out.println("turn " + turn + ", " + entitiesInActionOrder);
-        AIComponent ai = aiMapper.get(currentEntity);
-        QueuedAction action = ai.getAI().getMove(this, currentEntity);
+        System.out.println("turn " + turn + ", " + currentEntity + " " + entitiesInActionOrder);
 
-        if (action == null) {
-            FactionComponent factions = factionMapper.get(currentEntity);
-            Optional<Faction> currentFaction = factions.getFactions()
-                .stream()
-                .filter(Faction::isPlayerFaction)
-                .findFirst();
-            if (currentFaction.isEmpty())
-                throw new RuntimeException("If Entity has the Player AI, it MUST have a Player Faction");
-            if (currentFaction.get().toString().equals(ActionQueue.get().getID())) {
+        PlayerComponent player = PlayerComponent.get(currentEntity);
+        if (player != null) {
+            if (player.getPlayerId().equals(ActionQueue.get().getID())) {
                 HUD.get().getCursor().setPosition(currentEntity);
                 HUD.get().setState(HUD.HUDState.CURSOR_MOVE);
                 System.out.println("your turn");
@@ -136,6 +127,8 @@ public class GameState {
                 System.out.println("opponent turn");
             }
         } else {
+            AIComponent ai = AIComponent.get(currentEntity);
+            QueuedAction action = ai.getAI().getMove(this, currentEntity);
             HUD.get().setState(HUD.HUDState.LOCKED);
             ActionQueue.get().addAction(action);
             System.out.println("ai turn");
@@ -167,4 +160,9 @@ public class GameState {
     public int getHeight() {
         return height;
     }
+
+    public void dispose() {
+        entities.dispose();
+    }
+
 }

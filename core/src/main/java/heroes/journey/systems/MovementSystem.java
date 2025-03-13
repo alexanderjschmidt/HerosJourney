@@ -1,35 +1,44 @@
 package heroes.journey.systems;
 
+import static heroes.journey.systems.GameEngine.ACTOR;
+import static heroes.journey.systems.GameEngine.actionMapper;
+import static heroes.journey.systems.GameEngine.movementMapper;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+
 import heroes.journey.GameState;
-import heroes.journey.components.*;
+import heroes.journey.components.ActionComponent;
+import heroes.journey.components.ActorComponent;
+import heroes.journey.components.GlobalGameStateComponent;
+import heroes.journey.components.MovementComponent;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.initializers.base.BaseActions;
 
-import static heroes.journey.Engine.*;
-
 public class MovementSystem extends IteratingSystem {
 
     public MovementSystem() {
-        super(Family.all(PositionComponent.class, MovementComponent.class, ActorComponent.class, GlobalGameStateComponent.class).get());
+        super(Family.all(PositionComponent.class, MovementComponent.class, ActorComponent.class,
+            GlobalGameStateComponent.class).get());
     }
 
     @Override
     protected void processEntity(Entity entity, float delta) {
-        PositionComponent position = POSITION.get(entity);
+        PositionComponent position = PositionComponent.get(entity);
         MovementComponent movement = movementMapper.get(entity);
         ActorComponent actor = ACTOR.get(entity);
         ActionComponent action = actionMapper.get(entity);
 
         if (movement.hasPath() && !actor.hasActions()) {
             //TODO Make duration based on move speed
-            actor.addAction(Actions.sequence(Actions.moveTo(movement.getPath().i - position.getX(), movement.getPath().j - position.getY(), .2f),
-                Actions.run(new Runnable() {
+            actor.addAction(Actions.sequence(
+                Actions.moveTo(movement.getPath().i - position.getX(), movement.getPath().j - position.getY(),
+                    .2f), Actions.run(new Runnable() {
                     @Override
                     public void run() {
                         actor.setPosition(0, 0);
@@ -39,8 +48,7 @@ public class MovementSystem extends IteratingSystem {
                         }
                         updateActions(action, entity);
                     }
-                })
-            ));
+                })));
         }
     }
 
@@ -57,7 +65,8 @@ public class MovementSystem extends IteratingSystem {
             action.openActionMenu(entity);
         } else {
             if (action.getAction() instanceof TargetAction targetAction) {
-                targetAction.targetEffect(GameState.global(), entity, action.getTargetX(), action.getTargetY());
+                targetAction.targetEffect(GameState.global(), entity, action.getTargetX(),
+                    action.getTargetY());
             } else {
                 action.getAction().onSelect(GameState.global(), entity);
             }

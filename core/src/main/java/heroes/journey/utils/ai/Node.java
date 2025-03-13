@@ -42,6 +42,8 @@ public class Node {
             childNode.setQueuedAction(QueuedAction);
             children.add(childNode);
         }
+        gameState.dispose();
+        gameState = null;
     }
 
     // Select the best child using UCT (Upper Confidence Bound for Trees)
@@ -75,7 +77,7 @@ public class Node {
     public int rollout(Entity playingEntity) {
         GameState tempState = this.gameState.clone();
         int depth = 0;
-        while (scorer.getScore(gameState, playingEntity) == 0 && depth < 5) {
+        while (scorer.getScore(gameState, playingEntity) > 0 && depth < 5) {
             List<QueuedAction> QueuedActions = scorer.getPossibleQueuedActions(gameState);
             QueuedAction randomQueuedAction = QueuedActions.get(Random.get().nextInt(QueuedActions.size()));
             tempState = tempState.applyAction(randomQueuedAction);

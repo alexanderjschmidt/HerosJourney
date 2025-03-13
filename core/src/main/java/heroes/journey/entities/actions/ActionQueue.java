@@ -1,5 +1,8 @@
 package heroes.journey.entities.actions;
 
+import static heroes.journey.systems.GameEngine.actionMapper;
+import static heroes.journey.systems.GameEngine.movementMapper;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -10,6 +13,8 @@ import org.json.JSONObject;
 import com.badlogic.ashley.core.Entity;
 
 import heroes.journey.GameState;
+import heroes.journey.components.ActionComponent;
+import heroes.journey.components.MovementComponent;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUD.HUDState;
@@ -146,9 +151,8 @@ public class ActionQueue extends ArrayList<QueuedAction> {
     }
 
     public void update() {
-        if (actionInProgress)
-            return;
-        nextAction();
+        if (!actionInProgress)
+            nextAction();
     }
 
     public void nextAction() {
@@ -156,14 +160,19 @@ public class ActionQueue extends ArrayList<QueuedAction> {
             return;
         }
         QueuedAction action = actionQueue.removeFirst();
-        //System.out.println("process action " + action);
         actionInProgress = true;
+        System.out.println("process action " + action);
         Cell path = action.getPath();
 
         HUD.get().setState(HUDState.MOVING);
         Entity selected = gameState.getEntities().get(path.i, path.j);
+        MovementComponent movement = movementMapper.get(selected);
+        ActionComponent actions = actionMapper.get(selected);
         HUD.get().getCursor().setSelected(selected);
-        //selected.move(path, action.getAction(), action.getTargetX(), action.getTargetY());
+
+        movement.move(path);
+        actions.act(action.getAction(), action.getTargetX(), action.getTargetY());
+
         GameState.global().nextTurn();
     }
 

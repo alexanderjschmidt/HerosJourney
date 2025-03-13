@@ -1,6 +1,15 @@
 package heroes.journey.utils.input;
 
+import static heroes.journey.systems.GameEngine.statsMapper;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.badlogic.gdx.Gdx;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
@@ -15,14 +24,6 @@ import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.AStar;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.worldgen.NewMapManager;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static heroes.journey.Engine.POSITION;
-import static heroes.journey.Engine.statsMapper;
 
 public class InputManager {
 
@@ -61,7 +62,7 @@ public class InputManager {
             path = path.parent;
         }
         cursor.setPath(temp);
-        PositionComponent position = POSITION.get(cursor.getSelected());
+        PositionComponent position = PositionComponent.get(cursor.getSelected());
         if (holder == null) {
             if (cursor.getSelected() != null)
                 holder = new Cell(position.getX(), position.getY(), 1);
@@ -76,7 +77,7 @@ public class InputManager {
             Options.MAP_BLEND = !Options.MAP_BLEND;
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {
-            Random.get().setSeed((int) (Math.random() * 10000000));
+            Random.get().setSeed((int)(Math.random() * 10000000));
             NewMapManager.get().initMapGeneration(GameState.global());
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_JOB_INFO)) {
@@ -152,7 +153,8 @@ public class InputManager {
             if (cursor.getSelected() != null) {
                 savePath();
                 cursor.moveSelected();
-            } else if (cursor.getHover() != null) {
+            } else if (cursor.getHover() != null &&
+                cursor.getHover() == GameState.global().getEntities().getCurrentEntity()) {
                 cursor.setSelectedtoHover();
                 HUD.get().select();
                 StatsComponent stats = statsMapper.get(cursor.getSelected());
@@ -222,7 +224,7 @@ public class InputManager {
             if (!(HUD.get().getActionMenu().getSelected() instanceof TargetAction)) {
                 sendAction();
             } else {
-                HUD.get().getCursor().setActiveSkill((TargetAction) HUD.get().getActionMenu().getSelected());
+                HUD.get().getCursor().setActiveSkill((TargetAction)HUD.get().getActionMenu().getSelected());
             }
             HUD.get().getActionMenu().select();
         } else if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||

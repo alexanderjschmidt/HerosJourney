@@ -8,14 +8,19 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import heroes.journey.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 
 /*
  * TODO List
  * Fix Terrain difficulty
- * Make sure AI is working still with components
+ * pull actions from location (and factions?) maybe modify were the open action menu code is
+ * comb through all HUD state sets to make sure the player cant input actions while action queue is in process
+ * make a uuid to entity map in gamestate so that references to entities in components can use the uuid instead of entities, that should make cloning cleaner
+ * Chunk EntityManager for more efficiency? Only clone nearby chunks for AI? limited on how far they could travel in x turns
  * Make TextureMaps not Enums?
+ * move component mappers to component classes
  * fix far out zoom
  * force zoom if camera would go off screen
  * make camera not go beyond map
@@ -53,7 +58,7 @@ import heroes.journey.utils.art.ResourceManager;
  * Sounds
  * 	Background music
  * 	Action Sounds
- *
+ * Use a GameEngine Pool for Ashely so AI doesnt keep making new Entities to be deleted
  */
 public class Application extends Game {
 
@@ -87,8 +92,8 @@ public class Application extends Game {
 
     public void setScreen(Screen screen) {
         super.setScreen(screen);
-        GameCamera.get().position.x = Gdx.graphics.getWidth() / 2;
-        GameCamera.get().position.y = Gdx.graphics.getHeight() / 2;
+        GameCamera.get().position.x = Gdx.graphics.getWidth() / 2f;
+        GameCamera.get().position.y = Gdx.graphics.getHeight() / 2f;
     }
 
     @Override

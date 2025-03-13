@@ -1,8 +1,11 @@
 package heroes.journey.components;
 
-import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
 
-public class PositionComponent implements Component {
+import heroes.journey.components.interfaces.ClonableComponent;
+
+public class PositionComponent implements ClonableComponent<PositionComponent> {
 
     private int x, y;
 
@@ -31,5 +34,12 @@ public class PositionComponent implements Component {
 
     public PositionComponent clone() {
         return new PositionComponent(x, y);
+    }
+
+    private static final ComponentMapper<PositionComponent> mapper = ComponentMapper.getFor(
+        PositionComponent.class);
+
+    public static PositionComponent get(Entity entity) {
+        return mapper.get(entity);
     }
 }

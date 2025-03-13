@@ -1,11 +1,12 @@
 package heroes.journey.components;
 
-import com.badlogic.ashley.core.Component;
-import heroes.journey.entities.items.ItemInterface;
-
 import java.util.HashMap;
 
-public class InventoryComponent extends HashMap<ItemInterface, Integer> implements Component {
+import heroes.journey.components.interfaces.ClonableComponent;
+import heroes.journey.entities.items.ItemInterface;
+
+public class InventoryComponent extends HashMap<ItemInterface,Integer>
+    implements ClonableComponent<InventoryComponent> {
 
     private int gold;
 
@@ -38,7 +39,7 @@ public class InventoryComponent extends HashMap<ItemInterface, Integer> implemen
     }
 
     public InventoryComponent clone() {
-        throw new RuntimeException("Not Implemented");
+        return new InventoryComponent();
     }
 
 }

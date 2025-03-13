@@ -3,11 +3,12 @@ package heroes.journey.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.Application;
-import heroes.journey.Engine;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.ActionQueue;
+import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.InputManager;
@@ -25,7 +26,7 @@ public class BattleScreen implements Screen {
     // quickStart constructor
     public BattleScreen(Application app, boolean quickStart) {
         this.app = app;
-        this.mapData = new MapData((int) (Math.random() * 10000000), 32, 2, false);
+        this.mapData = new MapData((int)(Math.random() * 10000000), 32, 2, false);
         startGame();
     }
 
@@ -36,9 +37,15 @@ public class BattleScreen implements Screen {
     }
 
     // server create game
-    public BattleScreen(Application app, int seed, int mapSize, int armySize, int teamCount, boolean fogOfWar) {
+    public BattleScreen(
+        Application app,
+        int seed,
+        int mapSize,
+        int armySize,
+        int teamCount,
+        boolean fogOfWar) {
         this.app = app;
-        this.mapData = ActionQueue.get().initSocket((int) (Math.random() * 10000000), 16, 4, false, true);
+        this.mapData = ActionQueue.get().initSocket((int)(Math.random() * 10000000), 16, 4, false, true);
     }
 
     public void startGame() {
@@ -69,10 +76,13 @@ public class BattleScreen implements Screen {
 
         batch.begin();
         GameState.global().render(batch, delta);
-        HUD.get().getCursor().render(batch, delta);
         batch.end();
 
-        Engine.get().update(delta);
+        GameEngine.get().update(delta);
+
+        batch.begin();
+        HUD.get().getCursor().render(batch, delta);
+        batch.end();
 
         HUD.get().draw();
 

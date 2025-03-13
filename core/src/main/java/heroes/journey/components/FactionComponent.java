@@ -1,29 +1,31 @@
 package heroes.journey.components;
 
-import com.badlogic.ashley.core.Component;
-import heroes.journey.entities.factions.Faction;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import heroes.journey.components.interfaces.ClonableComponent;
 
-public class FactionComponent implements Component {
+public class FactionComponent implements ClonableComponent<FactionComponent> {
 
-    private List<Faction> factions;
+    private final String name;
 
-    public FactionComponent() {
-        this.factions = new ArrayList<>();
+    public FactionComponent(String name) {
+        this.name = name;
     }
 
-    public FactionComponent addFaction(Faction faction) {
-        factions.add(faction);
-        return this;
-    }
-
-    public List<Faction> getFactions() {
-        return factions;
+    @Override
+    public String toString() {
+        return name;
     }
 
     public FactionComponent clone() {
-        throw new RuntimeException("Not Implemented");
+        return new FactionComponent(name);
+    }
+
+    private static final ComponentMapper<FactionComponent> mapper = ComponentMapper.getFor(
+        FactionComponent.class);
+
+    public static FactionComponent get(Entity entity) {
+        return mapper.get(entity);
     }
 }

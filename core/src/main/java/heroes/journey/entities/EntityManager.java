@@ -1,43 +1,69 @@
 package heroes.journey.entities;
 
-import static heroes.journey.Engine.POSITION;
+import static heroes.journey.systems.GameEngine.statsMapper;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 
-import heroes.journey.GameState;
+import heroes.journey.components.FactionComponent;
 import heroes.journey.components.PositionComponent;
+import heroes.journey.components.interfaces.ClonableComponent;
+import heroes.journey.systems.GameEngine;
 
-public class EntityManager {
+public class EntityManager implements Cloneable {
 
     private int width, height;
     private Entity[][] entities;
 
     private Entity currentEntity;
 
-    private GameState gameState;
+    private final HashMap<String,Entity> factions;
 
-    public EntityManager(GameState gameState, int width, int height) {
-        this.gameState = gameState;
+    public EntityManager(int width, int height) {
         this.width = width;
         this.height = height;
         entities = new Entity[width][height];
+        factions = new HashMap<>();
     }
 
-    public EntityManager clone(GameState newGameState) {
-        EntityManager clone = new EntityManager(newGameState, width, height);
+    public EntityManager clone() {
+        EntityManager clone = new EntityManager(width, height);
+
+        for (Entity faction : factions.values()) {
+            clone.factions.put(faction.toString(), cloneEntity(clone, faction));
+        }
+
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Entity e = entities[i][j];
                 if (e != null) {
-
+                    Entity clonedEntity = cloneEntity(clone, e);
+                    clone.addEntity(clonedEntity);
+                    if (e == currentEntity) {
+                        clone.setCurrentEntity(clonedEntity);
+                    }
                 }
             }
         }
+        return clone;
+    }
+
+    private Entity cloneEntity(EntityManager clonedManager, Entity e) {
+        Entity clone = new Entity();
+        for (Component component : e.getComponents()) {
+            if (component instanceof ClonableComponent<?> clonableComponent) {
+                ClonableComponent clonedComponent = clonableComponent.clone();
+                clone.add(clonedComponent);
+            }
+        }
+        GameEngine.get().addEntity(clone);
         return clone;
     }
 
@@ -48,10 +74,15 @@ public class EntityManager {
     }
 
     public void addEntity(Entity e) {
-        PositionComponent position = POSITION.get(e);
+        PositionComponent position = PositionComponent.get(e);
         if (entities[position.getX()][position.getY()] == null) {
             entities[position.getX()][position.getY()] = e;
         }
+    }
+
+    public void addFactions(Entity entity) {
+        FactionComponent factionComponent = FactionComponent.get(entity);
+        factions.put(factionComponent.toString(), entity);
     }
 
     /**
@@ -68,12 +99,11 @@ public class EntityManager {
     }
 
     public List<Entity> getEntitiesInActionOrder() {
-        List<Entity> entitiesInOrder = Arrays.stream(entities)  // Stream<Character[]>
+        return Arrays.stream(entities)  // Stream<Character[]>
             .flatMap(Arrays::stream)                         // Stream<Character>
             .filter(Objects::nonNull)                       // Remove nulls
-            //    .sorted(Comparator.comparing(Character::getSpeed))
-            .collect(Collectors.toList());
-        return entitiesInOrder;
+            .sorted(Comparator.comparing((Entity e) -> statsMapper.get(e).getSpeed())
+                .thenComparing(Object::toString)).collect(Collectors.toList());
     }
 
     public void print() {
@@ -97,5 +127,20 @@ public class EntityManager {
 
     public Entity getCurrentEntity() {
         return currentEntity;
+    }
+
+    public void dispose() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Entity e = entities[i][j];
+                if (e != null) {
+                    GameEngine.get().removeEntity(e);
+                }
+            }
+        }
+    }
+
+    public HashMap<String,Entity> getFactions() {
+        return factions;
     }
 }

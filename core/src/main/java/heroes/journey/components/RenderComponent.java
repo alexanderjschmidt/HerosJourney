@@ -14,8 +14,5 @@ public class RenderComponent implements Component {
     public TextureRegion getSprite() {
         return sprite;
     }
-
-    public RenderComponent clone() {
-        throw new RuntimeException("This is a visual component DONT clone it");
-    }
+    
 }

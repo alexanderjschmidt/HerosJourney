@@ -1,13 +1,13 @@
 package heroes.journey.components;
 
-import com.badlogic.ashley.core.Component;
-import heroes.journey.entities.stats.DamageType;
-import heroes.journey.entities.stats.DamageTypeManager;
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class StatsComponent implements Component {
+import heroes.journey.components.interfaces.ClonableComponent;
+import heroes.journey.entities.stats.DamageType;
+import heroes.journey.entities.stats.DamageTypeManager;
+
+public class StatsComponent implements ClonableComponent<StatsComponent> {
 
     public static final float MAX_HEALTH = 100, MAX_MANA = 100;
 
@@ -17,21 +17,21 @@ public class StatsComponent implements Component {
     private int health;
     private int mana;
 
-    private final Map<DamageType, Integer> resistancesFlat;
-    private final Map<DamageType, Float> resistancesPercentage;
+    private final Map<DamageType,Integer> resistancesFlat;
+    private final Map<DamageType,Float> resistancesPercentage;
 
     public StatsComponent() {
         body = 1;
         mind = 1;
         fame = 0;
-        resistancesFlat = new HashMap<DamageType, Integer>();
-        resistancesPercentage = new HashMap<DamageType, Float>();
+        resistancesFlat = new HashMap<DamageType,Integer>();
+        resistancesPercentage = new HashMap<DamageType,Float>();
         for (DamageType type : DamageTypeManager.get().values()) {
             resistancesFlat.put(type, 0);
             resistancesPercentage.put(type, 0f);
         }
-        health = (int) MAX_HEALTH;
-        mana = (int) MAX_MANA;
+        health = (int)MAX_HEALTH;
+        mana = (int)MAX_MANA;
     }
 
     public int getBody() {
@@ -64,7 +64,7 @@ public class StatsComponent implements Component {
 
     // Returns if they are Alive
     public boolean adjustHealth(int health) {
-        this.health = (int) Math.min(MAX_HEALTH, Math.max(0, this.health + health));
+        this.health = (int)Math.min(MAX_HEALTH, Math.max(0, this.health + health));
         return (this.health + health > 0);
     }
 
@@ -77,15 +77,15 @@ public class StatsComponent implements Component {
         if (this.mana + mana < 0) {
             return false;
         }
-        this.mana = (int) Math.min(MAX_MANA, Math.max(0, this.mana + mana));
+        this.mana = (int)Math.min(MAX_MANA, Math.max(0, this.mana + mana));
         return true;
     }
 
-    public Map<DamageType, Integer> getResistancesFlat() {
+    public Map<DamageType,Integer> getResistancesFlat() {
         return resistancesFlat;
     }
 
-    public Map<DamageType, Float> getResistancesPercentage() {
+    public Map<DamageType,Float> getResistancesPercentage() {
         return resistancesPercentage;
     }
 
@@ -101,5 +101,9 @@ public class StatsComponent implements Component {
         stats.mana = mana;
         stats.health = health;
         return stats;
+    }
+
+    public int getSpeed() {
+        return body;
     }
 }

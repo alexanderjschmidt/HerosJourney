@@ -1,17 +1,18 @@
 package heroes.journey.components;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
-import heroes.journey.GameState;
-import heroes.journey.entities.actions.Action;
-import heroes.journey.initializers.base.BaseActions;
-import heroes.journey.ui.HUD;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ActionComponent implements Component {
+import com.badlogic.ashley.core.Entity;
+
+import heroes.journey.GameState;
+import heroes.journey.components.interfaces.ClonableComponent;
+import heroes.journey.entities.actions.Action;
+import heroes.journey.initializers.base.BaseActions;
+import heroes.journey.ui.HUD;
+
+public class ActionComponent implements ClonableComponent<ActionComponent> {
 
     private final List<Action> availableActions;
     private Action action;
@@ -45,8 +46,9 @@ public class ActionComponent implements Component {
     }
 
     public void openActionMenu(Entity entity) {
-        List<Action> requirementsMetOptions = availableActions.stream().filter(action -> action.requirementsMet(GameState.global(), entity)).collect(
-            Collectors.toList());
+        List<Action> requirementsMetOptions = availableActions.stream()
+            .filter(action -> action.requirementsMet(GameState.global(), entity))
+            .collect(Collectors.toList());
         HUD.get().getActionMenu().open(requirementsMetOptions);
     }
 

@@ -1,7 +1,5 @@
 package heroes.journey.entities.actions;
 
-import static heroes.journey.Engine.POSITION;
-
 import com.badlogic.ashley.core.Entity;
 
 import heroes.journey.GameState;
@@ -33,7 +31,7 @@ public abstract class TargetAction extends Action {
 
     public void onHover(GameState gameState, Entity hover) {
         gameState.getRangeManager().clearRange();
-        PositionComponent position = POSITION.get(hover);
+        PositionComponent position = PositionComponent.get(hover);
         gameState.getRangeManager().setDistanceRangeAt(position.getX(), position.getY(), range, rangeType);
     }
 

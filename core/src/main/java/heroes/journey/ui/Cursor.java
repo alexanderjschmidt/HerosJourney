@@ -1,10 +1,13 @@
 package heroes.journey.ui;
 
+import static heroes.journey.systems.GameEngine.movementMapper;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
@@ -15,9 +18,6 @@ import heroes.journey.utils.ai.pathfinding.AStar;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
-
-import static heroes.journey.Engine.POSITION;
-import static heroes.journey.Engine.movementMapper;
 
 public class Cursor {
     // coords
@@ -190,7 +190,7 @@ public class Cursor {
     }
 
     public void setPosition(Entity e) {
-        PositionComponent position = POSITION.get(e);
+        PositionComponent position = PositionComponent.get(e);
         this.setPosition(position.getX(), position.getY());
     }
 
@@ -204,7 +204,7 @@ public class Cursor {
             return;
         }
         Entity e = GameState.global().getEntities().removeEntity(sx, sy);
-        PositionComponent position = POSITION.get(e);
+        PositionComponent position = PositionComponent.get(e);
         position.setX(initialX).setY(initialY);
         GameState.global().getEntities().addEntity(e);
         clearSelected();
@@ -248,8 +248,8 @@ public class Cursor {
     }
 
     public void turn(float vx, float vy) {
-        this.x = (int) (sx + vx);
-        this.y = (int) (sy + vy);
+        this.x = (int)(sx + vx);
+        this.y = (int)(sy + vy);
     }
 
     public void moveSelected() {

@@ -1,7 +1,12 @@
 package heroes.journey.utils;
 
+import static heroes.journey.systems.GameEngine.statsMapper;
+
+import java.util.ArrayList;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
@@ -9,11 +14,6 @@ import heroes.journey.components.StatsComponent;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
-
-import java.util.ArrayList;
-
-import static heroes.journey.Engine.POSITION;
-import static heroes.journey.Engine.statsMapper;
 
 public class RangeManager {
 
@@ -45,7 +45,7 @@ public class RangeManager {
         int[] ranges,
         RangeColor rangeType) {
         clearRange();
-        PositionComponent position = POSITION.get(selected);
+        PositionComponent position = PositionComponent.get(selected);
         setDistanceRangeAt(position.getX(), position.getY(), ranges, rangeType);
         targets = new ArrayList<Entity>();
         target = 0;
@@ -66,7 +66,7 @@ public class RangeManager {
 
     public void pointAtTarget(int increment) {
         target = (target + increment + targets.size()) % targets.size();
-        PositionComponent position = POSITION.get(targets.get(target));
+        PositionComponent position = PositionComponent.get(targets.get(target));
         HUD.get().getCursor().setPosition(position.getX(), position.getY());
     }
 
@@ -77,7 +77,7 @@ public class RangeManager {
         clearRange();
         StatsComponent stats = statsMapper.get(selected);
         int move = stats.getMoveDistance();
-        PositionComponent position = POSITION.get(selected);
+        PositionComponent position = PositionComponent.get(selected);
         floodfill(move, position.getX(), position.getY(), selected);
     }
 
@@ -96,7 +96,7 @@ public class RangeManager {
             return;
         }
         range[x][y] = RangeColor.BLUE;
-        setDistanceRangeAt(x, y, new int[]{1, 2}, RangeColor.RED);
+        setDistanceRangeAt(x, y, new int[] {1, 2}, RangeColor.RED);
 
         // System.out.println(terrainCost);
         floodfill(dist - gameState.getMap().getTerrainCost(x + 1, y, selected), x + 1, y, selected);

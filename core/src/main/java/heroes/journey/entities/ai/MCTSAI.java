@@ -1,6 +1,10 @@
 package heroes.journey.entities.ai;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.QueuedAction;
@@ -8,11 +12,6 @@ import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.utils.ai.MCTS;
 import heroes.journey.utils.ai.Scorer;
 import heroes.journey.utils.ai.pathfinding.Cell;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static heroes.journey.Engine.POSITION;
 
 public class MCTSAI implements AI, Scorer {
 
@@ -31,7 +30,7 @@ public class MCTSAI implements AI, Scorer {
     public List<QueuedAction> getPossibleQueuedActions(GameState gameState) {
         List<QueuedAction> possibleActions = new ArrayList<>();
         Entity playingEntity = gameState.getEntities().getCurrentEntity();
-        PositionComponent position = POSITION.get(playingEntity);
+        PositionComponent position = PositionComponent.get(playingEntity);
         Cell target = new Cell(position.getX(), position.getY() - 1, 1);
         Cell path = new Cell(position.getX(), position.getY(), 1);
         path.parent = target;
@@ -44,6 +43,7 @@ public class MCTSAI implements AI, Scorer {
 
     @Override
     public int getScore(GameState gameState, Entity playingEntity) {
-        return 1;
+        PositionComponent position = PositionComponent.get(playingEntity);
+        return GameState.global().getHeight() - position.getY();
     }
 }

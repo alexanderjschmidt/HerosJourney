@@ -1,20 +1,21 @@
 package heroes.journey.tilemap;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import heroes.journey.GameCamera;
-import heroes.journey.GameState;
-import heroes.journey.entities.actions.Action;
-import heroes.journey.initializers.base.BaseActions;
-import heroes.journey.tilemap.tiles.ActionTile;
-import heroes.journey.tilemap.tiles.Tile;
-import heroes.journey.utils.worldgen.CellularAutomata;
+import static heroes.journey.initializers.base.Tiles.WATER;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static heroes.journey.initializers.base.Tiles.WATER;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import heroes.journey.GameCamera;
+import heroes.journey.entities.EntityManager;
+import heroes.journey.entities.actions.Action;
+import heroes.journey.initializers.base.BaseActions;
+import heroes.journey.tilemap.tiles.ActionTile;
+import heroes.journey.tilemap.tiles.Tile;
+import heroes.journey.utils.worldgen.CellularAutomata;
 
 public class TileMap {
 
@@ -26,23 +27,28 @@ public class TileMap {
     private float elapsed = 0;
 
     public TileMap(int mapSize) {
-        // gen = new RandomWorldGenerator(seed, 80, 2, .6f, false);
         width = mapSize;
         height = mapSize;
         tileMap = new Tile[width][height];
         for (Tile[] row : tileMap) {
             Arrays.fill(row, WATER);
         }
+        environment = new ActionTile[width][height];
+        facing = new Tile[width][height];
+        variance = new int[width][height];
         GameCamera.get().setZoom();
     }
 
-    public void render(SpriteBatch batch, float xo, float yo, float delta) {
+    public void render(SpriteBatch batch, float delta) {
         elapsed += delta;
 
-        int x0 = (int) Math.max(Math.floor(xo - GameCamera.get().getxLow()), 0);
-        int y0 = (int) Math.max(Math.floor(yo - GameCamera.get().getyLow()), 0);
-        int x1 = (int) Math.min(Math.floor(xo + GameCamera.get().getxHigh()), width);
-        int y1 = (int) Math.min(Math.floor(yo + GameCamera.get().getyHigh()), height);
+        int xo = (int)(GameCamera.get().position.x / GameCamera.get().getSize());
+        int yo = (int)(GameCamera.get().position.y / GameCamera.get().getSize());
+
+        int x0 = (int)Math.max(Math.floor(xo - GameCamera.get().getxLow()), 0);
+        int y0 = (int)Math.max(Math.floor(yo - GameCamera.get().getyLow()), 0);
+        int x1 = (int)Math.min(Math.floor(xo + GameCamera.get().getxHigh()), width);
+        int y1 = (int)Math.min(Math.floor(yo + GameCamera.get().getyHigh()), height);
 
         for (int x = x0; x < x1; x++) {
             for (int y = y0; y < y1; y++) {
@@ -105,13 +111,18 @@ public class TileMap {
         return tile.getActions();
     }
 
-    // TODO make this a deep copy
-    public TileMap clone(GameState clone) {
+    public TileMap clone(EntityManager entityManager) {
         TileMap map = new TileMap(width);
-        map.tileMap = this.tileMap.clone();
-        map.environment = this.environment.clone();
-        map.variance = this.variance.clone();
-        map.facing = this.facing.clone();
+        map.tileMap = Arrays.copyOf(tileMap, tileMap.length);
+        map.environment = Arrays.copyOf(environment, environment.length);
+        map.variance = Arrays.copyOf(variance, variance.length);
+        map.facing = Arrays.copyOf(facing, facing.length);
+        for (int x = 0; x < width; x++) {
+            map.tileMap[x] = Arrays.copyOf(tileMap[x], tileMap[x].length);
+            map.environment[x] = Arrays.copyOf(environment[x], environment[x].length);
+            map.variance[x] = Arrays.copyOf(variance[x], variance[x].length);
+            map.facing[x] = Arrays.copyOf(facing[x], facing[x].length);
+        }
         return map;
     }
 

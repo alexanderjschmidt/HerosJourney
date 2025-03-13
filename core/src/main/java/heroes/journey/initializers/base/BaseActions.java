@@ -1,12 +1,13 @@
 package heroes.journey.initializers.base;
 
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.Application;
-import heroes.journey.Engine;
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.screens.MainMenuScreen;
+import heroes.journey.systems.GameEngine;
 
 public class BaseActions implements InitializerInterface {
 
@@ -27,7 +28,7 @@ public class BaseActions implements InitializerInterface {
         exit_game = new Action("Exit Game", true) {
             @Override
             public void onSelect(GameState gameState, Entity selected) {
-                Engine.get().removeAllEntities();
+                GameEngine.get().removeAllEntities();
                 Application.get().setScreen(new MainMenuScreen(Application.get()));
             }
 

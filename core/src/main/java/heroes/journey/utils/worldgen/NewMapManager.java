@@ -1,18 +1,20 @@
 package heroes.journey.utils.worldgen;
 
-import com.badlogic.ashley.core.Entity;
-import heroes.journey.Engine;
-import heroes.journey.GameState;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.ashley.core.Entity;
+
+import heroes.journey.GameState;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.systems.GameEngine;
+
 public class NewMapManager {
 
     List<Entity> startingEntities;
-    Map<MapGenerationPhase, List<MapGenerationEffect>> mapGenerationEffects;
+    Map<MapGenerationPhase,List<MapGenerationEffect>> mapGenerationEffects;
 
     private static NewMapManager newMapManager;
 
@@ -53,8 +55,10 @@ public class NewMapManager {
 
     public void initEntityGeneration(GameState gameState) {
         for (Entity entity : startingEntities) {
-            Engine.get().addEntity(entity);
-            gameState.getEntities().addEntity(entity);
+            GameEngine.get().addEntity(entity);
+            PositionComponent position = PositionComponent.get(entity);
+            if (position != null)
+                gameState.getEntities().addEntity(entity);
         }
     }
 
