@@ -6,18 +6,19 @@ import heroes.journey.GameState;
 
 public class TurnUI extends UI {
 
-	public TurnUI() {
+    public TurnUI() {
         super(0, 0, 8, 1, true, false);
-	}
+    }
 
-	public void update() {
+    public void update() {
 
-	}
+    }
 
-	@Override
-	public void drawUI(Batch batch, float parentAlpha) {
-		GameState gameState = GameState.global();
-        drawText(batch, "Day " + gameState.getTurn(), 0, 0);
-	}
+    @Override
+    public void drawUI(Batch batch, float parentAlpha) {
+        GameState gameState = GameState.global();
+
+        drawText(batch, "Day " + gameState.getTurn() + " " + gameState.getCurrentEntity(), 0, 0);
+    }
 
 }

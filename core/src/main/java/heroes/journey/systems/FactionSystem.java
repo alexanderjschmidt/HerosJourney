@@ -21,8 +21,11 @@ public class FactionSystem extends IteratingSystem {
     @Override
     public void update(float delta) {
         System.out.println("Faction System Running");
+        HUD.HUDState previousState = HUD.get().getState();
+        HUD.get().setState(HUD.HUDState.LOCKED);
         super.update(delta);
         setProcessing(false);
+        HUD.get().setState(previousState);
     }
 
     @Override
@@ -30,7 +33,7 @@ public class FactionSystem extends IteratingSystem {
         AIComponent ai = AIComponent.get(entity);
 
         QueuedAction action = ai.getAI().getMove(GameState.global(), entity);
-        HUD.get().setState(HUD.HUDState.LOCKED);
-        ActionQueue.get().addAction(action);
+        if (action != null)
+            ActionQueue.get().addAction(action);
     }
 }

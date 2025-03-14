@@ -18,8 +18,10 @@ import heroes.journey.components.PlayerComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RenderComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.ai.MCTSAI;
+import heroes.journey.entities.ai.MonsterFactionAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.tiles.ActionTile;
@@ -66,7 +68,9 @@ public class Map implements InitializerInterface {
             @Override
             public void applyEffect(GameState gameState) {
                 Entity goblins = new Entity();
-                goblins.add(new FactionComponent("Goblins")).add(new GameStateComponent());
+                goblins.add(new FactionComponent("Goblins").addOwnedLocation(new Position(16, 10)))
+                    .add(new GameStateComponent())
+                    .add(new AIComponent(new MonsterFactionAI()));
                 GameEngine.get().addEntity(goblins);
 
                 Entity player = new Entity();
@@ -82,19 +86,6 @@ public class Map implements InitializerInterface {
                     .add(new InventoryComponent())
                     .add(new LoyaltyComponent().putLoyalty(goblins, Loyalties.ENEMY));
                 GameEngine.get().addEntity(player);
-
-                Entity goblin = new Entity();
-                goblin.add(new PositionComponent(16, 10))
-                    .add(new GameStateComponent())
-                    .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[8][2]))
-                    .add(new ActorComponent())
-                    .add(new MovementComponent())
-                    .add(new ActionComponent())
-                    .add(new AIComponent(new MCTSAI()))
-                    .add(new StatsComponent())
-                    .add(new InventoryComponent())
-                    .add(new LoyaltyComponent().putLoyalty(goblins, Loyalties.ALLY));
-                GameEngine.get().addEntity(goblin);
             }
         };
     }

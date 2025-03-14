@@ -4,36 +4,17 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 
 import heroes.journey.components.interfaces.ClonableComponent;
+import heroes.journey.entities.Position;
 
-public class PositionComponent implements ClonableComponent<PositionComponent> {
-
-    private int x, y;
+public class PositionComponent extends Position implements ClonableComponent<PositionComponent> {
 
     public PositionComponent(int x, int y) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public PositionComponent setX(int x) {
-        this.x = x;
-        return this;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public PositionComponent setY(int y) {
-        this.y = y;
-        return this;
-    }
-
+    @Override
     public PositionComponent clone() {
-        return new PositionComponent(x, y);
+        return new PositionComponent(getX(), getY());
     }
 
     private static final ComponentMapper<PositionComponent> mapper = ComponentMapper.getFor(
