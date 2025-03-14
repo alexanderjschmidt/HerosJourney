@@ -1,6 +1,8 @@
 package heroes.journey.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -34,6 +36,13 @@ public class ActorComponent extends Actor implements Component {
                 Interpolation.pow5In),
             com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy(-15 * v.x, -15 * v.y, .2f,
                 Interpolation.pow5Out)));
+    }
+
+    private static final ComponentMapper<ActorComponent> mapper = ComponentMapper.getFor(
+        ActorComponent.class);
+
+    public static ActorComponent get(Entity entity) {
+        return mapper.get(entity);
     }
 
 }

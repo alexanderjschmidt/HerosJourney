@@ -1,18 +1,11 @@
 package heroes.journey.entities;
 
-import static heroes.journey.systems.GameEngine.statsMapper;
-
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 
-import heroes.journey.components.FactionComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.systems.GameEngine;
@@ -20,47 +13,35 @@ import heroes.journey.systems.GameEngine;
 public class EntityManager implements Cloneable {
 
     private int width, height;
-    private Entity[][] entities;
+    private Entity[][] entitiesLocations;
 
-    private Entity currentEntity;
-
-    private final HashMap<String,Entity> factions;
+    private final HashMap<UUID,Entity> entities;
 
     public EntityManager(int width, int height) {
         this.width = width;
         this.height = height;
-        entities = new Entity[width][height];
-        factions = new HashMap<>();
+        entitiesLocations = new Entity[width][height];
+        entities = new HashMap<>();
     }
 
     public EntityManager clone() {
         EntityManager clone = new EntityManager(width, height);
 
-        for (Entity faction : factions.values()) {
-            clone.factions.put(faction.toString(), cloneEntity(clone, faction));
+        for (UUID id : entities.keySet()) {
+            clone.entities.put(id, cloneEntity(clone, entities.get(id)));
         }
 
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                Entity e = entities[i][j];
-                if (e != null) {
-                    Entity clonedEntity = cloneEntity(clone, e);
-                    clone.addEntity(clonedEntity);
-                    if (e == currentEntity) {
-                        clone.setCurrentEntity(clonedEntity);
-                    }
-                }
-            }
-        }
         return clone;
     }
 
-    private Entity cloneEntity(EntityManager clonedManager, Entity e) {
+    private Entity cloneEntity(EntityManager manager, Entity e) {
         Entity clone = new Entity();
         for (Component component : e.getComponents()) {
             if (component instanceof ClonableComponent<?> clonableComponent) {
-                ClonableComponent clonedComponent = clonableComponent.clone();
-                clone.add(clonedComponent);
+                clone.add(clonableComponent.clone());
+                if (component instanceof PositionComponent) {
+                    manager.addEntity(clone);
+                }
             }
         }
         GameEngine.get().addEntity(clone);
@@ -68,42 +49,30 @@ public class EntityManager implements Cloneable {
     }
 
     public Entity removeEntity(int x, int y) {
-        Entity e = entities[x][y];
-        entities[x][y] = null;
+        Entity e = entitiesLocations[x][y];
+        entitiesLocations[x][y] = null;
         return e;
+    }
+
+    public void registerEntity(UUID id, Entity e) {
+        entities.put(id, e);
+    }
+
+    public void unregisterEntity(UUID id) {
+        entities.remove(id);
     }
 
     public void addEntity(Entity e) {
         PositionComponent position = PositionComponent.get(e);
-        if (entities[position.getX()][position.getY()] == null) {
-            entities[position.getX()][position.getY()] = e;
+        if (entitiesLocations[position.getX()][position.getY()] == null) {
+            entitiesLocations[position.getX()][position.getY()] = e;
         }
     }
 
-    public void addFactions(Entity entity) {
-        FactionComponent factionComponent = FactionComponent.get(entity);
-        factions.put(factionComponent.toString(), entity);
-    }
-
-    /**
-     * takes into account fog
-     *
-     * @param x
-     * @param y
-     * @return
-     */
     public Entity get(int x, int y) {
         if (x < 0 || y < 0 || y >= height || x >= width)
             return null;
-        return entities[x][y];
-    }
-
-    public List<Entity> getEntitiesInActionOrder() {
-        return Arrays.stream(entities)  // Stream<Character[]>
-            .flatMap(Arrays::stream)                         // Stream<Character>
-            .filter(Objects::nonNull)                       // Remove nulls
-            .sorted(Comparator.comparing((Entity e) -> statsMapper.get(e).getSpeed())
-                .thenComparing(Object::toString)).collect(Collectors.toList());
+        return entitiesLocations[x][y];
     }
 
     public void print() {
@@ -121,18 +90,10 @@ public class EntityManager implements Cloneable {
         System.out.println();
     }
 
-    public void setCurrentEntity(Entity currentEntity) {
-        this.currentEntity = currentEntity;
-    }
-
-    public Entity getCurrentEntity() {
-        return currentEntity;
-    }
-
     public void dispose() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                Entity e = entities[i][j];
+                Entity e = entitiesLocations[i][j];
                 if (e != null) {
                     GameEngine.get().removeEntity(e);
                 }
@@ -140,7 +101,7 @@ public class EntityManager implements Cloneable {
         }
     }
 
-    public HashMap<String,Entity> getFactions() {
-        return factions;
+    public Entity getEntity(UUID id) {
+        return entities.get(id);
     }
 }

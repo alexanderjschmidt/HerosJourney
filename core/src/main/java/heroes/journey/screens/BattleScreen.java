@@ -52,7 +52,7 @@ public class BattleScreen implements Screen {
         batch = app.getBatch();
 
         GameState.global().init(mapData);
-        NewMapManager.get().initGameState(GameState.global());
+        NewMapManager.get().initMapGeneration(GameState.global());
         GameState.global().nextTurn();
 
         ready = true;

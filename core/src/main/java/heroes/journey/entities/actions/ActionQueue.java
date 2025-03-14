@@ -1,8 +1,5 @@
 package heroes.journey.entities.actions;
 
-import static heroes.journey.systems.GameEngine.actionMapper;
-import static heroes.journey.systems.GameEngine.movementMapper;
-
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -166,8 +163,8 @@ public class ActionQueue extends ArrayList<QueuedAction> {
 
         HUD.get().setState(HUDState.MOVING);
         Entity selected = gameState.getEntities().get(path.i, path.j);
-        MovementComponent movement = movementMapper.get(selected);
-        ActionComponent actions = actionMapper.get(selected);
+        MovementComponent movement = MovementComponent.get(selected);
+        ActionComponent actions = ActionComponent.get(selected);
         HUD.get().getCursor().setSelected(selected);
 
         movement.move(path);

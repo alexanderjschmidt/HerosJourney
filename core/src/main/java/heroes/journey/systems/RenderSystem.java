@@ -1,8 +1,5 @@
 package heroes.journey.systems;
 
-import static heroes.journey.systems.GameEngine.ACTOR;
-import static heroes.journey.systems.GameEngine.RENDER;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -34,8 +31,8 @@ public class RenderSystem extends IteratingSystem {
         PositionComponent position = PositionComponent.get(entity);
 
         if (GameCamera.get().onCamera(position.getX(), position.getY())) {
-            RenderComponent render = RENDER.get(entity);
-            ActorComponent actor = ACTOR.get(entity);
+            RenderComponent render = RenderComponent.get(entity);
+            ActorComponent actor = ActorComponent.get(entity);
 
             if (actor != null) {
                 actor.act(delta);

@@ -2,6 +2,9 @@ package heroes.journey.components;
 
 import java.util.HashMap;
 
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.items.ItemInterface;
 
@@ -40,6 +43,13 @@ public class InventoryComponent extends HashMap<ItemInterface,Integer>
 
     public InventoryComponent clone() {
         return new InventoryComponent();
+    }
+
+    private static final ComponentMapper<InventoryComponent> mapper = ComponentMapper.getFor(
+        InventoryComponent.class);
+
+    public static InventoryComponent get(Entity entity) {
+        return mapper.get(entity);
     }
 
 }

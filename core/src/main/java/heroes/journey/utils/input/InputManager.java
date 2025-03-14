@@ -1,7 +1,5 @@
 package heroes.journey.utils.input;
 
-import static heroes.journey.systems.GameEngine.statsMapper;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,7 +138,7 @@ public class InputManager {
 
     private void updateMoveState(float delta) {
         if (Gdx.input.isKeyJustPressed(KeyManager.NEXT_CHARACTER)) {
-            cursor.setPosition(GameState.global().getEntities().getCurrentEntity());
+            cursor.setPosition(GameState.global().getCurrentEntity());
         }
         if ((Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) || Gdx.input.isKeyJustPressed(KeyManager.BACK)) &&
             cursor.getSelected() != null) {
@@ -154,10 +152,10 @@ public class InputManager {
                 savePath();
                 cursor.moveSelected();
             } else if (cursor.getHover() != null &&
-                cursor.getHover() == GameState.global().getEntities().getCurrentEntity()) {
+                cursor.getHover() == GameState.global().getCurrentEntity()) {
                 cursor.setSelectedtoHover();
                 HUD.get().select();
-                StatsComponent stats = statsMapper.get(cursor.getSelected());
+                StatsComponent stats = StatsComponent.get(cursor.getSelected());
                 if (stats.getMoveDistance() == 0) {
                     savePath();
                     //cursor.getSelected().openActionMenu();

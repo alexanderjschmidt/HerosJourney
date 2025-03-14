@@ -1,7 +1,5 @@
 package heroes.journey.ui;
 
-import static heroes.journey.systems.GameEngine.movementMapper;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -10,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
+import heroes.journey.components.MovementComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.ui.HUD.HUDState;
@@ -256,7 +255,7 @@ public class Cursor {
         if (GameState.global().getEntities().get(path.i, path.j) == null ||
             GameState.global().getEntities().get(path.i, path.j) == selected) {
             hud.setState(HUDState.MOVING);
-            movementMapper.get(selected).move(AStar.reversePath(path));
+            MovementComponent.get(selected).move(AStar.reversePath(path));
             GameState.global().getRangeManager().clearRange();
             sx = path.i;
             sy = path.j;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 
 import heroes.journey.GameState;
@@ -59,5 +60,12 @@ public class ActionComponent implements ClonableComponent<ActionComponent> {
         clone.targetY = targetY;
         clone.availableActions.addAll(availableActions);
         return clone;
+    }
+
+    private static final ComponentMapper<ActionComponent> mapper = ComponentMapper.getFor(
+        ActionComponent.class);
+
+    public static ActionComponent get(Entity entity) {
+        return mapper.get(entity);
     }
 }

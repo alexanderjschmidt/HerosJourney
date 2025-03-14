@@ -3,6 +3,9 @@ package heroes.journey.components;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.stats.DamageType;
 import heroes.journey.entities.stats.DamageTypeManager;
@@ -105,5 +108,12 @@ public class StatsComponent implements ClonableComponent<StatsComponent> {
 
     public int getSpeed() {
         return body;
+    }
+
+    private static final ComponentMapper<StatsComponent> mapper = ComponentMapper.getFor(
+        StatsComponent.class);
+
+    public static StatsComponent get(Entity entity) {
+        return mapper.get(entity);
     }
 }

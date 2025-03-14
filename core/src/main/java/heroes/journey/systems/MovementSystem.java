@@ -1,9 +1,5 @@
 package heroes.journey.systems;
 
-import static heroes.journey.systems.GameEngine.ACTOR;
-import static heroes.journey.systems.GameEngine.actionMapper;
-import static heroes.journey.systems.GameEngine.movementMapper;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -30,9 +26,9 @@ public class MovementSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float delta) {
         PositionComponent position = PositionComponent.get(entity);
-        MovementComponent movement = movementMapper.get(entity);
-        ActorComponent actor = ACTOR.get(entity);
-        ActionComponent action = actionMapper.get(entity);
+        MovementComponent movement = MovementComponent.get(entity);
+        ActorComponent actor = ActorComponent.get(entity);
+        ActionComponent action = ActionComponent.get(entity);
 
         if (movement.hasPath() && !actor.hasActions()) {
             //TODO Make duration based on move speed

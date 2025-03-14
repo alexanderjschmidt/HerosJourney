@@ -1,7 +1,5 @@
 package heroes.journey.utils;
 
-import static heroes.journey.systems.GameEngine.statsMapper;
-
 import java.util.ArrayList;
 
 import com.badlogic.ashley.core.Entity;
@@ -75,7 +73,7 @@ public class RangeManager {
             return;
         }
         clearRange();
-        StatsComponent stats = statsMapper.get(selected);
+        StatsComponent stats = StatsComponent.get(selected);
         int move = stats.getMoveDistance();
         PositionComponent position = PositionComponent.get(selected);
         floodfill(move, position.getX(), position.getY(), selected);

@@ -1,19 +1,29 @@
 package heroes.journey;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import heroes.journey.components.AIComponent;
+import heroes.journey.components.GlobalGameStateComponent;
 import heroes.journey.components.PlayerComponent;
+import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.initializers.Initializer;
+import heroes.journey.initializers.base.Map;
 import heroes.journey.systems.FactionSystem;
 import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.MapData;
@@ -32,6 +42,8 @@ public class GameState implements Cloneable {
     private int turn;
 
     private static GameState gameState;
+
+    private UUID currentEntity;
     private List<Entity> entitiesInActionOrder;
 
     public static GameState global() {
@@ -59,6 +71,8 @@ public class GameState implements Cloneable {
         entities = new EntityManager(width, height);
         rangeManager = new RangeManager(this, width, height);
 
+        new Map().init();
+
         turn = 0;
     }
 
@@ -68,6 +82,7 @@ public class GameState implements Cloneable {
         clone.map = map.clone(clone.entities);
         clone.rangeManager = rangeManager.clone(clone);
         clone.turn = turn;
+        clone.currentEntity = currentEntity;
         return clone;
     }
 
@@ -99,17 +114,40 @@ public class GameState implements Cloneable {
         rangeManager.render(batch, turn);
     }
 
+    public Entity setCurrentEntity(Entity currentEntity) {
+        this.currentEntity = GameEngine.getID(currentEntity);
+        return currentEntity;
+    }
+
+    public Entity get(UUID id) {
+        return entities.getEntity(id);
+    }
+
+    public Entity getCurrentEntity() {
+        return get(currentEntity);
+    }
+
+    private List<Entity> getEntitiesInActionOrder() {
+        ImmutableArray<Entity> entitiesImmutableArray = GameEngine.get()
+            .getEntitiesFor(
+                Family.all(GlobalGameStateComponent.class, StatsComponent.class, AIComponent.class).get());
+        Entity[] array = entitiesImmutableArray.toArray(Entity.class);
+        return Arrays.stream(array)
+            .filter(Objects::nonNull)
+            .sorted(Comparator.comparing((Entity e) -> StatsComponent.get(e).getSpeed())
+                .thenComparing(Object::toString))
+            .collect(Collectors.toList());
+    }
+
     private Entity incrementTurn() {
         if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
-            entitiesInActionOrder = entities.getEntitiesInActionOrder();
+            entitiesInActionOrder = getEntitiesInActionOrder();
             turn++;
             if (GameState.global() == this) {
                 GameEngine.get().getSystem(FactionSystem.class).setProcessing(true);
             }
         }
-        Entity currentEntity = entitiesInActionOrder.removeFirst();
-        entities.setCurrentEntity(currentEntity);
-        return currentEntity;
+        return setCurrentEntity(entitiesInActionOrder.removeFirst());
     }
 
     public void nextTurn() {

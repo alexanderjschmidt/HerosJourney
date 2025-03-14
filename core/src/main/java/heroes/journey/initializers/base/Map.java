@@ -10,7 +10,7 @@ import heroes.journey.components.AIComponent;
 import heroes.journey.components.ActionComponent;
 import heroes.journey.components.ActorComponent;
 import heroes.journey.components.FactionComponent;
-import heroes.journey.components.GlobalGameStateComponent;
+import heroes.journey.components.GameStateComponent;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.LoyaltyComponent;
 import heroes.journey.components.MovementComponent;
@@ -21,6 +21,7 @@ import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
+import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.tiles.ActionTile;
 import heroes.journey.tilemap.tiles.Tile;
 import heroes.journey.utils.ai.pathfinding.AStar;
@@ -30,44 +31,10 @@ import heroes.journey.utils.art.TextureMaps;
 import heroes.journey.utils.worldgen.CellularAutomata;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationPhase;
-import heroes.journey.utils.worldgen.NewMapManager;
 
 public class Map implements InitializerInterface {
 
-    static {
-        Entity goblins = new Entity();
-        goblins.add(new FactionComponent("Goblins")).add(new GlobalGameStateComponent());
-
-        Entity player = new Entity();
-        player.add(new PlayerComponent(ActionQueue.get().getID()))
-            .add(new PositionComponent(16, 16))
-            .add(new GlobalGameStateComponent())
-            .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[1][1]))
-            .add(new ActorComponent())
-            .add(new MovementComponent())
-            .add(new ActionComponent())
-            .add(new AIComponent(new MCTSAI()))
-            .add(new StatsComponent())
-            .add(new InventoryComponent())
-            .add(new LoyaltyComponent().putLoyalty(goblins, Loyalties.ENEMY));
-
-        Entity goblin = new Entity();
-        goblin.add(new PositionComponent(16, 10))
-            .add(new GlobalGameStateComponent())
-            .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[8][2]))
-            .add(new ActorComponent())
-            .add(new MovementComponent())
-            .add(new ActionComponent())
-            .add(new AIComponent(new MCTSAI()))
-            .add(new StatsComponent())
-            .add(new InventoryComponent())
-            .add(new LoyaltyComponent().putLoyalty(goblins, Loyalties.ALLY));
-
-        NewMapManager.get().getStartingEntities().add(goblins);
-        NewMapManager.get().getStartingEntities().add(player);
-        NewMapManager.get().getStartingEntities().add(goblin);
-
-        // Generated Map
+    public void init() {
         new MapGenerationEffect(MapGenerationPhase.INIT) {
             @Override
             public void applyEffect(GameState gameState) {
@@ -93,6 +60,41 @@ public class Map implements InitializerInterface {
             @Override
             public void applyEffect(GameState gameState) {
                 gameState.getMap().genFacingAndVariance();
+            }
+        };
+        new MapGenerationEffect(MapGenerationPhase.FINAL) {
+            @Override
+            public void applyEffect(GameState gameState) {
+                Entity goblins = new Entity();
+                goblins.add(new FactionComponent("Goblins")).add(new GameStateComponent());
+                GameEngine.get().addEntity(goblins);
+
+                Entity player = new Entity();
+                player.add(new PlayerComponent(ActionQueue.get().getID()))
+                    .add(new PositionComponent(16, 16))
+                    .add(new GameStateComponent())
+                    .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[1][1]))
+                    .add(new ActorComponent())
+                    .add(new MovementComponent())
+                    .add(new ActionComponent())
+                    .add(new AIComponent(new MCTSAI()))
+                    .add(new StatsComponent())
+                    .add(new InventoryComponent())
+                    .add(new LoyaltyComponent().putLoyalty(goblins, Loyalties.ENEMY));
+                GameEngine.get().addEntity(player);
+
+                Entity goblin = new Entity();
+                goblin.add(new PositionComponent(16, 10))
+                    .add(new GameStateComponent())
+                    .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[8][2]))
+                    .add(new ActorComponent())
+                    .add(new MovementComponent())
+                    .add(new ActionComponent())
+                    .add(new AIComponent(new MCTSAI()))
+                    .add(new StatsComponent())
+                    .add(new InventoryComponent())
+                    .add(new LoyaltyComponent().putLoyalty(goblins, Loyalties.ALLY));
+                GameEngine.get().addEntity(goblin);
             }
         };
     }

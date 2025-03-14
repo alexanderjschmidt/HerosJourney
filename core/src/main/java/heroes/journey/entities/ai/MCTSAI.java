@@ -29,7 +29,7 @@ public class MCTSAI implements AI, Scorer {
     @Override
     public List<QueuedAction> getPossibleQueuedActions(GameState gameState) {
         List<QueuedAction> possibleActions = new ArrayList<>();
-        Entity playingEntity = gameState.getEntities().getCurrentEntity();
+        Entity playingEntity = gameState.getCurrentEntity();
         PositionComponent position = PositionComponent.get(playingEntity);
         Cell target = new Cell(position.getX(), position.getY() - 1, 1);
         Cell path = new Cell(position.getX(), position.getY(), 1);

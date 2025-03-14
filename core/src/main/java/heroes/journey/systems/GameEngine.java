@@ -1,24 +1,14 @@
 package heroes.journey.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
+import java.util.UUID;
 
-import heroes.journey.components.ActionComponent;
-import heroes.journey.components.ActorComponent;
-import heroes.journey.components.MovementComponent;
-import heroes.journey.components.RenderComponent;
-import heroes.journey.components.StatsComponent;
+import com.badlogic.ashley.core.Entity;
+
+import heroes.journey.components.GameStateComponent;
+import heroes.journey.systems.listeners.GlobalGameStateListener;
+import heroes.journey.systems.listeners.GlobalPositionListener;
 
 public class GameEngine extends com.badlogic.ashley.core.Engine {
-
-    public static final ComponentMapper<RenderComponent> RENDER = ComponentMapper.getFor(
-        RenderComponent.class);
-    public static final ComponentMapper<ActorComponent> ACTOR = ComponentMapper.getFor(ActorComponent.class);
-    public static final ComponentMapper<MovementComponent> movementMapper = ComponentMapper.getFor(
-        MovementComponent.class);
-    public static final ComponentMapper<ActionComponent> actionMapper = ComponentMapper.getFor(
-        ActionComponent.class);
-    public static final ComponentMapper<StatsComponent> statsMapper = ComponentMapper.getFor(
-        StatsComponent.class);
 
     private static GameEngine gameEngine;
 
@@ -36,6 +26,14 @@ public class GameEngine extends com.badlogic.ashley.core.Engine {
         FactionSystem factionSystem = new FactionSystem();
         factionSystem.setProcessing(false);
         addSystem(factionSystem);
+
+        addEntityListener(GlobalGameStateListener.getFamily(), new GlobalGameStateListener());
+        addEntityListener(GlobalPositionListener.getFamily(), new GlobalPositionListener());
+    }
+
+    public static UUID getID(Entity e) {
+        GameStateComponent gameStateComponent = GameStateComponent.get(e);
+        return gameStateComponent == null ? null : gameStateComponent.getId();
     }
 
 }

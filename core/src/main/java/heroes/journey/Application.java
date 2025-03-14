@@ -17,10 +17,9 @@ import heroes.journey.utils.art.ResourceManager;
  * Fix Terrain difficulty
  * pull actions from location (and factions?) maybe modify were the open action menu code is
  * comb through all HUD state sets to make sure the player cant input actions while action queue is in process
- * make a uuid to entity map in gamestate so that references to entities in components can use the uuid instead of entities, that should make cloning cleaner
  * Chunk EntityManager for more efficiency? Only clone nearby chunks for AI? limited on how far they could travel in x turns
  * Make TextureMaps not Enums?
- * move component mappers to component classes
+ * make Map Generation Phases not enums
  * fix far out zoom
  * force zoom if camera would go off screen
  * make camera not go beyond map
