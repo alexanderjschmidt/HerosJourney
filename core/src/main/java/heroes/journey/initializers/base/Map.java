@@ -1,7 +1,5 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.Tiles.CAVE;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 
@@ -26,11 +24,11 @@ import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.tiles.ActionTile;
 import heroes.journey.tilemap.tiles.Tile;
+import heroes.journey.tilemap.wavefunction.WaveFunctionCollapse;
 import heroes.journey.utils.ai.pathfinding.AStar;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
-import heroes.journey.utils.worldgen.CellularAutomata;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationPhase;
 
@@ -41,12 +39,12 @@ public class Map implements InitializerInterface {
             @Override
             public void applyEffect(GameState gameState) {
                 int width = gameState.getWidth();
-                Tile[][] tileMap = CellularAutomata.generateMap(width);
+                Tile[][] tileMap = WaveFunctionCollapse.genMap(width);
                 gameState.getMap().setTileMap(tileMap);
-                gameState.getMap().setEnvironment(CellularAutomata.generateTrees(tileMap, width));
+                //gameState.getMap().setEnvironment(CellularAutomata.generateTrees(tileMap, width));
             }
         };
-        new MapGenerationEffect(MapGenerationPhase.SECOND, 1000) {
+        /*new MapGenerationEffect(MapGenerationPhase.SECOND, 1000) {
             @Override
             public void applyEffect(GameState gameState) {
                 genHouses(gameState.getMap().getTileMap(), gameState.getMap().getEnvironment());
@@ -57,13 +55,13 @@ public class Map implements InitializerInterface {
             public void applyEffect(GameState gameState) {
                 gameState.getMap().getEnvironment()[16][10] = CAVE;
             }
-        };
-        new MapGenerationEffect(MapGenerationPhase.FINAL) {
-            @Override
-            public void applyEffect(GameState gameState) {
-                gameState.getMap().genFacingAndVariance();
-            }
-        };
+        };*/
+        //        new MapGenerationEffect(MapGenerationPhase.FINAL) {
+        //            @Override
+        //            public void applyEffect(GameState gameState) {
+        //                gameState.getMap().genFacingAndVariance();
+        //            }
+        //        };
         new MapGenerationEffect(MapGenerationPhase.FINAL) {
             @Override
             public void applyEffect(GameState gameState) {

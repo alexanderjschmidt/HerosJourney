@@ -52,7 +52,8 @@ public class TileMap {
 
         for (int x = x0; x < x1; x++) {
             for (int y = y0; y < y1; y++) {
-                tileMap[x][y].render(batch, this, elapsed, x, y, variance[x][y], facing[x][y]);
+                if (tileMap[x][y] != null)
+                    tileMap[x][y].render(batch, this, elapsed, x, y, variance[x][y], facing[x][y]);
                 if (environment[x][y] != null)
                     environment[x][y].render(batch, this, elapsed, x, y, variance[x][y], facing[x][y]);
             }
